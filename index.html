@@ -40,60 +40,26 @@
             filter: blur(150px); opacity: 0.1;
             animation: moveGradient 30s infinite alternate;
         }
-        .aurora-bg::before {
-            background: var(--brand-teal);
-            width: 800px; height: 800px; top: -10%; left: -10%;
-        }
-        .aurora-bg::after {
-            background: var(--brand-gold);
-            width: 900px; height: 900px; bottom: -15%; right: -10%;
-            animation-delay: 15s;
-        }
+        .aurora-bg::before { background: var(--brand-teal); width: 800px; height: 800px; top: -10%; left: -10%; }
+        .aurora-bg::after { background: var(--brand-gold); width: 900px; height: 900px; bottom: -15%; right: -10%; animation-delay: 15s; }
         @keyframes moveGradient {
-            from { transform: translate(0, 0) scale(1) rotate(0deg); }
-            to { transform: translate(70px, -70px) scale(1.1) rotate(15deg); }
+            from { transform: translate(0, 0) scale(1) rotate(0deg); } to { transform: translate(70px, -70px) scale(1.1) rotate(15deg); }
         }
 
         /* --- Reusable Components --- */
         .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 2;}
         .section { padding: 120px 0; }
-        .section-heading {
-            font-family: var(--font-heading);
-            font-size: 3rem; text-align: center; margin-bottom: 20px;
-        }
-        .section-subheading {
-            text-align: center; max-width: 700px; margin: 0 auto 80px auto;
-            color: var(--color-text-muted); line-height: 1.7; font-size: 1.1rem;
-        }
-        .btn {
-            display: inline-block; padding: 12px 32px; border-radius: 50px; text-decoration: none;
-            font-weight: 500; font-family: var(--font-heading);
-            transition: all 0.3s ease; border: 1px solid transparent;
-        }
-        .btn-primary {
-            background: var(--brand-gold); color: #0B0C10;
-            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.2);
-        }
-        .btn-primary:hover {
-            transform: translateY(-3px); box-shadow: 0 8px 30px rgba(212, 175, 55, 0.3);
-        }
-        .glass-card {
-            background: var(--glass-bg); border: 1px solid var(--color-border);
-            border-radius: 16px; backdrop-filter: blur(12px);
-            transition: all 0.4s ease;
-        }
-        .glass-card:hover {
-            border-color: rgba(0, 128, 128, 0.5); /* Teal */
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            transform: translateY(-8px);
-        }
+        .section-heading { font-family: var(--font-heading); font-size: 3rem; text-align: center; margin-bottom: 20px; }
+        .section-subheading { text-align: center; max-width: 700px; margin: 0 auto 80px auto; color: var(--color-text-muted); line-height: 1.7; font-size: 1.1rem; }
+        .btn { display: inline-block; padding: 12px 32px; border-radius: 50px; text-decoration: none; font-weight: 500; font-family: var(--font-heading); transition: all 0.3s ease; border: 1px solid transparent; }
+        .btn-primary { background: var(--brand-gold); color: #0B0C10; box-shadow: 0 5px 20px rgba(212, 175, 55, 0.2); }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(212, 175, 55, 0.3); }
+        .glass-card { background: var(--glass-bg); border: 1px solid var(--color-border); border-radius: 16px; backdrop-filter: blur(12px); transition: all 0.4s ease; }
+        .glass-card:hover { border-color: rgba(0, 128, 128, 0.5); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2); transform: translateY(-8px); }
 
         /* --- Header --- */
         .main-header { position: fixed; top: 0; left:0; width: 100%; z-index: 100; padding: 20px 0; transition: all 0.4s ease; }
-        .main-header.scrolled {
-            background: rgba(11, 12, 16, 0.8); backdrop-filter: blur(15px);
-            padding: 15px 0; border-bottom: 1px solid var(--color-border);
-        }
+        .main-header.scrolled { background: rgba(11, 12, 16, 0.8); backdrop-filter: blur(15px); padding: 15px 0; border-bottom: 1px solid var(--color-border); }
         .header-container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 20px;}
         .header-logo img { height: 45px; }
         .main-nav a { text-decoration: none; color: var(--color-text-light); margin-left: 40px; font-weight: 500; font-size: 1rem; }
@@ -103,63 +69,15 @@
         .hero { min-height: 100vh; display: flex; align-items: center; text-align: center; position: relative; }
         #hero-orb-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; opacity: 0.7; }
         .hero-content { max-width: 800px; margin: 0 auto; }
-        .hero-content h1 {
-            font-family: var(--font-heading); font-size: 4.5rem; font-weight: 700;
-            line-height: 1.15; letter-spacing: -1.5px; margin-bottom: 24px;
-        }
+        .hero-content h1 { font-family: var(--font-heading); font-size: 4.5rem; font-weight: 700; line-height: 1.15; letter-spacing: -1.5px; margin-bottom: 24px; }
         .hero-content p { font-size: 1.2rem; color: var(--color-text-muted); margin: 0 auto 40px auto; max-width: 600px; }
-
-        /* MODIFIED: Hero Focus Cards (Vertical Layout) */
-        .hero-focus-cards {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            margin-bottom: 50px;
-        }
-        .hero-card {
-            padding: 25px;
-            border-radius: 16px;
-            text-decoration: none;
-            color: var(--color-text-muted);
-            width: 280px;
-            display: flex;
-            flex-direction: column; /* Vertical layout */
-            align-items: center;
-            text-align: center;
-            gap: 15px; /* Space between items */
-            border: 1px solid transparent;
-            background: transparent;
-            backdrop-filter: blur(0px);
-            transition: all 0.4s ease;
-        }
-        .hero-card:hover {
-            transform: translateY(-8px);
-            background: var(--glass-bg);
-            border-color: var(--color-border);
-            color: var(--color-text-light);
-            backdrop-filter: blur(10px);
-        }
-        .hero-card .icon {
-            font-size: 2.5rem;
-            color: var(--color-text-muted);
-            transition: color 0.4s ease;
-            height: 40px; /* fixed height for icon */
-        }
-        .hero-card:hover .icon {
-            color: var(--brand-gold);
-        }
-        .hero-card h4 {
-            font-family: var(--font-heading);
-            font-weight: 500;
-            font-size: 1.2rem;
-            color: var(--color-text-light);
-        }
-        .hero-card p {
-            font-size: 0.9rem;
-            line-height: 1.6;
-            margin: 0;
-            color: var(--color-text-muted);
-        }
+        .hero-focus-cards { display: flex; justify-content: center; gap: 25px; margin-bottom: 50px; }
+        .hero-card { padding: 25px; border-radius: 16px; text-decoration: none; color: var(--color-text-muted); width: 280px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 15px; border: 1px solid transparent; background: transparent; backdrop-filter: blur(0px); transition: all 0.4s ease; }
+        .hero-card:hover { transform: translateY(-8px); background: var(--glass-bg); border-color: var(--color-border); color: var(--color-text-light); backdrop-filter: blur(10px); }
+        .hero-card .icon { font-size: 2.5rem; color: var(--color-text-muted); transition: color 0.4s ease; height: 40px; }
+        .hero-card:hover .icon { color: var(--brand-gold); }
+        .hero-card h4 { font-family: var(--font-heading); font-weight: 500; font-size: 1.2rem; color: var(--color-text-light); }
+        .hero-card p { font-size: 0.9rem; line-height: 1.6; margin: 0; color: var(--color-text-muted); }
 
         /* --- Trust Section --- */
         .trust-section h2 { font-family: var(--font-heading); font-size: 1.5rem; color: var(--color-text-muted); margin-bottom: 40px; }
@@ -167,25 +85,26 @@
         .logos-grid img { height: 35px; filter: grayscale(1) brightness(2); opacity: 0.7; transition: all 0.3s ease; }
         .logos-grid img:hover { filter: none; opacity: 1; transform: scale(1.1); }
         
-        /* --- Services Section --- */
-        .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
-        .service-card { padding: 40px; }
-        .service-card .icon { font-size: 2.5rem; color: var(--brand-teal); margin-bottom: 20px; }
-        .service-card h3 { font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 15px; }
-        .service-card p { color: var(--color-text-muted); line-height: 1.7; }
+        /* --- Services Section & Industries Section --- */
+        .grid-3-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+        .info-card { padding: 40px; }
+        .info-card .icon { font-size: 2.5rem; color: var(--brand-teal); margin-bottom: 20px; }
+        .info-card h3 { font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 15px; }
+        .info-card p { color: var(--color-text-muted); line-height: 1.7; }
 
-        /* NEW: Unified Approach Section */
+        /* --- Unified Approach Section --- */
         .unified-section { text-align: center; }
         .unified-content { max-width: 800px; margin: 0 auto; }
         .unified-content h2 { font-size: 2.8rem; line-height: 1.2; margin-bottom: 20px; }
         .unified-content p { color: var(--color-text-muted); font-size: 1.2rem; line-height: 1.8; }
-        .unified-content .divider {
-            height: 2px;
-            width: 80px;
-            background: linear-gradient(90deg, var(--brand-gold), var(--brand-teal));
-            margin: 40px auto;
-            opacity: 0.5;
-        }
+        .unified-content .divider { height: 2px; width: 80px; background: linear-gradient(90deg, var(--brand-gold), var(--brand-teal)); margin: 40px auto; opacity: 0.5; }
+
+        /* --- Technologies Section --- */
+        .tech-grid { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 50px; }
+        .tech-item { text-align: center; color: var(--color-text-muted); transition: color 0.3s ease; }
+        .tech-item:hover { color: var(--color-text-light); }
+        .tech-item .icon { font-size: 3rem; }
+        .tech-item span { display: block; margin-top: 15px; font-family: var(--font-heading); }
 
         /* --- Testimonials Section --- */
         .testimonials-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
@@ -195,16 +114,16 @@
         .testimonial-card .author { margin-top: 25px; font-weight: 700; color: var(--color-text-light); }
         .testimonial-card .author span { display: block; font-weight: 400; color: var(--color-text-muted); font-style: normal; }
 
-        /* --- CTA Section --- */
+        /* --- CTA Sections (Careers & Contact) --- */
         .cta-section { text-align: center; }
         .cta-container { padding: 60px; }
         .cta-container h2 { font-size: 2.5rem; margin-bottom: 20px; }
         .cta-container p { color: var(--color-text-muted); max-width: 500px; margin: 0 auto 30px auto; }
-
+        
         /* --- Responsive Design --- */
         @media (max-width: 992px) {
             .hero-content h1 { font-size: 3.5rem; }
-            .services-grid, .testimonials-grid { grid-template-columns: 1fr; }
+            .grid-3-col, .testimonials-grid { grid-template-columns: 1fr; }
         }
          @media (max-width: 768px) {
             .hero-focus-cards { flex-direction: column; align-items: center; gap: 15px; }
@@ -219,7 +138,8 @@
             <a href="#" class="header-logo"><img src="cygnisoft_logo.jpg" alt="CygniSoft Logo"></a>
             <nav class="main-nav">
                 <a href="#solutions">Solutions</a>
-                <a href="#about">About Us</a>
+                <a href="#industries">Industries</a>
+                <a href="#about">About</a>
                 <a href="#contact">Contact</a>
             </nav>
             <a href="#contact" class="btn btn-primary">Start Your Project</a>
@@ -233,7 +153,6 @@
                 <div class="hero-content">
                     <h1>We Engineer Clarity from Complexity.</h1>
                     <p>CygniSoft orchestrates elite talent and bespoke technology to build your future, today.</p>
-
                     <div class="hero-focus-cards">
                         <a href="#solutions" class="hero-card">
                             <div class="icon"><i class="fa-solid fa-code"></i></div>
@@ -246,7 +165,6 @@
                             <p>Specialized talent sourcing to elevate patient care and operations.</p>
                         </a>
                     </div>
-
                     <a href="#solutions" class="btn btn-primary">Accelerate Your Vision</a>
                 </div>
             </div>
@@ -269,21 +187,45 @@
             <div class="container">
                 <h2 class="section-heading">Integrated Solutions</h2>
                 <p class="section-subheading">Our strength lies in a holistic approach, blending human potential with technological power to create unmatched value for your enterprise.</p>
-                <div class="services-grid">
-                    <div class="service-card glass-card">
+                <div class="grid-3-col">
+                    <div class="info-card glass-card">
                         <div class="icon"><i class="fa-solid fa-users-line"></i></div>
                         <h3>Elite Talent Sourcing</h3>
-                        <p>We connect you with visionary professionals in IT and Healthcare who don't just fill a role—they elevate your entire organization.</p>
+                        <p>We connect you with visionary professionals who don't just fill a role—they elevate your entire organization.</p>
                     </div>
-                    <div class="service-card glass-card">
+                    <div class="info-card glass-card">
                         <div class="icon"><i class="fa-solid fa-cubes"></i></div>
                         <h3>Custom Software Development</h3>
-                        <p>We architect robust, scalable software and mobile applications that serve as the engine for your business's growth and efficiency.</p>
+                        <p>We architect robust, scalable software that serves as the engine for your business's growth and efficiency.</p>
                     </div>
-                    <div class="service-card glass-card">
+                    <div class="info-card glass-card">
                         <div class="icon"><i class="fa-solid fa-shield-halved"></i></div>
                         <h3>Managed Tech Services</h3>
-                        <p>Our proactive IT management and strategic consulting ensure your infrastructure is secure, optimized, and always future-ready.</p>
+                        <p>Our proactive IT management and strategic consulting ensure your infrastructure is secure, optimized, and future-ready.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="industries">
+            <div class="container">
+                <h2 class="section-heading">Expertise Across Key Sectors</h2>
+                <p class="section-subheading">We speak your language. Our tailored solutions are built on a deep understanding of the sectors we serve.</p>
+                <div class="grid-3-col">
+                    <div class="info-card glass-card">
+                        <div class="icon"><i class="fa-solid fa-heart-pulse"></i></div>
+                        <h3>Healthcare</h3>
+                        <p>Navigating the complexities of healthcare with specialized staffing for clinical and administrative roles.</p>
+                    </div>
+                    <div class="info-card glass-card">
+                        <div class="icon"><i class="fa-solid fa-landmark"></i></div>
+                        <h3>Finance & Banking</h3>
+                        <p>Providing secure, compliant technology solutions and expert talent for the financial industry.</p>
+                    </div>
+                    <div class="info-card glass-card">
+                        <div class="icon"><i class="fa-solid fa-store"></i></div>
+                        <h3>Retail & E-commerce</h3>
+                        <p>Powering modern retail with scalable e-commerce platforms and the talent to manage them.</p>
                     </div>
                 </div>
             </div>
@@ -295,6 +237,35 @@
                     <h2 class="section-heading">Our Unified Approach</h2>
                     <div class="divider"></div>
                     <p>Our unique strength lies at the intersection of human potential and technological power. We don't just solve problems—we build integrated ecosystems that drive lasting success.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section tech-section">
+            <div class="container">
+                <h2 class="section-heading">Powered by Leading-Edge Technology</h2>
+                <p class="section-subheading">We leverage a modern, powerful technology stack to build robust and scalable solutions.</p>
+                <div class="tech-grid">
+                    <div class="tech-item">
+                        <div class="icon"><i class="fab fa-windows"></i></div>
+                        <span>Dynamics 365</span>
+                    </div>
+                    <div class="tech-item">
+                        <div class="icon"><i class="fab fa-azure"></i></div>
+                        <span>Microsoft Azure</span>
+                    </div>
+                    <div class="tech-item">
+                        <div class="icon"><i class="fab fa-aws"></i></div>
+                        <span>Amazon Web Services</span>
+                    </div>
+                    <div class="tech-item">
+                        <div class="icon"><i class="fab fa-react"></i></div>
+                        <span>React</span>
+                    </div>
+                    <div class="tech-item">
+                        <div class="icon"><i class="fab fa-python"></i></div>
+                        <span>Python</span>
+                    </div>
                 </div>
             </div>
         </section>
@@ -315,6 +286,16 @@
                          <div class="author">John Smith <span>CEO, HealthSys</span></div>
                      </div>
                  </div>
+            </div>
+        </section>
+        
+        <section class="section cta-section" id="careers">
+             <div class="container">
+                <div class="cta-container glass-card">
+                    <h2>Join a Team of Visionaries</h2>
+                    <p>We're a team of innovators, problem-solvers, and strategic thinkers. Discover where you fit in and help us shape the future.</p>
+                    <a href="#" class="btn btn-primary">Explore Open Roles</a>
+                </div>
             </div>
         </section>
 
@@ -343,7 +324,6 @@
                 const ctx = canvas.getContext('2d');
                 let width, height, particles, mouse;
                 const particleCount = 50;
-
                 mouse = { x: null, y: null };
                 
                 function initCanvas() {
@@ -352,7 +332,6 @@
                     canvas.width = width;
                     canvas.height = height;
                     particles = [];
-
                     const center = { x: width / 2, y: height / 2 };
                     for (let i = 0; i < particleCount; i++) {
                         const radius = Math.random() * 200 + 150;
@@ -372,12 +351,10 @@
                 function animate() {
                     ctx.clearRect(0, 0, width, height);
                     const center = { x: width / 2, y: height / 2 };
-
                     if (mouse.x !== null) {
                         center.x += (mouse.x - center.x) * 0.05;
                         center.y += (mouse.y - center.y) * 0.05;
                     }
-
                     const gradient = ctx.createRadialGradient(center.x, center.y, 0, center.x, center.y, 100);
                     gradient.addColorStop(0, 'rgba(255, 179, 71, 0.1)');
                     gradient.addColorStop(1, 'rgba(11, 12, 16, 0)');
@@ -385,7 +362,6 @@
                     ctx.beginPath();
                     ctx.arc(center.x, center.y, 100, 0, Math.PI * 2);
                     ctx.fill();
-
                     particles.forEach(p => {
                         p.angle += p.speed;
                         p.x = center.x + Math.cos(p.angle) * p.radius;
@@ -395,18 +371,11 @@
                         ctx.fillStyle = p.color;
                         ctx.fill();
                     });
-                    
                     requestAnimationFrame(animate);
                 }
                 
-                canvas.addEventListener('mousemove', (e) => {
-                    mouse.x = e.clientX;
-                    mouse.y = e.clientY;
-                });
-                 canvas.addEventListener('mouseleave', () => {
-                    mouse.x = null;
-                    mouse.y = null;
-                });
+                canvas.addEventListener('mousemove', (e) => { mouse.x = e.clientX; mouse.y = e.clientY; });
+                canvas.addEventListener('mouseleave', () => { mouse.x = null; mouse.y = null; });
 
                 initCanvas();
                 animate();
