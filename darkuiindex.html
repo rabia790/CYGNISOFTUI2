@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CygniSoft Inc. - The Professional Agency</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --brand-gold: #FFB347; /* Muted Orange/Soft Gold */
+            --brand-teal: #008080; /* Professional Deep Teal */
+            --color-bg: #0B0C10;
+            --color-bg-secondary: #1C1C22;
+            --color-text-light: #EAEAEA;
+            --color-text-muted: #8892B0;
+            --color-border: rgba(136, 146, 176, 0.15);
+            --glass-bg: rgba(22, 27, 34, 0.5);
+            --font-heading: 'Space Grotesk', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-bg);
+            color: var(--color-text-light);
+            overflow-x: hidden;
+        }
+
+        /* Digital Aurora Background */
+        .aurora-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; overflow: hidden; z-index: -1;
+        }
+        .aurora-bg::before, .aurora-bg::after {
+            content: ''; position: absolute; border-radius: 50%;
+            filter: blur(150px); opacity: 0.1;
+            animation: moveGradient 30s infinite alternate;
+        }
+        .aurora-bg::before {
+            background: var(--brand-teal);
+            width: 800px; height: 800px; top: -10%; left: -10%;
+        }
+        .aurora-bg::after {
+            background: var(--brand-gold);
+            width: 900px; height: 900px; bottom: -15%; right: -10%;
+            animation-delay: 15s;
+        }
+        @keyframes moveGradient {
+            from { transform: translate(0, 0) scale(1) rotate(0deg); }
+            to { transform: translate(70px, -70px) scale(1.1) rotate(15deg); }
+        }
+
+        /* --- Reusable Components --- */
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 2;}
+        .section { padding: 120px 0; }
+        .section-heading {
+            font-family: var(--font-heading);
+            font-size: 3rem; text-align: center; margin-bottom: 20px;
+        }
+        .section-subheading {
+            text-align: center; max-width: 700px; margin: 0 auto 80px auto;
+            color: var(--color-text-muted); line-height: 1.7; font-size: 1.1rem;
+        }
+        .btn {
+            display: inline-block; padding: 12px 32px; border-radius: 50px; text-decoration: none;
+            font-weight: 500; font-family: var(--font-heading);
+            transition: all 0.3s ease; border: 1px solid transparent;
+        }
+        .btn-primary {
+            background: var(--brand-gold); color: #0B0C10;
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.2);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px); box-shadow: 0 8px 30px rgba(212, 175, 55, 0.3);
+        }
+        .glass-card {
+            background: var(--glass-bg); border: 1px solid var(--color-border);
+            border-radius: 16px; backdrop-filter: blur(12px);
+            transition: all 0.4s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(0, 128, 128, 0.5); /* Teal */
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            transform: translateY(-8px);
+        }
+
+        /* --- Header --- */
+        .main-header { position: fixed; top: 0; left:0; width: 100%; z-index: 100; padding: 20px 0; transition: all 0.4s ease; }
+        .main-header.scrolled {
+            background: rgba(11, 12, 16, 0.8); backdrop-filter: blur(15px);
+            padding: 15px 0; border-bottom: 1px solid var(--color-border);
+        }
+        .header-container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 20px;}
+        .header-logo img { height: 45px; }
+        .main-nav a { text-decoration: none; color: var(--color-text-light); margin-left: 40px; font-weight: 500; font-size: 1rem; }
+        .main-nav a:hover { color: var(--brand-gold); }
+
+        /* --- Hero Section with Neural Orb --- */
+        .hero { min-height: 100vh; display: flex; align-items: center; text-align: center; position: relative; }
+        #hero-orb-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; opacity: 0.7; }
+        .hero-content { max-width: 800px; margin: 0 auto; }
+        .hero-content h1 {
+            font-family: var(--font-heading); font-size: 4.5rem; font-weight: 700;
+            line-height: 1.15; letter-spacing: -1.5px; margin-bottom: 24px;
+        }
+        .hero-content p { font-size: 1.2rem; color: var(--color-text-muted); margin: 0 auto 40px auto; max-width: 600px; }
+
+        /* NEW: Hero Focus Cards */
+        .hero-focus-cards {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .hero-card {
+            padding: 15px 25px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--color-text-muted);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 1px solid transparent;
+            background: transparent;
+            backdrop-filter: blur(0px);
+            transition: all 0.4s ease;
+        }
+        .hero-card:hover {
+            transform: translateY(-5px);
+            background: var(--glass-bg);
+            border-color: var(--color-border);
+            color: var(--color-text-light);
+            backdrop-filter: blur(10px);
+        }
+        .hero-card .icon {
+            font-size: 1.8rem;
+            transition: color 0.4s ease;
+        }
+        .hero-card:hover .icon {
+            color: var(--brand-gold);
+        }
+        .hero-card h4 {
+            font-family: var(--font-heading);
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        /* --- Trust Section --- */
+        .trust-section h2 { font-family: var(--font-heading); font-size: 1.5rem; color: var(--color-text-muted); margin-bottom: 40px; }
+        .logos-grid { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 60px; }
+        .logos-grid img { height: 35px; filter: grayscale(1) brightness(2); opacity: 0.7; transition: all 0.3s ease; }
+        .logos-grid img:hover { filter: none; opacity: 1; transform: scale(1.1); }
+        
+        /* --- Services Section --- */
+        .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+        .service-card { padding: 40px; }
+        .service-card .icon { font-size: 2.5rem; color: var(--brand-teal); margin-bottom: 20px; }
+        .service-card h3 { font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 15px; }
+        .service-card p { color: var(--color-text-muted); line-height: 1.7; }
+
+        /* --- Synergy Animator Section --- */
+        .synergy-section { padding-top: 150px; }
+        .synergy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+        .synergy-content h2 { font-family: var(--font-heading); font-size: 2.8rem; line-height: 1.2; margin-bottom: 20px; }
+        .synergy-content p { color: var(--color-text-muted); font-size: 1.1rem; line-height: 1.8; margin-bottom: 30px; }
+        .synergy-visual { position: relative; height: 350px; display: flex; justify-content: center; align-items: center; }
+        .synergy-circle {
+            position: absolute; border-radius: 50%;
+            background-blend-mode: screen;
+            animation: converge 10s infinite alternate ease-in-out;
+        }
+        .synergy-circle.talent { background: radial-gradient(circle, var(--brand-gold), transparent 70%); width: 200px; height: 200px; }
+        .synergy-circle.tech { background: radial-gradient(circle, var(--brand-teal), transparent 70%); width: 200px; height: 200px; animation-delay: -5s; }
+        .synergy-text { position: absolute; opacity: 0; transition: opacity 2s ease; font-family: var(--font-heading); font-size: 1.2rem; }
+        @keyframes converge {
+            0%, 100% { transform: translateX(-80px) scale(0.9); }
+            50% { transform: translateX(80px) scale(1); }
+        }
+        .synergy-visual.active .synergy-text { opacity: 1; }
+
+        /* --- Testimonials Section --- */
+        .testimonials-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .testimonial-card { padding: 40px; position: relative; }
+        .testimonial-card .quote-icon { position: absolute; top: 30px; left: 30px; font-size: 3rem; color: var(--color-border); }
+        .testimonial-card p { font-size: 1.1rem; line-height: 1.8; margin-top: 50px; font-style: italic; }
+        .testimonial-card .author { margin-top: 25px; font-weight: 700; color: var(--color-text-light); }
+        .testimonial-card .author span { display: block; font-weight: 400; color: var(--color-text-muted); font-style: normal; }
+
+        /* --- CTA Section --- */
+        .cta-section { text-align: center; }
+        .cta-container { padding: 60px; }
+        .cta-container h2 { font-size: 2.5rem; margin-bottom: 20px; }
+        .cta-container p { color: var(--color-text-muted); max-width: 500px; margin: 0 auto 30px auto; }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 992px) {
+            .hero-content h1 { font-size: 3.5rem; }
+            .services-grid, .testimonials-grid { grid-template-columns: 1fr; }
+            .synergy-grid { grid-template-columns: 1fr; text-align: center; }
+            .synergy-visual { margin-top: 60px; }
+        }
+         @media (max-width: 768px) {
+            .hero-focus-cards { flex-direction: column; align-items: center; gap: 10px; }
+         }
+    </style>
+</head>
+<body>
+    <div class="aurora-bg"></div>
+    <header class="main-header" id="main-header">
+        <div class="header-container">
+            <a href="#" class="header-logo"><img src="cygnisoft_logo.jpg" alt="CygniSoft Logo"></a>
+            <nav class="main-nav">
+                <a href="#solutions">Solutions</a>
+                <a href="#about">About Us</a>
+                <a href="#contact">Contact</a>
+            </nav>
+            <a href="#contact" class="btn btn-primary">Start Your Project</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <canvas id="hero-orb-canvas"></canvas>
+            <div class="container">
+                <div class="hero-content">
+                    <h1>We Engineer Clarity from Complexity.</h1>
+                    <p>CygniSoft orchestrates elite talent and bespoke technology to build your future, today.</p>
+
+                    <div class="hero-focus-cards">
+                        <a href="#solutions" class="hero-card">
+                            <div class="icon"><i class="fa-solid fa-code"></i></div>
+                            <h4>IT & Technology</h4>
+                        </a>
+                        <a href="#solutions" class="hero-card">
+                            <div class="icon"><i class="fa-solid fa-heart-pulse"></i></div>
+                            <h4>Healthcare</h4>
+                        </a>
+                    </div>
+
+                    <a href="#solutions" class="btn btn-primary">Explore Our Solutions</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="section trust-section">
+            <div class="container">
+                <h2>Trusted by the Industry's Visionaries</h2>
+                <div class="logos-grid">
+                     <img src="https://via.placeholder.com/150x40/333/eee?text=TechCorp" alt="TechCorp Logo">
+                    <img src="https://via.placeholder.com/150x40/333/eee?text=HealthSys" alt="HealthSys Logo">
+                    <img src="https://via.placeholder.com/150x40/333/eee?text=GlobalDev" alt="GlobalDev Logo">
+                    <img src="https://via.placeholder.com/150x40/333/eee?text=InnovateX" alt="InnovateX Logo">
+                    <img src="https://via.placeholder.com/150x40/333/eee?text=FutureLabs" alt="FutureLabs Logo">
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="solutions">
+            <div class="container">
+                <h2 class="section-heading">Integrated Solutions</h2>
+                <p class="section-subheading">Our strength lies in a holistic approach, blending human potential with technological power to create unmatched value for your enterprise.</p>
+                <div class="services-grid">
+                    <div class="service-card glass-card">
+                        <div class="icon"><i class="fa-solid fa-users-line"></i></div>
+                        <h3>Elite Talent Sourcing</h3>
+                        <p>We connect you with visionary professionals in IT and Healthcare who don't just fill a role—they elevate your entire organization.</p>
+                    </div>
+                    <div class="service-card glass-card">
+                        <div class="icon"><i class="fa-solid fa-cubes"></i></div>
+                        <h3>Custom Software Development</h3>
+                        <p>We architect robust, scalable software and mobile applications that serve as the engine for your business's growth and efficiency.</p>
+                    </div>
+                    <div class="service-card glass-card">
+                        <div class="icon"><i class="fa-solid fa-shield-halved"></i></div>
+                        <h3>Managed Tech Services</h3>
+                        <p>Our proactive IT management and strategic consulting ensure your infrastructure is secure, optimized, and always future-ready.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section synergy-section" id="about">
+            <div class="container">
+                <div class="synergy-grid">
+                    <div class="synergy-content">
+                        <h2>The Convergence of Talent and Technology</h2>
+                        <p>True innovation doesn't happen in a vacuum. It sparks at the precise intersection where brilliant minds are empowered by intelligent technology. This is our core philosophy and the foundation of every solution we deliver.</p>
+                        <a href="#" class="btn btn-primary">Discover Our Method</a>
+                    </div>
+                    <div class="synergy-visual" id="synergy-visual">
+                        <div class="synergy-circle talent"></div>
+                        <div class="synergy-circle tech"></div>
+                        <div class="synergy-text">Innovation Unlocked</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section testimonials-section">
+            <div class="container">
+                 <h2 class="section-heading">What Our Partners Say</h2>
+                 <p class="section-subheading">Our success is reflected in the lasting partnerships we build.</p>
+                 <div class="testimonials-grid">
+                     <div class="testimonial-card glass-card">
+                        <div class="quote-icon"><i class="fa-solid fa-quote-left"></i></div>
+                        <p>"CygniSoft's approach is different. They didn't just find us a developer; they found us a strategic partner who has become essential to our team's success."</p>
+                        <div class="author">Jane Doe <span>CTO, InnovateX</span></div>
+                     </div>
+                     <div class="testimonial-card glass-card">
+                        <div class="quote-icon"><i class="fa-solid fa-quote-left"></i></div>
+                        <p>"The software solution they built for us was a game-changer. It streamlined our operations and the team was professional and insightful throughout the entire process."</p>
+                         <div class="author">John Smith <span>CEO, HealthSys</span></div>
+                     </div>
+                 </div>
+            </div>
+        </section>
+
+        <section class="section cta-section" id="contact">
+            <div class="container">
+                <div class="cta-container glass-card">
+                    <h2>Ready to Build What's Next?</h2>
+                    <p>Your vision requires more than just a service provider—it requires a partner. Let's start the conversation about how we can help you achieve your goals.</p>
+                    <a href="#" class="btn btn-primary">Initiate Your Project</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Header Scroll Effect ---
+            const header = document.getElementById('main-header');
+            window.addEventListener('scroll', () => {
+                header.classList.toggle('scrolled', window.scrollY > 50);
+            });
+
+            // --- Neural Orb Hero Canvas ---
+            const canvas = document.getElementById('hero-orb-canvas');
+            if (canvas) {
+                const ctx = canvas.getContext('2d');
+                let width, height, particles, mouse;
+                const particleCount = 50;
+
+                mouse = { x: null, y: null };
+                
+                function initCanvas() {
+                    width = canvas.offsetWidth;
+                    height = canvas.offsetHeight;
+                    canvas.width = width;
+                    canvas.height = height;
+                    particles = [];
+
+                    const center = { x: width / 2, y: height / 2 };
+                    for (let i = 0; i < particleCount; i++) {
+                        const radius = Math.random() * 200 + 150;
+                        const angle = Math.random() * Math.PI * 2;
+                        particles.push({
+                            x: center.x + Math.cos(angle) * radius,
+                            y: center.y + Math.sin(angle) * radius,
+                            size: Math.random() * 2 + 1,
+                            speed: Math.random() * 0.01 + 0.005,
+                            angle: angle,
+                            radius: radius,
+                            color: Math.random() > 0.5 ? 'rgba(255, 179, 71, 0.7)' : 'rgba(0, 128, 128, 0.7)'
+                        });
+                    }
+                }
+
+                function animate() {
+                    ctx.clearRect(0, 0, width, height);
+                    const center = { x: width / 2, y: height / 2 };
+
+                    if (mouse.x !== null) {
+                        center.x += (mouse.x - center.x) * 0.05;
+                        center.y += (mouse.y - center.y) * 0.05;
+                    }
+
+                    const gradient = ctx.createRadialGradient(center.x, center.y, 0, center.x, center.y, 100);
+                    gradient.addColorStop(0, 'rgba(255, 179, 71, 0.1)');
+                    gradient.addColorStop(1, 'rgba(11, 12, 16, 0)');
+                    ctx.fillStyle = gradient;
+                    ctx.beginPath();
+                    ctx.arc(center.x, center.y, 100, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    particles.forEach(p => {
+                        p.angle += p.speed;
+                        p.x = center.x + Math.cos(p.angle) * p.radius;
+                        p.y = center.y + Math.sin(p.angle) * p.radius;
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                        ctx.fillStyle = p.color;
+                        ctx.fill();
+                    });
+                    
+                    requestAnimationFrame(animate);
+                }
+                
+                canvas.addEventListener('mousemove', (e) => {
+                    mouse.x = e.clientX;
+                    mouse.y = e.clientY;
+                });
+                 canvas.addEventListener('mouseleave', () => {
+                    mouse.x = null;
+                    mouse.y = null;
+                });
+
+                initCanvas();
+                animate();
+                window.addEventListener('resize', initCanvas);
+            }
+            
+            // --- Synergy Animator Observer ---
+            const synergyVisual = document.getElementById('synergy-visual');
+            const synergyObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.5 });
+            if(synergyVisual) synergyObserver.observe(synergyVisual);
+        });
+    </script>
+</body>
+</html>
