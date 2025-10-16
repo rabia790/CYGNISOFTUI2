@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CygniSoft Inc. - The Professional Agency</title>
+    <title>CygniSoft Inc. - The Enhanced Agency</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
-            --brand-gold: #FFB347; /* Muted Orange/Soft Gold */
-            --brand-teal: #008080; /* Professional Deep Teal */
+            --brand-gold: #FFB347;
+            --brand-teal: #008080;
             --color-bg: #0B0C10;
             --color-bg-secondary: #1C1C22;
             --color-text-light: #EAEAEA;
@@ -21,6 +21,18 @@
             --font-heading: 'Space Grotesk', sans-serif;
             --font-body: 'Inter', sans-serif;
         }
+        
+        body.light-mode {
+            --brand-gold: #E89B31;
+            --brand-teal: #006A6A;
+            --color-bg: #F5F5F7;
+            --color-bg-secondary: #FFFFFF;
+            --color-text-light: #1D1D1F;
+            --color-text-muted: #515154;
+            --color-border: rgba(29, 29, 31, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.5);
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         body {
@@ -28,6 +40,31 @@
             background-color: var(--color-bg);
             color: var(--color-text-light);
             overflow-x: hidden;
+            transition: background-color 0.4s ease, color 0.4s ease;
+            cursor: none;
+        }
+
+        /* NEW: Interactive Cursor */
+        .cursor-light {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 25px;
+            height: 25px;
+            background: var(--brand-teal);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            opacity: 0.3;
+            filter: blur(15px);
+            transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease, background-color 0.3s ease;
+        }
+        .cursor-light.hover {
+            width: 60px;
+            height: 60px;
+            opacity: 0.2;
+            background: var(--brand-gold);
         }
 
         /* Digital Aurora Background */
@@ -56,14 +93,17 @@
         .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(212, 175, 55, 0.3); }
         .glass-card { background: var(--glass-bg); border: 1px solid var(--color-border); border-radius: 16px; backdrop-filter: blur(12px); transition: all 0.4s ease; }
         .glass-card:hover { border-color: rgba(0, 128, 128, 0.5); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2); transform: translateY(-8px); }
+        body.light-mode .glass-card:hover { box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); }
 
         /* --- Header --- */
-        .main-header { position: fixed; top: 0; left:0; width: 100%; z-index: 100; padding: 20px 0; transition: all 0.4s ease; }
-        .main-header.scrolled { background: rgba(11, 12, 16, 0.8); backdrop-filter: blur(15px); padding: 15px 0; border-bottom: 1px solid var(--color-border); }
+        .main-header { position: fixed; top: 0; left:0; width: 100%; z-index: 100; padding: 20px 0; transition: background-color 0.4s ease, padding 0.4s ease, border-color 0.4s ease; }
+        .main-header.scrolled { background: var(--glass-bg); backdrop-filter: blur(15px); padding: 15px 0; border-bottom: 1px solid var(--color-border); }
         .header-container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 20px;}
         .header-logo img { height: 45px; }
+        .header-controls { display: flex; align-items: center; gap: 40px; }
         .main-nav a { text-decoration: none; color: var(--color-text-light); margin-left: 40px; font-weight: 500; font-size: 1rem; }
         .main-nav a:hover { color: var(--brand-gold); }
+        #theme-toggle { background: none; border: none; color: var(--color-text-muted); font-size: 1.2rem; cursor: none; }
 
         /* --- Hero Section with Neural Orb --- */
         .hero { min-height: 100vh; display: flex; align-items: center; text-align: center; position: relative; }
@@ -79,70 +119,67 @@
         .hero-card h4 { font-family: var(--font-heading); font-weight: 500; font-size: 1.2rem; color: var(--color-text-light); }
         .hero-card p { font-size: 0.9rem; line-height: 1.6; margin: 0; color: var(--color-text-muted); }
 
-        /* --- Trust Section --- */
-        .trust-section h2 { font-family: var(--font-heading); font-size: 1.5rem; color: var(--color-text-muted); margin-bottom: 40px; }
-        .logos-grid { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 60px; }
-        .logos-grid img { height: 35px; filter: grayscale(1) brightness(2); opacity: 0.7; transition: all 0.3s ease; }
-        .logos-grid img:hover { filter: none; opacity: 1; transform: scale(1.1); }
+        /* NEW: Stats Section */
+        .stats-section { padding-top: 60px; padding-bottom: 60px; background-color: var(--color-bg-secondary); }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; text-align: center; }
+        .stat-item .stat-number { font-family: var(--font-heading); font-size: 3.5rem; font-weight: 700; color: var(--brand-gold); }
+        .stat-item .stat-label { color: var(--color-text-muted); }
+
+        /* NEW: Sticky Services Section */
+        .sticky-services-container { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: flex-start; }
+        .sticky-visual { position: sticky; top: 150px; height: 400px; display: flex; align-items: center; justify-content: center; }
+        .visual-content { text-align: center; }
+        .visual-content .icon { font-size: 5rem; color: var(--brand-teal); transition: color 0.5s ease; }
+        .scroll-content .service-panel { min-height: 400px; padding: 20px; opacity: 0.3; transition: opacity 0.5s ease; }
+        .scroll-content .service-panel.is-active { opacity: 1; }
+        .service-panel h3 { font-family: var(--font-heading); font-size: 2rem; margin-bottom: 15px; color: var(--brand-gold); }
+        .service-panel p { color: var(--color-text-muted); font-size: 1.1rem; line-height: 1.8; }
         
-        /* --- Services Section & Industries Section --- */
-        .grid-3-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
-        .info-card { padding: 40px; }
-        .info-card .icon { font-size: 2.5rem; color: var(--brand-teal); margin-bottom: 20px; }
-        .info-card h3 { font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 15px; }
-        .info-card p { color: var(--color-text-muted); line-height: 1.7; }
-
-        /* --- Unified Approach Section --- */
-        .unified-section { text-align: center; }
-        .unified-content { max-width: 800px; margin: 0 auto; }
-        .unified-content h2 { font-size: 2.8rem; line-height: 1.2; margin-bottom: 20px; }
-        .unified-content p { color: var(--color-text-muted); font-size: 1.2rem; line-height: 1.8; }
-        .unified-content .divider { height: 2px; width: 80px; background: linear-gradient(90deg, var(--brand-gold), var(--brand-teal)); margin: 40px auto; opacity: 0.5; }
-
         /* --- Technologies Section --- */
         .tech-grid { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 50px; }
-        .tech-item { text-align: center; color: var(--color-text-muted); transition: color 0.3s ease; }
-        .tech-item:hover { color: var(--color-text-light); }
+        .tech-item { text-align: center; color: var(--color-text-muted); transition: all 0.3s ease; }
+        .tech-item:hover { color: var(--color-text-light); transform: translateY(-5px); }
         .tech-item .icon { font-size: 3rem; }
         .tech-item span { display: block; margin-top: 15px; font-family: var(--font-heading); }
-
-        /* --- Testimonials Section --- */
+        
+        /* --- Testimonials & CTA Sections... (styles from before) --- */
         .testimonials-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
         .testimonial-card { padding: 40px; position: relative; }
         .testimonial-card .quote-icon { position: absolute; top: 30px; left: 30px; font-size: 3rem; color: var(--color-border); }
         .testimonial-card p { font-size: 1.1rem; line-height: 1.8; margin-top: 50px; font-style: italic; }
         .testimonial-card .author { margin-top: 25px; font-weight: 700; color: var(--color-text-light); }
         .testimonial-card .author span { display: block; font-weight: 400; color: var(--color-text-muted); font-style: normal; }
-
-        /* --- CTA Sections (Careers & Contact) --- */
         .cta-section { text-align: center; }
         .cta-container { padding: 60px; }
         .cta-container h2 { font-size: 2.5rem; margin-bottom: 20px; }
         .cta-container p { color: var(--color-text-muted); max-width: 500px; margin: 0 auto 30px auto; }
-        
-        /* --- Responsive Design --- */
+
         @media (max-width: 992px) {
             .hero-content h1 { font-size: 3.5rem; }
-            .grid-3-col, .testimonials-grid { grid-template-columns: 1fr; }
+            .sticky-services-container { grid-template-columns: 1fr; }
+            .sticky-visual { display: none; }
+            .scroll-content .service-panel { min-height: auto; opacity: 1; padding-bottom: 80px; }
+            .testimonials-grid { grid-template-columns: 1fr; }
         }
-         @media (max-width: 768px) {
-            .hero-focus-cards { flex-direction: column; align-items: center; gap: 15px; }
-            .hero-card { width: 100%; max-width: 320px; }
-         }
     </style>
 </head>
-<body>
+<body id="body">
+    <div class="cursor-light" id="cursor-light"></div>
     <div class="aurora-bg"></div>
     <header class="main-header" id="main-header">
         <div class="header-container">
             <a href="#" class="header-logo"><img src="cygnisoft_logo.jpg" alt="CygniSoft Logo"></a>
-            <nav class="main-nav">
-                <a href="#solutions">Solutions</a>
-                <a href="#industries">Industries</a>
-                <a href="#about">About</a>
-                <a href="#contact">Contact</a>
-            </nav>
-            <a href="#contact" class="btn btn-primary">Start Your Project</a>
+            <div class="header-controls">
+                <nav class="main-nav">
+                    <a href="#solutions">Solutions</a>
+                    <a href="#tech">Technology</a>
+                    <a href="#contact">Contact</a>
+                </nav>
+                <button id="theme-toggle" title="Toggle Theme">
+                    <i class="fa-solid fa-sun"></i>
+                </button>
+                <a href="#contact" class="btn btn-primary">Start Project</a>
+            </div>
         </div>
     </header>
 
@@ -165,20 +202,25 @@
                             <p>Specialized talent sourcing to elevate patient care and operations.</p>
                         </a>
                     </div>
-                    <a href="#solutions" class="btn btn-primary">Accelerate Your Vision</a>
                 </div>
             </div>
         </section>
 
-        <section class="section trust-section">
+        <section class="section stats-section">
             <div class="container">
-                <h2>Trusted by the Industry's Visionaries</h2>
-                <div class="logos-grid">
-                     <img src="https://via.placeholder.com/150x40/333/eee?text=TechCorp" alt="TechCorp Logo">
-                    <img src="https://via.placeholder.com/150x40/333/eee?text=HealthSys" alt="HealthSys Logo">
-                    <img src="https://via.placeholder.com/150x40/333/eee?text=GlobalDev" alt="GlobalDev Logo">
-                    <img src="https://via.placeholder.com/150x40/333/eee?text=InnovateX" alt="InnovateX Logo">
-                    <img src="https://via.placeholder.com/150x40/333/eee?text=FutureLabs" alt="FutureLabs Logo">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="10">0</div>
+                        <div class="stat-label">Years of Experience</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="500">0</div>
+                        <div class="stat-label">Successful Placements</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="98">0</div>
+                        <div class="stat-label">Client Satisfaction (%)</div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -187,85 +229,40 @@
             <div class="container">
                 <h2 class="section-heading">Integrated Solutions</h2>
                 <p class="section-subheading">Our strength lies in a holistic approach, blending human potential with technological power to create unmatched value for your enterprise.</p>
-                <div class="grid-3-col">
-                    <div class="info-card glass-card">
-                        <div class="icon"><i class="fa-solid fa-users-line"></i></div>
-                        <h3>Elite Talent Sourcing</h3>
-                        <p>We connect you with visionary professionals who don't just fill a role—they elevate your entire organization.</p>
+                <div class="sticky-services-container">
+                    <div class="sticky-visual">
+                        <div class="visual-content">
+                            <div class="icon" id="sticky-icon"><i class="fa-solid fa-users-line"></i></div>
+                        </div>
                     </div>
-                    <div class="info-card glass-card">
-                        <div class="icon"><i class="fa-solid fa-cubes"></i></div>
-                        <h3>Custom Software Development</h3>
-                        <p>We architect robust, scalable software that serves as the engine for your business's growth and efficiency.</p>
-                    </div>
-                    <div class="info-card glass-card">
-                        <div class="icon"><i class="fa-solid fa-shield-halved"></i></div>
-                        <h3>Managed Tech Services</h3>
-                        <p>Our proactive IT management and strategic consulting ensure your infrastructure is secure, optimized, and future-ready.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="section" id="industries">
-            <div class="container">
-                <h2 class="section-heading">Expertise Across Key Sectors</h2>
-                <p class="section-subheading">We speak your language. Our tailored solutions are built on a deep understanding of the sectors we serve.</p>
-                <div class="grid-3-col">
-                    <div class="info-card glass-card">
-                        <div class="icon"><i class="fa-solid fa-heart-pulse"></i></div>
-                        <h3>Healthcare</h3>
-                        <p>Navigating the complexities of healthcare with specialized staffing for clinical and administrative roles.</p>
-                    </div>
-                    <div class="info-card glass-card">
-                        <div class="icon"><i class="fa-solid fa-landmark"></i></div>
-                        <h3>Finance & Banking</h3>
-                        <p>Providing secure, compliant technology solutions and expert talent for the financial industry.</p>
-                    </div>
-                    <div class="info-card glass-card">
-                        <div class="icon"><i class="fa-solid fa-store"></i></div>
-                        <h3>Retail & E-commerce</h3>
-                        <p>Powering modern retail with scalable e-commerce platforms and the talent to manage them.</p>
+                    <div class="scroll-content">
+                        <div class="service-panel" data-icon="fa-solid fa-users-line">
+                            <h3>Elite Talent Sourcing</h3>
+                            <p>We connect you with visionary professionals in IT and Healthcare who don't just fill a role—they elevate your entire organization. Our rigorous vetting process ensures you get not just the right skills, but the right cultural fit for long-term success.</p>
+                        </div>
+                        <div class="service-panel" data-icon="fa-solid fa-cubes">
+                            <h3>Custom Software Development</h3>
+                            <p>We architect robust, scalable software and mobile applications that serve as the engine for your business's growth. From initial strategy to final deployment, we build solutions that are secure, efficient, and perfectly aligned with your goals.</p>
+                        </div>
+                        <div class="service-panel" data-icon="fa-solid fa-shield-halved">
+                            <h3>Managed Tech Services</h3>
+                            <p>Our proactive IT management and strategic consulting ensure your infrastructure is secure, optimized, and always future-ready. We handle the technology so you can focus on what you do best: running your business.</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="section unified-section" id="about">
-            <div class="container">
-                <div class="unified-content">
-                    <h2 class="section-heading">Our Unified Approach</h2>
-                    <div class="divider"></div>
-                    <p>Our unique strength lies at the intersection of human potential and technological power. We don't just solve problems—we build integrated ecosystems that drive lasting success.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="section tech-section">
+        <section class="section tech-section" id="tech">
             <div class="container">
                 <h2 class="section-heading">Powered by Leading-Edge Technology</h2>
                 <p class="section-subheading">We leverage a modern, powerful technology stack to build robust and scalable solutions.</p>
                 <div class="tech-grid">
-                    <div class="tech-item">
-                        <div class="icon"><i class="fab fa-windows"></i></div>
-                        <span>Dynamics 365</span>
-                    </div>
-                    <div class="tech-item">
-                        <div class="icon"><i class="fab fa-azure"></i></div>
-                        <span>Microsoft Azure</span>
-                    </div>
-                    <div class="tech-item">
-                        <div class="icon"><i class="fab fa-aws"></i></div>
-                        <span>Amazon Web Services</span>
-                    </div>
-                    <div class="tech-item">
-                        <div class="icon"><i class="fab fa-react"></i></div>
-                        <span>React</span>
-                    </div>
-                    <div class="tech-item">
-                        <div class="icon"><i class="fab fa-python"></i></div>
-                        <span>Python</span>
-                    </div>
+                    <div class="tech-item"><div class="icon"><i class="fab fa-windows"></i></div><span>Dynamics 365</span></div>
+                    <div class="tech-item"><div class="icon"><i class="fab fa-azure"></i></div><span>Microsoft Azure</span></div>
+                    <div class="tech-item"><div class="icon"><i class="fab fa-aws"></i></div><span>Amazon Web Services</span></div>
+                    <div class="tech-item"><div class="icon"><i class="fab fa-react"></i></div><span>React</span></div>
+                    <div class="tech-item"><div class="icon"><i class="fab fa-python"></i></div><span>Python</span></div>
                 </div>
             </div>
         </section>
@@ -288,16 +285,6 @@
                  </div>
             </div>
         </section>
-        
-        <section class="section cta-section" id="careers">
-             <div class="container">
-                <div class="cta-container glass-card">
-                    <h2>Join a Team of Visionaries</h2>
-                    <p>We're a team of innovators, problem-solvers, and strategic thinkers. Discover where you fit in and help us shape the future.</p>
-                    <a href="#" class="btn btn-primary">Explore Open Roles</a>
-                </div>
-            </div>
-        </section>
 
         <section class="section cta-section" id="contact">
             <div class="container">
@@ -318,69 +305,113 @@
                 header.classList.toggle('scrolled', window.scrollY > 50);
             });
 
+            // --- Interactive Cursor ---
+            const cursor = document.getElementById('cursor-light');
+            const interactiveElements = document.querySelectorAll('a, button, .glass-card');
+            window.addEventListener('mousemove', e => {
+                cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+            });
+            interactiveElements.forEach(el => {
+                el.addEventListener('mouseover', () => cursor.classList.add('hover'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+            });
+
+            // --- Theme Toggle ---
+            const themeToggle = document.getElementById('theme-toggle');
+            const body = document.body;
+            const currentTheme = localStorage.getItem('theme');
+
+            if (currentTheme === 'light') {
+                body.classList.add('light-mode');
+                themeToggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
+            }
+
+            themeToggle.addEventListener('click', () => {
+                body.classList.toggle('light-mode');
+                if (body.classList.contains('light-mode')) {
+                    localStorage.setItem('theme', 'light');
+                    themeToggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
+                } else {
+                    localStorage.removeItem('theme');
+                    themeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
+                }
+            });
+
             // --- Neural Orb Hero Canvas ---
             const canvas = document.getElementById('hero-orb-canvas');
             if (canvas) {
+                // (Orb animation code remains the same as previous version)
                 const ctx = canvas.getContext('2d');
-                let width, height, particles, mouse;
+                let width, height, particles, mouse = { x: null, y: null };
                 const particleCount = 50;
-                mouse = { x: null, y: null };
-                
                 function initCanvas() {
-                    width = canvas.offsetWidth;
-                    height = canvas.offsetHeight;
-                    canvas.width = width;
-                    canvas.height = height;
+                    width = canvas.offsetWidth; height = canvas.offsetHeight;
+                    canvas.width = width; canvas.height = height;
                     particles = [];
                     const center = { x: width / 2, y: height / 2 };
                     for (let i = 0; i < particleCount; i++) {
                         const radius = Math.random() * 200 + 150;
                         const angle = Math.random() * Math.PI * 2;
-                        particles.push({
-                            x: center.x + Math.cos(angle) * radius,
-                            y: center.y + Math.sin(angle) * radius,
-                            size: Math.random() * 2 + 1,
-                            speed: Math.random() * 0.01 + 0.005,
-                            angle: angle,
-                            radius: radius,
-                            color: Math.random() > 0.5 ? 'rgba(255, 179, 71, 0.7)' : 'rgba(0, 128, 128, 0.7)'
-                        });
+                        particles.push({ x: center.x + Math.cos(angle) * radius, y: center.y + Math.sin(angle) * radius, size: Math.random() * 2 + 1, speed: Math.random() * 0.01 + 0.005, angle: angle, radius: radius, color: Math.random() > 0.5 ? 'rgba(255, 179, 71, 0.7)' : 'rgba(0, 128, 128, 0.7)' });
                     }
                 }
-
                 function animate() {
                     ctx.clearRect(0, 0, width, height);
                     const center = { x: width / 2, y: height / 2 };
-                    if (mouse.x !== null) {
-                        center.x += (mouse.x - center.x) * 0.05;
-                        center.y += (mouse.y - center.y) * 0.05;
-                    }
+                    if (mouse.x !== null) { center.x += (mouse.x - center.x) * 0.05; center.y += (mouse.y - center.y) * 0.05; }
                     const gradient = ctx.createRadialGradient(center.x, center.y, 0, center.x, center.y, 100);
-                    gradient.addColorStop(0, 'rgba(255, 179, 71, 0.1)');
-                    gradient.addColorStop(1, 'rgba(11, 12, 16, 0)');
-                    ctx.fillStyle = gradient;
-                    ctx.beginPath();
-                    ctx.arc(center.x, center.y, 100, 0, Math.PI * 2);
-                    ctx.fill();
+                    gradient.addColorStop(0, 'rgba(255, 179, 71, 0.1)'); gradient.addColorStop(1, 'rgba(11, 12, 16, 0)');
+                    ctx.fillStyle = gradient; ctx.beginPath(); ctx.arc(center.x, center.y, 100, 0, Math.PI * 2); ctx.fill();
                     particles.forEach(p => {
                         p.angle += p.speed;
-                        p.x = center.x + Math.cos(p.angle) * p.radius;
-                        p.y = center.y + Math.sin(p.angle) * p.radius;
-                        ctx.beginPath();
-                        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                        ctx.fillStyle = p.color;
-                        ctx.fill();
+                        p.x = center.x + Math.cos(p.angle) * p.radius; p.y = center.y + Math.sin(p.angle) * p.radius;
+                        ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fillStyle = p.color; ctx.fill();
                     });
                     requestAnimationFrame(animate);
                 }
-                
                 canvas.addEventListener('mousemove', (e) => { mouse.x = e.clientX; mouse.y = e.clientY; });
                 canvas.addEventListener('mouseleave', () => { mouse.x = null; mouse.y = null; });
-
-                initCanvas();
-                animate();
-                window.addEventListener('resize', initCanvas);
+                initCanvas(); animate(); window.addEventListener('resize', initCanvas);
             }
+
+            // --- Animated Counters ---
+            const statsObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const counter = entry.target;
+                        const target = +counter.getAttribute('data-target');
+                        const duration = 2000;
+                        let start = 0;
+                        const stepTime = Math.abs(Math.floor(duration / target));
+
+                        const timer = setInterval(() => {
+                            start += 1;
+                            counter.textContent = start;
+                            if (start === target) {
+                                clearInterval(timer);
+                            }
+                        }, stepTime);
+                        observer.unobserve(counter);
+                    }
+                });
+            }, { threshold: 0.5 });
+            document.querySelectorAll('.stat-number').forEach(stat => {
+                statsObserver.observe(stat);
+            });
+
+            // --- Sticky Services Section ---
+            const servicePanels = document.querySelectorAll('.service-panel');
+            const stickyIcon = document.getElementById('sticky-icon');
+            const stickyServicesObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        servicePanels.forEach(panel => panel.classList.remove('is-active'));
+                        entry.target.classList.add('is-active');
+                        if(stickyIcon) stickyIcon.innerHTML = `<i class="${entry.target.dataset.icon}"></i>`;
+                    }
+                });
+            }, { threshold: 0.6 });
+            servicePanels.forEach(panel => stickyServicesObserver.observe(panel));
         });
     </script>
 </body>
