@@ -109,36 +109,41 @@
         }
         .hero-content p { font-size: 1.2rem; color: var(--color-text-muted); margin: 0 auto 40px auto; max-width: 600px; }
 
-        /* NEW: Hero Focus Cards */
+        /* MODIFIED: Hero Focus Cards (Vertical Layout) */
         .hero-focus-cards {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            margin-bottom: 40px;
+            gap: 25px;
+            margin-bottom: 50px;
         }
         .hero-card {
-            padding: 15px 25px;
-            border-radius: 12px;
+            padding: 25px;
+            border-radius: 16px;
             text-decoration: none;
             color: var(--color-text-muted);
+            width: 280px;
             display: flex;
+            flex-direction: column; /* Vertical layout */
             align-items: center;
-            gap: 15px;
+            text-align: center;
+            gap: 15px; /* Space between items */
             border: 1px solid transparent;
             background: transparent;
             backdrop-filter: blur(0px);
             transition: all 0.4s ease;
         }
         .hero-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
             background: var(--glass-bg);
             border-color: var(--color-border);
             color: var(--color-text-light);
             backdrop-filter: blur(10px);
         }
         .hero-card .icon {
-            font-size: 1.8rem;
+            font-size: 2.5rem;
+            color: var(--color-text-muted);
             transition: color 0.4s ease;
+            height: 40px; /* fixed height for icon */
         }
         .hero-card:hover .icon {
             color: var(--brand-gold);
@@ -146,7 +151,14 @@
         .hero-card h4 {
             font-family: var(--font-heading);
             font-weight: 500;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
+            color: var(--color-text-light);
+        }
+        .hero-card p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin: 0;
+            color: var(--color-text-muted);
         }
 
         /* --- Trust Section --- */
@@ -162,25 +174,18 @@
         .service-card h3 { font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 15px; }
         .service-card p { color: var(--color-text-muted); line-height: 1.7; }
 
-        /* --- Synergy Animator Section --- */
-        .synergy-section { padding-top: 150px; }
-        .synergy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
-        .synergy-content h2 { font-family: var(--font-heading); font-size: 2.8rem; line-height: 1.2; margin-bottom: 20px; }
-        .synergy-content p { color: var(--color-text-muted); font-size: 1.1rem; line-height: 1.8; margin-bottom: 30px; }
-        .synergy-visual { position: relative; height: 350px; display: flex; justify-content: center; align-items: center; }
-        .synergy-circle {
-            position: absolute; border-radius: 50%;
-            background-blend-mode: screen;
-            animation: converge 10s infinite alternate ease-in-out;
+        /* NEW: Unified Approach Section */
+        .unified-section { text-align: center; }
+        .unified-content { max-width: 800px; margin: 0 auto; }
+        .unified-content h2 { font-size: 2.8rem; line-height: 1.2; margin-bottom: 20px; }
+        .unified-content p { color: var(--color-text-muted); font-size: 1.2rem; line-height: 1.8; }
+        .unified-content .divider {
+            height: 2px;
+            width: 80px;
+            background: linear-gradient(90deg, var(--brand-gold), var(--brand-teal));
+            margin: 40px auto;
+            opacity: 0.5;
         }
-        .synergy-circle.talent { background: radial-gradient(circle, var(--brand-gold), transparent 70%); width: 200px; height: 200px; }
-        .synergy-circle.tech { background: radial-gradient(circle, var(--brand-teal), transparent 70%); width: 200px; height: 200px; animation-delay: -5s; }
-        .synergy-text { position: absolute; opacity: 0; transition: opacity 2s ease; font-family: var(--font-heading); font-size: 1.2rem; }
-        @keyframes converge {
-            0%, 100% { transform: translateX(-80px) scale(0.9); }
-            50% { transform: translateX(80px) scale(1); }
-        }
-        .synergy-visual.active .synergy-text { opacity: 1; }
 
         /* --- Testimonials Section --- */
         .testimonials-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
@@ -200,11 +205,10 @@
         @media (max-width: 992px) {
             .hero-content h1 { font-size: 3.5rem; }
             .services-grid, .testimonials-grid { grid-template-columns: 1fr; }
-            .synergy-grid { grid-template-columns: 1fr; text-align: center; }
-            .synergy-visual { margin-top: 60px; }
         }
          @media (max-width: 768px) {
-            .hero-focus-cards { flex-direction: column; align-items: center; gap: 10px; }
+            .hero-focus-cards { flex-direction: column; align-items: center; gap: 15px; }
+            .hero-card { width: 100%; max-width: 320px; }
          }
     </style>
 </head>
@@ -234,14 +238,16 @@
                         <a href="#solutions" class="hero-card">
                             <div class="icon"><i class="fa-solid fa-code"></i></div>
                             <h4>IT & Technology</h4>
+                            <p>Bespoke software and elite staffing for a competitive digital edge.</p>
                         </a>
                         <a href="#solutions" class="hero-card">
                             <div class="icon"><i class="fa-solid fa-heart-pulse"></i></div>
                             <h4>Healthcare</h4>
+                            <p>Specialized talent sourcing to elevate patient care and operations.</p>
                         </a>
                     </div>
 
-                    <a href="#solutions" class="btn btn-primary">Explore Our Solutions</a>
+                    <a href="#solutions" class="btn btn-primary">Accelerate Your Vision</a>
                 </div>
             </div>
         </section>
@@ -283,19 +289,12 @@
             </div>
         </section>
 
-        <section class="section synergy-section" id="about">
+        <section class="section unified-section" id="about">
             <div class="container">
-                <div class="synergy-grid">
-                    <div class="synergy-content">
-                        <h2>The Convergence of Talent and Technology</h2>
-                        <p>True innovation doesn't happen in a vacuum. It sparks at the precise intersection where brilliant minds are empowered by intelligent technology. This is our core philosophy and the foundation of every solution we deliver.</p>
-                        <a href="#" class="btn btn-primary">Discover Our Method</a>
-                    </div>
-                    <div class="synergy-visual" id="synergy-visual">
-                        <div class="synergy-circle talent"></div>
-                        <div class="synergy-circle tech"></div>
-                        <div class="synergy-text">Innovation Unlocked</div>
-                    </div>
+                <div class="unified-content">
+                    <h2 class="section-heading">Our Unified Approach</h2>
+                    <div class="divider"></div>
+                    <p>Our unique strength lies at the intersection of human potential and technological power. We don't just solve problems—we build integrated ecosystems that drive lasting success.</p>
                 </div>
             </div>
         </section>
@@ -413,17 +412,6 @@
                 animate();
                 window.addEventListener('resize', initCanvas);
             }
-            
-            // --- Synergy Animator Observer ---
-            const synergyVisual = document.getElementById('synergy-visual');
-            const synergyObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                    }
-                });
-            }, { threshold: 0.5 });
-            if(synergyVisual) synergyObserver.observe(synergyVisual);
         });
     </script>
 </body>
