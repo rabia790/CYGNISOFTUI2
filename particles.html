@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CygniSoft Inc. - Redesigned Professional Agency</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --brand-gold: #FFB347;
+            --brand-teal: #008080;
+            --color-bg: #0B0C10;
+            --color-bg-secondary: #1C1C22;
+            --color-text-light: #EAEAEA;
+            --color-text-muted: #8892B0;
+            --color-border: rgba(136, 146, 176, 0.15);
+            --glass-bg: rgba(22, 27, 34, 0.5);
+            --font-heading: 'Space Grotesk', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-bg);
+            color: var(--color-text-light);
+            overflow-x: hidden;
+        }
+
+        /* Digital Aurora Background */
+        .aurora-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; overflow: hidden; z-index: -1;
+        }
+        .aurora-bg::before, .aurora-bg::after {
+            content: ''; position: absolute; border-radius: 50%;
+            filter: blur(150px); opacity: 0.1;
+            animation: moveGradient 30s infinite alternate;
+        }
+        .aurora-bg::before { background: var(--brand-teal); width: 800px; height: 800px; top: -10%; left: -10%; }
+        .aurora-bg::after { background: var(--brand-gold); width: 900px; height: 900px; bottom: -15%; right: -10%; animation-delay: 15s; }
+        @keyframes moveGradient {
+            from { transform: translate(0, 0) scale(1) rotate(0deg); } to { transform: translate(70px, -70px) scale(1.1) rotate(15deg); }
+        }
+
+        /* --- Reusable Components --- */
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 2;}
+        .section { padding: 120px 0; position: relative; }
+        .section-heading { font-family: var(--font-heading); font-size: 3rem; text-align: center; margin-bottom: 20px; }
+        .section-subheading { text-align: center; max-width: 700px; margin: 0 auto 80px auto; color: var(--color-text-muted); line-height: 1.7; font-size: 1.1rem; }
+        .btn { display: inline-block; padding: 12px 32px; border-radius: 50px; text-decoration: none; font-weight: 500; font-family: var(--font-heading); transition: all 0.3s ease; border: 1px solid transparent; }
+        .btn-primary { background: var(--brand-gold); color: #0B0C10; box-shadow: 0 5px 20px rgba(212, 175, 55, 0.2); }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(212, 175, 55, 0.3); }
+        .glass-card { background: var(--glass-bg); border: 1px solid var(--color-border); border-radius: 16px; backdrop-filter: blur(12px); transition: all 0.4s ease; }
+        .glass-card:hover { border-color: rgba(0, 128, 128, 0.5); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2); transform: translateY(-8px); }
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* --- Header --- */
+        .main-header { position: fixed; top: 0; left:0; width: 100%; z-index: 100; padding: 20px 0; transition: all 0.4s ease; }
+        .main-header.scrolled { background: rgba(11, 12, 16, 0.8); backdrop-filter: blur(15px); padding: 15px 0; border-bottom: 1px solid var(--color-border); }
+        .header-container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 20px;}
+        .header-logo img { height: 45px; }
+        .main-nav a { text-decoration: none; color: var(--color-text-light); margin-left: 40px; font-weight: 500; font-size: 1rem; }
+        .main-nav a:hover { color: var(--brand-gold); }
+
+        /* --- Hero Section --- */
+        .hero { min-height: 100vh; display: flex; align-items: center; text-align: center; position: relative; }
+        #hero-orb-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; opacity: 0.7; }
+        .hero-content h1 { font-family: var(--font-heading); font-size: 4.5rem; font-weight: 700; line-height: 1.15; letter-spacing: -1.5px; margin-bottom: 24px; }
+        .hero-content p { font-size: 1.2rem; color: var(--color-text-muted); margin: 0 auto 40px auto; max-width: 600px; }
+        .hero-focus-cards { display: flex; justify-content: center; gap: 25px; margin-bottom: 50px; }
+        .hero-card { padding: 25px; border-radius: 16px; text-decoration: none; color: var(--color-text-muted); width: 280px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 15px; border: 1px solid transparent; background: transparent; backdrop-filter: blur(0px); transition: all 0.4s ease; }
+        .hero-card:hover { transform: translateY(-8px); background: var(--glass-bg); border-color: var(--color-border); color: var(--color-text-light); backdrop-filter: blur(10px); }
+        .hero-card .icon { font-size: 2.5rem; color: var(--color-text-muted); transition: color 0.4s ease; height: 40px; }
+        .hero-card:hover .icon { color: var(--brand-gold); }
+        .hero-card h4 { font-family: var(--font-heading); font-weight: 500; font-size: 1.2rem; color: var(--color-text-light); }
+        .hero-card p { font-size: 0.9rem; line-height: 1.6; margin: 0; color: var(--color-text-muted); }
+
+        /* --- Stats Section --- */
+        .stats-section { padding: 60px 0; background-color: var(--color-bg-secondary); }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; text-align: center; }
+        .stat-item .stat-number { font-family: var(--font-heading); font-size: 3.5rem; font-weight: 700; color: var(--brand-gold); }
+        .stat-item .stat-label { color: var(--color-text-muted); }
+
+        /* --- Sticky Services Section --- */
+        .sticky-services-container { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: flex-start; }
+        .sticky-visual { position: sticky; top: 150px; height: 400px; display: flex; align-items: center; justify-content: center; }
+        .visual-content .icon { font-size: 5rem; color: var(--brand-teal); transition: color 0.5s ease, transform 0.5s ease; }
+        .scroll-content .service-panel { min-height: 400px; padding: 20px; opacity: 0.3; transition: opacity 0.5s ease; }
+        .scroll-content .service-panel.is-active { opacity: 1; }
+        .service-panel h3 { font-family: var(--font-heading); font-size: 2rem; margin-bottom: 15px; color: var(--brand-gold); }
+        .service-panel p { color: var(--color-text-muted); font-size: 1.1rem; line-height: 1.8; }
+        
+        /* --- Industries Section --- */
+        .grid-3-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+        .info-card { padding: 40px; }
+        .info-card .icon { font-size: 2.5rem; color: var(--brand-teal); margin-bottom: 20px; }
+        .info-card h3 { font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 15px; }
+        .info-card p { color: var(--color-text-muted); line-height: 1.7; }
+        
+        /* --- "Our Process" Timeline Section --- */
+        .process-timeline { max-width: 800px; margin: 0 auto; position: relative; }
+        .timeline-line { position: absolute; top: 0; left: 24px; width: 2px; height: 100%; background: var(--color-border); }
+        .timeline-line-progress { width: 100%; height: 0%; background: linear-gradient(to bottom, var(--brand-gold), var(--brand-teal)); transition: height 1s ease-out; }
+        .timeline-item { position: relative; padding-left: 80px; margin-bottom: 80px; }
+        .timeline-dot { position: absolute; top: 5px; left: 15px; width: 20px; height: 20px; background: var(--color-bg-secondary); border: 2px solid var(--color-border); border-radius: 50%; transition: all 0.5s ease; }
+        .timeline-content .step-number { font-family: var(--font-heading); font-size: 1rem; color: var(--brand-gold); margin-bottom: 10px; }
+        .timeline-content h3 { font-family: var(--font-heading); font-size: 1.8rem; margin-bottom: 15px; }
+        .timeline-content p { color: var(--color-text-muted); line-height: 1.8; }
+        .timeline-item.active .timeline-dot { border-color: var(--brand-gold); transform: scale(1.2); }
+        
+        /* --- Technologies Section --- */
+        .tech-grid { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 50px; }
+        .tech-item { text-align: center; color: var(--color-text-muted); transition: color 0.3s ease, transform 0.3s ease; }
+        .tech-item:hover { color: var(--color-text-light); transform: translateY(-5px); }
+        .tech-item .icon { font-size: 3rem; }
+        .tech-item span { display: block; margin-top: 15px; font-family: var(--font-heading); }
+
+        /* --- Global Map Section --- */
+        .map-section { text-align: center; }
+        .map-container { position: relative; max-width: 800px; margin: 0 auto; }
+        .map-svg { width: 100%; height: auto; fill: var(--color-border); }
+        .map-dot { position: absolute; width: 12px; height: 12px; background-color: var(--brand-teal); border-radius: 50%; box-shadow: 0 0 15px var(--brand-teal); animation: pulse 2s infinite alternate; }
+        .map-dot.north-america { top: 35%; left: 22%; }
+        .map-dot.europe { top: 30%; left: 48%; animation-delay: 0.5s; }
+        .map-dot.asia { top: 40%; left: 75%; animation-delay: 1s; }
+        @keyframes pulse { from { transform: scale(0.8); opacity: 0.7; } to { transform: scale(1.2); opacity: 1; } }
+        
+        /* --- Testimonials & CTA Sections --- */
+        .testimonials-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .testimonial-card { padding: 40px; position: relative; }
+        .testimonial-card .quote-icon { position: absolute; top: 30px; left: 30px; font-size: 3rem; color: var(--color-border); }
+        .testimonial-card p { font-size: 1.1rem; line-height: 1.8; margin-top: 50px; font-style: italic; }
+        .testimonial-card .author { margin-top: 25px; font-weight: 700; }
+        .testimonial-card .author span { display: block; font-weight: 400; color: var(--color-text-muted); font-style: normal; }
+        .cta-section { text-align: center; }
+        .cta-container { padding: 60px; }
+        .cta-container h2 { font-size: 2.5rem; margin-bottom: 20px; }
+        .cta-container p { color: var(--color-text-muted); max-width: 500px; margin: 0 auto 30px auto; }
+        
+        @media (max-width: 992px) {
+            .hero-content h1 { font-size: 3.5rem; }
+            .stats-grid { grid-template-columns: 1fr; gap: 50px; }
+            .sticky-services-container { grid-template-columns: 1fr; }
+            .sticky-visual { display: none; }
+            .scroll-content .service-panel { min-height: auto; opacity: 1; padding-bottom: 80px; }
+            .grid-3-col, .testimonials-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="aurora-bg"></div>
+    <header class="main-header" id="main-header">
+        <div class="header-container">
+            <a href="#" class="header-logo"><img src="cygnisoft_logo.jpg" alt="CygniSoft Logo"></a>
+            <nav class="main-nav">
+                <a href="#solutions">Solutions</a>
+                <a href="#industries">Industries</a>
+                <a href="#process">Our Process</a>
+                <a href="#contact">Contact</a>
+            </nav>
+            <a href="#contact" class="btn btn-primary">Start Your Project</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <canvas id="hero-orb-canvas"></canvas>
+            <div class="container">
+                <div class="hero-content reveal">
+                    <h1>We Engineer Clarity from Complexity.</h1>
+                    <p>CygniSoft orchestrates elite talent and bespoke technology to build your future, today.</p>
+                    <div class="hero-focus-cards">
+                        <a href="#solutions" class="hero-card">
+                            <div class="icon"><i class="fa-solid fa-code"></i></div>
+                            <h4>IT & Technology</h4>
+                            <p>Bespoke software and elite staffing for a competitive digital edge.</p>
+                        </a>
+                        <a href="#solutions" class="hero-card">
+                            <div class="icon"><i class="fa-solid fa-heart-pulse"></i></div>
+                            <h4>Healthcare</h4>
+                            <p>Specialized talent sourcing to elevate patient care and operations.</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section stats-section reveal">
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="10">0</div>
+                        <div class="stat-label">Years of Experience</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="500">0</div>
+                        <div class="stat-label">Successful Placements</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="98">0</div>
+                        <div class="stat-label">Client Satisfaction (%)</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="solutions">
+            <div class="container">
+                <h2 class="section-heading reveal">Integrated Solutions</h2>
+                <p class="section-subheading reveal">Our strength lies in a holistic approach, blending human potential with technological power to create unmatched value for your enterprise.</p>
+                <div class="sticky-services-container">
+                    <div class="sticky-visual">
+                        <div class="visual-content">
+                            <div class="icon" id="sticky-icon"><i class="fa-solid fa-users-line"></i></div>
+                        </div>
+                    </div>
+                    <div class="scroll-content">
+                        <div class="service-panel" data-icon="fa-solid fa-users-line">
+                            <h3>Elite Talent Sourcing</h3>
+                            <p>We connect you with visionary professionals who don't just fill a role—they elevate your entire organization. Our rigorous vetting process ensures you get not just the right skills, but the right cultural fit for long-term success.</p>
+                        </div>
+                        <div class="service-panel" data-icon="fa-solid fa-cubes">
+                            <h3>Custom Software Development</h3>
+                            <p>We architect robust, scalable software and mobile applications that serve as the engine for your business's growth. From initial strategy to final deployment, we build solutions that are secure, efficient, and perfectly aligned with your goals.</p>
+                        </div>
+                        <div class="service-panel" data-icon="fa-solid fa-shield-halved">
+                            <h3>Managed Tech Services</h3>
+                            <p>Our proactive IT management and strategic consulting ensure your infrastructure is secure, optimized, and always future-ready. We handle the technology so you can focus on what you do best: running your business.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="industries">
+            <div class="container">
+                <h2 class="section-heading reveal">Expertise Across Key Sectors</h2>
+                <p class="section-subheading reveal">We speak your language. Our tailored solutions are built on a deep understanding of the sectors we serve.</p>
+                <div class="grid-3-col">
+                    <div class="info-card glass-card reveal">
+                        <div class="icon"><i class="fa-solid fa-heart-pulse"></i></div>
+                        <h3>Healthcare</h3>
+                        <p>Navigating the complexities of healthcare with specialized staffing for clinical and administrative roles.</p>
+                    </div>
+                    <div class="info-card glass-card reveal">
+                        <div class="icon"><i class="fa-solid fa-landmark"></i></div>
+                        <h3>Finance & Banking</h3>
+                        <p>Providing secure, compliant technology solutions and expert talent for the financial industry.</p>
+                    </div>
+                    <div class="info-card glass-card reveal">
+                        <div class="icon"><i class="fa-solid fa-store"></i></div>
+                        <h3>Retail & E-commerce</h3>
+                        <p>Powering modern retail with scalable e-commerce platforms and the talent to manage them.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="process">
+            <div class="container">
+                <h2 class="section-heading reveal">Your Blueprint for Success</h2>
+                <p class="section-subheading reveal">We follow a meticulous, transparent process to ensure exceptional results, every time.</p>
+                <div class="process-timeline" id="process-timeline">
+                    <div class="timeline-line"><div class="timeline-line-progress" id="timeline-progress"></div></div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="step-number">01</div>
+                            <h3>Discovery & Strategy</h3>
+                            <p>We begin by deeply understanding your goals to build a comprehensive project roadmap.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="step-number">02</div>
+                            <h3>Sourcing & Design</h3>
+                            <p>Our experts architect the technical solution or source ideal candidates from our elite, vetted global network.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="step-number">03</div>
+                            <h3>Execution & Vetting</h3>
+                            <p>We build with agile methodologies or rigorously vet talent to ensure a perfect technical and cultural fit.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="step-number">04</div>
+                            <h3>Delivery & Partnership</h3>
+                            <p>We ensure a seamless deployment and provide ongoing support for a long-term partnership.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section tech-section" id="tech">
+            <div class="container">
+                <h2 class="section-heading reveal">Powered by Leading-Edge Technology</h2>
+                <p class="section-subheading reveal">We leverage a modern, powerful technology stack to build robust and scalable solutions.</p>
+                <div class="tech-grid">
+                    <div class="tech-item reveal"><div class="icon"><i class="fab fa-windows"></i></div><span>Dynamics 365</span></div>
+                    <div class="tech-item reveal"><div class="icon"><i class="fab fa-azure"></i></div><span>Microsoft Azure</span></div>
+                    <div class="tech-item reveal"><div class="icon"><i class="fab fa-aws"></i></div><span>Amazon Web Services</span></div>
+                    <div class="tech-item reveal"><div class="icon"><i class="fab fa-react"></i></div><span>React</span></div>
+                    <div class="tech-item reveal"><div class="icon"><i class="fab fa-python"></i></div><span>Python</span></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section map-section" id="about">
+             <div class="container">
+                <h2 class="section-heading reveal">Connecting Global Talent with Opportunity</h2>
+                <p class="section-subheading reveal">Our network spans continents, giving you access to a world-class pool of vetted professionals.</p>
+                <div class="map-container reveal">
+                    <svg class="map-svg" viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg"><path d="M990,216.5c-5.9-2.9-10.9-7.1-15.1-12.1... (path data omitted for brevity) ...c-0.9,0-1.8,0-2.6,0z" /></svg>
+                    <div class="map-dot north-america"></div>
+                    <div class="map-dot europe"></div>
+                    <div class="map-dot asia"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section testimonials-section">
+            <div class="container">
+                 <h2 class="section-heading reveal">What Our Partners Say</h2>
+                 <p class="section-subheading reveal">Our success is reflected in the lasting partnerships we build.</p>
+                 <div class="testimonials-grid">
+                     <div class="testimonial-card glass-card reveal">
+                        <div class="quote-icon"><i class="fa-solid fa-quote-left"></i></div>
+                        <p>"CygniSoft's approach is different. They didn't just find us a developer; they found us a strategic partner who has become essential to our team's success."</p>
+                        <div class="author">Jane Doe <span>CTO, InnovateX</span></div>
+                     </div>
+                     <div class="testimonial-card glass-card reveal">
+                        <div class="quote-icon"><i class="fa-solid fa-quote-left"></i></div>
+                        <p>"The software solution they built for us was a game-changer. It streamlined our operations and the team was professional and insightful throughout the entire process."</p>
+                         <div class="author">John Smith <span>CEO, HealthSys</span></div>
+                     </div>
+                 </div>
+            </div>
+        </section>
+        
+        <section class="section cta-section" id="careers">
+             <div class="container">
+                <div class="cta-container glass-card reveal">
+                    <h2>Join a Team of Visionaries</h2>
+                    <p>We're a team of innovators, problem-solvers, and strategic thinkers. Discover where you fit in and help us shape the future.</p>
+                    <a href="#" class="btn btn-primary">Explore Open Roles</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="section cta-section" id="contact">
+            <div class="container">
+                <div class="cta-container glass-card reveal">
+                    <h2 class="section-heading">Ready to Build What's Next?</h2>
+                    <p>Your vision requires more than just a service provider—it requires a partner. Let's start the conversation about how we can help you achieve your goals.</p>
+                    <a href="#" class="btn btn-primary">Initiate Your Project</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Header Scroll Effect ---
+            const header = document.getElementById('main-header');
+            window.addEventListener('scroll', () => {
+                header.classList.toggle('scrolled', window.scrollY > 50);
+            });
+
+            // --- On-Scroll Reveal ---
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+            // --- Neural Orb Hero Canvas ---
+            const canvas = document.getElementById('hero-orb-canvas');
+            if (canvas) {
+                const ctx = canvas.getContext('2d');
+                let width, height, particles, mouse = { x: null, y: null };
+                const particleCount = 50;
+                function initCanvas() {
+                    width = canvas.offsetWidth; height = canvas.offsetHeight;
+                    canvas.width = width; canvas.height = height;
+                    particles = [];
+                    const center = { x: width / 2, y: height / 2 };
+                    for (let i = 0; i < particleCount; i++) {
+                        const radius = Math.random() * 200 + 150;
+                        const angle = Math.random() * Math.PI * 2;
+                        particles.push({ x: center.x + Math.cos(angle) * radius, y: center.y + Math.sin(angle) * radius, size: Math.random() * 2 + 1, speed: Math.random() * 0.01 + 0.005, angle: angle, radius: radius, color: Math.random() > 0.5 ? 'rgba(255, 179, 71, 0.7)' : 'rgba(0, 128, 128, 0.7)' });
+                    }
+                }
+                function animate() {
+                    ctx.clearRect(0, 0, width, height);
+                    const center = { x: width / 2, y: height / 2 };
+                    if (mouse.x !== null) { center.x += (mouse.x - center.x) * 0.05; center.y += (mouse.y - center.y) * 0.05; }
+                    const gradient = ctx.createRadialGradient(center.x, center.y, 0, center.x, center.y, 100);
+                    gradient.addColorStop(0, 'rgba(255, 179, 71, 0.1)'); gradient.addColorStop(1, 'rgba(11, 12, 16, 0)');
+                    ctx.fillStyle = gradient; ctx.beginPath(); ctx.arc(center.x, center.y, 100, 0, Math.PI * 2); ctx.fill();
+                    particles.forEach(p => {
+                        p.angle += p.speed;
+                        p.x = center.x + Math.cos(p.angle) * p.radius; p.y = center.y + Math.sin(p.angle) * p.radius;
+                        ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fillStyle = p.color; ctx.fill();
+                    });
+                    requestAnimationFrame(animate);
+                }
+                canvas.addEventListener('mousemove', (e) => { mouse.x = e.clientX; mouse.y = e.clientY; });
+                canvas.addEventListener('mouseleave', () => { mouse.x = null; mouse.y = null; });
+                initCanvas(); animate(); window.addEventListener('resize', initCanvas);
+            }
+            
+             // --- Animated Counters ---
+            const statsObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const counter = entry.target;
+                        const target = +counter.getAttribute('data-target');
+                        const duration = 2000; let start = 0;
+                        const stepTime = Math.abs(Math.floor(duration / target));
+                        const timer = setInterval(() => {
+                            start += 1; counter.textContent = start;
+                            if (start === target) { clearInterval(timer); }
+                        }, stepTime);
+                        observer.unobserve(counter);
+                    }
+                });
+            }, { threshold: 0.5 });
+            document.querySelectorAll('.stat-number').forEach(stat => statsObserver.observe(stat));
+
+            // --- Sticky Services Section ---
+            const servicePanels = document.querySelectorAll('.service-panel');
+            const stickyIcon = document.getElementById('sticky-icon');
+            const stickyServicesObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        servicePanels.forEach(panel => panel.classList.remove('is-active'));
+                        entry.target.classList.add('is-active');
+                        if(stickyIcon) stickyIcon.innerHTML = `<i class="${entry.target.dataset.icon}"></i>`;
+                    }
+                });
+            }, { threshold: 0.6 });
+            servicePanels.forEach(panel => stickyServicesObserver.observe(panel));
+
+            // --- Interactive Process Timeline ---
+            const timeline = document.getElementById('process-timeline');
+            if (timeline) {
+                const timelineProgress = document.getElementById('timeline-progress');
+                const timelineItems = document.querySelectorAll('.timeline-item');
+                const timelineObserver = new IntersectionObserver(entries => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('active');
+                            const timelineRect = timeline.getBoundingClientRect();
+                            const itemRect = entry.target.getBoundingClientRect();
+                            const progress = (itemRect.top - timelineRect.top + itemRect.height / 2) / timelineRect.height * 100;
+                            timelineProgress.style.height = `${Math.min(100, progress)}%`;
+                        }
+                    });
+                }, { rootMargin: "0px 0px -200px 0px", threshold: 0.5 });
+                timelineItems.forEach(item => timelineObserver.observe(item));
+            }
+        });
+    </script>
+</body>
+</html>
