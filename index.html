@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CygniSoft Inc. - The Enhanced Agency</title>
+    <title>CygniSoft Inc. - The Professional Agency</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
-            --brand-gold: #FFB347;
-            --brand-teal: #008080;
+            --brand-gold: #FFB347; /* Muted Orange/Soft Gold */
+            --brand-teal: #008080; /* Professional Deep Teal */
             --color-bg: #0B0C10;
             --color-bg-secondary: #1C1C22;
             --color-text-light: #EAEAEA;
@@ -119,21 +119,28 @@
         .hero-card h4 { font-family: var(--font-heading); font-weight: 500; font-size: 1.2rem; color: var(--color-text-light); }
         .hero-card p { font-size: 0.9rem; line-height: 1.6; margin: 0; color: var(--color-text-muted); }
 
-        /* NEW: Stats Section */
+        /* --- Stats Section --- */
         .stats-section { padding-top: 60px; padding-bottom: 60px; background-color: var(--color-bg-secondary); }
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; text-align: center; }
         .stat-item .stat-number { font-family: var(--font-heading); font-size: 3.5rem; font-weight: 700; color: var(--brand-gold); }
         .stat-item .stat-label { color: var(--color-text-muted); }
 
-        /* NEW: Sticky Services Section */
+        /* --- Sticky Services Section --- */
         .sticky-services-container { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: flex-start; }
         .sticky-visual { position: sticky; top: 150px; height: 400px; display: flex; align-items: center; justify-content: center; }
         .visual-content { text-align: center; }
-        .visual-content .icon { font-size: 5rem; color: var(--brand-teal); transition: color 0.5s ease; }
+        .visual-content .icon { font-size: 5rem; color: var(--brand-teal); transition: color 0.5s ease, transform 0.5s ease; }
         .scroll-content .service-panel { min-height: 400px; padding: 20px; opacity: 0.3; transition: opacity 0.5s ease; }
         .scroll-content .service-panel.is-active { opacity: 1; }
         .service-panel h3 { font-family: var(--font-heading); font-size: 2rem; margin-bottom: 15px; color: var(--brand-gold); }
         .service-panel p { color: var(--color-text-muted); font-size: 1.1rem; line-height: 1.8; }
+        
+        /* NEW: Shared Grid & Info Card styles */
+        .grid-3-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+        .info-card { padding: 40px; }
+        .info-card .icon { font-size: 2.5rem; color: var(--brand-teal); margin-bottom: 20px; }
+        .info-card h3 { font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 15px; }
+        .info-card p { color: var(--color-text-muted); line-height: 1.7; }
         
         /* --- Technologies Section --- */
         .tech-grid { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 50px; }
@@ -142,7 +149,7 @@
         .tech-item .icon { font-size: 3rem; }
         .tech-item span { display: block; margin-top: 15px; font-family: var(--font-heading); }
         
-        /* --- Testimonials & CTA Sections... (styles from before) --- */
+        /* --- Testimonials & CTA Sections... --- */
         .testimonials-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
         .testimonial-card { padding: 40px; position: relative; }
         .testimonial-card .quote-icon { position: absolute; top: 30px; left: 30px; font-size: 3rem; color: var(--color-border); }
@@ -159,7 +166,11 @@
             .sticky-services-container { grid-template-columns: 1fr; }
             .sticky-visual { display: none; }
             .scroll-content .service-panel { min-height: auto; opacity: 1; padding-bottom: 80px; }
-            .testimonials-grid { grid-template-columns: 1fr; }
+            .grid-3-col, .testimonials-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .hero-focus-cards { flex-direction: column; align-items: center; gap: 15px; }
+            .hero-card { width: 100%; max-width: 320px; }
         }
     </style>
 </head>
@@ -172,6 +183,7 @@
             <div class="header-controls">
                 <nav class="main-nav">
                     <a href="#solutions">Solutions</a>
+                    <a href="#industries">Industries</a>
                     <a href="#tech">Technology</a>
                     <a href="#contact">Contact</a>
                 </nav>
@@ -253,6 +265,30 @@
             </div>
         </section>
 
+        <section class="section" id="industries">
+            <div class="container">
+                <h2 class="section-heading">Expertise Across Key Sectors</h2>
+                <p class="section-subheading">We speak your language. Our tailored solutions are built on a deep understanding of the sectors we serve.</p>
+                <div class="grid-3-col">
+                    <div class="info-card glass-card">
+                        <div class="icon"><i class="fa-solid fa-heart-pulse"></i></div>
+                        <h3>Healthcare</h3>
+                        <p>Navigating the complexities of healthcare with specialized staffing for clinical and administrative roles.</p>
+                    </div>
+                    <div class="info-card glass-card">
+                        <div class="icon"><i class="fa-solid fa-landmark"></i></div>
+                        <h3>Finance & Banking</h3>
+                        <p>Providing secure, compliant technology solutions and expert talent for the financial industry.</p>
+                    </div>
+                    <div class="info-card glass-card">
+                        <div class="icon"><i class="fa-solid fa-store"></i></div>
+                        <h3>Retail & E-commerce</h3>
+                        <p>Powering modern retail with scalable e-commerce platforms and the talent to manage them.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
         <section class="section tech-section" id="tech">
             <div class="container">
                 <h2 class="section-heading">Powered by Leading-Edge Technology</h2>
@@ -283,6 +319,16 @@
                          <div class="author">John Smith <span>CEO, HealthSys</span></div>
                      </div>
                  </div>
+            </div>
+        </section>
+
+        <section class="section cta-section" id="careers">
+             <div class="container">
+                <div class="cta-container glass-card">
+                    <h2>Join a Team of Visionaries</h2>
+                    <p>We're a team of innovators, problem-solvers, and strategic thinkers. Discover where you fit in and help us shape the future.</p>
+                    <a href="#" class="btn btn-primary">Explore Open Roles</a>
+                </div>
             </div>
         </section>
 
@@ -340,7 +386,6 @@
             // --- Neural Orb Hero Canvas ---
             const canvas = document.getElementById('hero-orb-canvas');
             if (canvas) {
-                // (Orb animation code remains the same as previous version)
                 const ctx = canvas.getContext('2d');
                 let width, height, particles, mouse = { x: null, y: null };
                 const particleCount = 50;
@@ -407,7 +452,9 @@
                     if (entry.isIntersecting) {
                         servicePanels.forEach(panel => panel.classList.remove('is-active'));
                         entry.target.classList.add('is-active');
-                        if(stickyIcon) stickyIcon.innerHTML = `<i class="${entry.target.dataset.icon}"></i>`;
+                        if(stickyIcon) {
+                            stickyIcon.innerHTML = `<i class="${entry.target.dataset.icon}"></i>`;
+                        }
                     }
                 });
             }, { threshold: 0.6 });
