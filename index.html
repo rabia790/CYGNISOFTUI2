@@ -370,112 +370,267 @@
             </div>
         </section>
     </main>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- Header Scroll Effect ---
+        const header = document.getElementById('main-header');
+        window.addEventListener('scroll', () => {
+            header.classList.toggle('scrolled', window.scrollY > 50);
+        });
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- Header Scroll Effect ---
-            const header = document.getElementById('main-header');
-            window.addEventListener('scroll', () => {
-                header.classList.toggle('scrolled', window.scrollY > 50);
+        // --- On-Scroll Reveal ---
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
             });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-            // --- On-Scroll Reveal ---
-            const revealObserver = new IntersectionObserver((entries) => {
+        // --- Professional Constellation (v9 - Drifting Home + Bounce) ---
+        const canvas = document.getElementById('hero-orb-canvas');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            let width, height, particles;
+
+            // --- Mouse Object ---
+            let mouse = {
+                x: null,
+                y: null,
+                radius: 100 // Radius of the "bounce" force
+            };
+
+            // --- Configuration ---
+            const particleCount = 150;  // Total number of random particles
+            const maxDistance = 100;    // Max distance for particle-to-particle lines
+            const particleRadius = 1.5;   // Base particle size
+            
+            // --- Physics ---
+            const baseDriftSpeed = 0.1;   // --- SPEED FOR AUTOMATIC MOVEMENT ---
+            const damping = 0.90;       // Simulates friction (how fast they slow down)
+            const returnForce = 0.01;   // How strongly particles return to "home"
+            const mouseForce = 3;       // How strong the "bounce" is
+
+            // Get colors
+            const nodeColor = 'rgba(136, 146, 176, 0.7)'; // --color-text-muted
+            const nodeGlow = 'rgba(136, 146, 176, 0.5)';
+            const mouseLineColor = 'rgba(255, 179, 71, 0.4)'; // --brand-gold
+            const particleLineColor = 'rgba(136, 146, 176, 0.1)';
+
+            class Particle {
+                constructor() {
+                    // --- Random "Home" Position ---
+                    this.baseX = Math.random() * width;
+                    this.baseY = Math.random() * height;
+                    
+                    // --- Speed for the "Home" position to drift ---
+                    this.driftVX = (Math.random() - 0.5) * baseDriftSpeed;
+                    this.driftVY = (Math.random() - 0.5) * baseDriftSpeed;
+                    
+                    this.x = this.baseX;
+                    this.y = this.baseY;
+                    
+                    // --- Physics variables ---
+                    this.vx = 0; // Velocity X
+                    this.vy = 0; // Velocity Y
+                    this.ax = 0; // Acceleration X
+                    this.ay = 0; // Acceleration Y
+
+                    this.radius = Math.random() * 0.5 + particleRadius;
+                }
+
+                update() {
+                    // --- 1. MAKE THE "HOME" POSITION DRIFT ---
+                    this.baseX += this.driftVX;
+                    this.baseY += this.driftVY;
+
+                    // --- 2. Wall-bounce the "home" position ---
+                    if (this.baseX + this.radius > width || this.baseX - this.radius < 0) {
+                        this.driftVX *= -1;
+                        this.baseX = Math.max(this.radius, Math.min(this.baseX, width - this.radius));
+                    }
+                    if (this.baseY + this.radius > height || this.baseY - this.radius < 0) {
+                        this.driftVY *= -1;
+                        this.baseY = Math.max(this.radius, Math.min(this.baseY, height - this.radius));
+                    }
+
+                    // --- 3. Calculate repulsion force from mouse (THE "BOUNCE") ---
+                    if (mouse.x !== null) {
+                        const dx_mouse = this.x - mouse.x;
+                        const dy_mouse = this.y - mouse.y;
+                        const dist_mouse = Math.sqrt(dx_mouse * dx_mouse + dy_mouse * dy_mouse);
+
+                        if (dist_mouse < mouse.radius) {
+                            const force = (mouse.radius - dist_mouse) / mouse.radius;
+                            const angle = Math.atan2(dy_mouse, dx_mouse);
+                            this.ax += Math.cos(angle) * force * mouseForce;
+                            this.ay += Math.sin(angle) * force * mouseForce;
+                        }
+                    }
+
+                    // --- 4. Calculate return force to "home" ---
+                    // (This pulls the particle to its new, drifting "home")
+                    const dx_base = this.baseX - this.x;
+                    const dy_base = this.baseY - this.y;
+                    this.ax += dx_base * returnForce;
+                    this.ay += dy_base * returnForce;
+
+                    // --- 5. Update velocity (add acceleration) ---
+                    this.vx += this.ax;
+                    this.vy += this.ay;
+
+                    // --- 6. Apply damping (friction) ---
+                    this.vx *= damping;
+                    this.vy *= damping;
+
+                    // --- 7. Update position (apply velocity) ---
+                    this.x += this.vx;
+                    this.y += this.vy;
+
+                    // --- 8. Reset acceleration for next frame ---
+                    this.ax = 0;
+                    this.ay = 0;
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = nodeColor;
+                    ctx.shadowColor = nodeGlow;
+                    ctx.shadowBlur = 6;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                }
+            }
+
+            function initCanvas() {
+                width = canvas.offsetWidth;
+                height = canvas.offsetHeight;
+                canvas.width = width;
+                canvas.height = height;
+                
+                particles = [];
+                for (let i = 0; i < particleCount; i++) {
+                    particles.push(new Particle());
+                }
+            }
+
+            // Main animation loop
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+
+                for (let i = 0; i < particles.length; i++) {
+                    const p1 = particles[i];
+                    p1.update();
+                    p1.draw();
+
+                    // --- 1. Draw lines to the mouse (subtle connection) ---
+                    if (mouse.x !== null) {
+                        const dx_mouse = p1.x - mouse.x;
+                        const dy_mouse = p1.y - mouse.y;
+                        const dist_mouse = Math.sqrt(dx_mouse * dx_mouse + dy_mouse * dy_mouse);
+
+                        if (dist_mouse < mouse.radius) {
+                            const opacity = 1 - (dist_mouse / mouse.radius);
+                            ctx.strokeStyle = `rgba(255, 179, 71, ${opacity * 0.3})`;
+                            ctx.lineWidth = 1;
+                            ctx.beginPath();
+                            ctx.moveTo(p1.x, p1.y);
+                            ctx.lineTo(mouse.x, mouse.y);
+                            ctx.stroke();
+                        }
+                    }
+
+                    // --- 2. Draw lines to other particles (very subtle) ---
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const p2 = particles[j];
+                        const dx = p1.x - p2.x;
+                        const dy = p1.y - p2.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+
+                        if (dist < maxDistance) {
+                            const opacity = 1 - (dist / maxDistance);
+                            ctx.strokeStyle = `rgba(136, 146, 176, ${opacity * 0.15})`;
+                            ctx.lineWidth = 1;
+                            ctx.beginPath();
+                            ctx.moveTo(p1.x, p1.y);
+                            ctx.lineTo(p2.x, p2.y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+                requestAnimationFrame(animate);
+            }
+
+            // --- Event Listeners ---
+            window.addEventListener('mousemove', (event) => {
+                mouse.x = event.clientX;
+                mouse.y = event.clientY;
+            });
+            window.addEventListener('mouseout', () => {
+                mouse.x = null;
+                mouse.y = null;
+            });
+            
+            // Start the animation
+            initCanvas();
+            animate();
+            window.addEventListener('resize', initCanvas);
+        }
+        // --- End of Professional Constellation Canvas ---
+        
+         // --- Animated Counters ---
+        const statsObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const counter = entry.target;
+                    const target = +counter.getAttribute('data-target');
+                    const duration = 2000; let start = 0;
+                    const stepTime = Math.abs(Math.floor(duration / target));
+                    const timer = setInterval(() => {
+                        start += 1; counter.textContent = start;
+                        if (start === target) { clearInterval(timer); }
+                    }, stepTime);
+                    observer.unobserve(counter);
+                }
+            });
+        }, { threshold: 0.5 });
+        document.querySelectorAll('.stat-number').forEach(stat => statsObserver.observe(stat));
+
+        // --- Sticky Services Section ---
+        const servicePanels = document.querySelectorAll('.service-panel');
+        const stickyIcon = document.getElementById('sticky-icon');
+        const stickyServicesObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    servicePanels.forEach(panel => panel.classList.remove('is-active'));
+                    entry.target.classList.add('is-active');
+                    if(stickyIcon) stickyIcon.innerHTML = `<i class="${entry.target.dataset.icon}"></i>`;
+                }
+            });
+        }, { threshold: 0.6 });
+        servicePanels.forEach(panel => stickyServicesObserver.observe(panel));
+
+        // --- Interactive Process Timeline ---
+        const timeline = document.getElementById('process-timeline');
+        if (timeline) {
+            const timelineProgress = document.getElementById('timeline-progress');
+            const timelineItems = document.querySelectorAll('.timeline-item');
+            const timelineObserver = new IntersectionObserver(entries => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('active');
+                        const timelineRect = timeline.getBoundingClientRect();
+                        const itemRect = entry.target.getBoundingClientRect();
+                        const progress = (itemRect.top - timelineRect.top + itemRect.height / 2) / timelineRect.height * 100;
+                        timelineProgress.style.height = `${Math.min(100, progress)}%`;
                     }
                 });
-            }, { threshold: 0.1 });
-            document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
-
-            // --- Neural Orb Hero Canvas ---
-            const canvas = document.getElementById('hero-orb-canvas');
-            if (canvas) {
-                const ctx = canvas.getContext('2d');
-                let width, height, particles, mouse = { x: null, y: null };
-                const particleCount = 50;
-                function initCanvas() {
-                    width = canvas.offsetWidth; height = canvas.offsetHeight;
-                    canvas.width = width; canvas.height = height;
-                    particles = [];
-                    const center = { x: width / 2, y: height / 2 };
-                    for (let i = 0; i < particleCount; i++) {
-                        const radius = Math.random() * 200 + 150;
-                        const angle = Math.random() * Math.PI * 2;
-                        particles.push({ x: center.x + Math.cos(angle) * radius, y: center.y + Math.sin(angle) * radius, size: Math.random() * 2 + 1, speed: Math.random() * 0.01 + 0.005, angle: angle, radius: radius, color: Math.random() > 0.5 ? 'rgba(255, 179, 71, 0.7)' : 'rgba(0, 128, 128, 0.7)' });
-                    }
-                }
-                function animate() {
-                    ctx.clearRect(0, 0, width, height);
-                    const center = { x: width / 2, y: height / 2 };
-                    if (mouse.x !== null) { center.x += (mouse.x - center.x) * 0.05; center.y += (mouse.y - center.y) * 0.05; }
-                    const gradient = ctx.createRadialGradient(center.x, center.y, 0, center.x, center.y, 100);
-                    gradient.addColorStop(0, 'rgba(255, 179, 71, 0.1)'); gradient.addColorStop(1, 'rgba(11, 12, 16, 0)');
-                    ctx.fillStyle = gradient; ctx.beginPath(); ctx.arc(center.x, center.y, 100, 0, Math.PI * 2); ctx.fill();
-                    particles.forEach(p => {
-                        p.angle += p.speed;
-                        p.x = center.x + Math.cos(p.angle) * p.radius; p.y = center.y + Math.sin(p.angle) * p.radius;
-                        ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fillStyle = p.color; ctx.fill();
-                    });
-                    requestAnimationFrame(animate);
-                }
-                canvas.addEventListener('mousemove', (e) => { mouse.x = e.clientX; mouse.y = e.clientY; });
-                canvas.addEventListener('mouseleave', () => { mouse.x = null; mouse.y = null; });
-                initCanvas(); animate(); window.addEventListener('resize', initCanvas);
-            }
-            
-             // --- Animated Counters ---
-            const statsObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const counter = entry.target;
-                        const target = +counter.getAttribute('data-target');
-                        const duration = 2000; let start = 0;
-                        const stepTime = Math.abs(Math.floor(duration / target));
-                        const timer = setInterval(() => {
-                            start += 1; counter.textContent = start;
-                            if (start === target) { clearInterval(timer); }
-                        }, stepTime);
-                        observer.unobserve(counter);
-                    }
-                });
-            }, { threshold: 0.5 });
-            document.querySelectorAll('.stat-number').forEach(stat => statsObserver.observe(stat));
-
-            // --- Sticky Services Section ---
-            const servicePanels = document.querySelectorAll('.service-panel');
-            const stickyIcon = document.getElementById('sticky-icon');
-            const stickyServicesObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        servicePanels.forEach(panel => panel.classList.remove('is-active'));
-                        entry.target.classList.add('is-active');
-                        if(stickyIcon) stickyIcon.innerHTML = `<i class="${entry.target.dataset.icon}"></i>`;
-                    }
-                });
-            }, { threshold: 0.6 });
-            servicePanels.forEach(panel => stickyServicesObserver.observe(panel));
-
-            // --- Interactive Process Timeline ---
-            const timeline = document.getElementById('process-timeline');
-            if (timeline) {
-                const timelineProgress = document.getElementById('timeline-progress');
-                const timelineItems = document.querySelectorAll('.timeline-item');
-                const timelineObserver = new IntersectionObserver(entries => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('active');
-                            const timelineRect = timeline.getBoundingClientRect();
-                            const itemRect = entry.target.getBoundingClientRect();
-                            const progress = (itemRect.top - timelineRect.top + itemRect.height / 2) / timelineRect.height * 100;
-                            timelineProgress.style.height = `${Math.min(100, progress)}%`;
-                        }
-                    });
-                }, { rootMargin: "0px 0px -200px 0px", threshold: 0.5 });
-                timelineItems.forEach(item => timelineObserver.observe(item));
-            }
-        });
-    </script>
+            }, { rootMargin: "0px 0px -200px 0px", threshold: 0.5 });
+            timelineItems.forEach(item => timelineObserver.observe(item));
+        }
+    });
+</script>
 </body>
 </html>
