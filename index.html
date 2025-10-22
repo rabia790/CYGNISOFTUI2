@@ -10,16 +10,55 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
-            --brand-gold: #FFB347;
+            --brand-gold: #D4AF37; /* Slightly desaturated gold for light bg */
             --brand-teal: #008080;
-            --color-bg: #10141A;
-            --color-bg-secondary: #20242D;
-            --color-text-light: #EAEAEA;
-            --color-text-muted: #8892B0;
-            --color-border: rgba(136, 146, 176, 0.15);
-            --glass-bg: rgba(32, 36, 45, 0.5);
+            
+            /* --- NEW LIGHT THEME COLORS --- */
+            --color-bg: #F8F9FA;            /* Very light gray */
+            --color-bg-secondary: #E9ECEF;  /* Slightly darker light gray */
+            --color-text-dark: #212529;     /* Dark text */
+            --color-text-muted: #6C757D;    /* Medium gray text */
+            --color-border: rgba(33, 37, 41, 0.1); /* Dark border, low opacity */
+            --glass-bg: rgba(255, 255, 255, 0.6); /* Whiter glass */
+            /* --- END NEW COLORS --- */
+
             --font-heading: 'Space Grotesk', sans-serif;
             --font-body: 'Inter', sans-serif;
+            
+            --color-input-bg: rgba(0, 0, 0, 0.2); /* Dark bg on light glass */
+    --color-input-text: #F8F9FA;
+        }
+        
+        body.dark-mode {
+            --color-bg: #1A1A1A;                /* Dark background */
+            --color-bg-secondary: #2C2C2C;      /* Darker secondary bg */
+            --color-text-dark: #F8F9FA;         /* Light text */
+            --color-text-muted: #ADB5BD;        /* Lighter muted text */
+            --color-border: rgba(255, 255, 255, 0.1); /* Light border */
+            --glass-bg: rgba(44, 44, 44, 0.6);  /* Dark glass */
+
+            /* --- Theme-aware variables for forms --- */
+            --color-input-bg: rgba(255, 255, 255, 0.08); /* Light bg on dark glass */
+            --color-input-text: #F8F9FA;                /* Light text for inputs */
+        }
+        
+        /* --- ADD THIS - THEME TOGGLE BUTTON STYLE --- */
+        .theme-toggle-btn {
+            background: none;
+            border: 1px solid var(--color-border);
+            color: var(--color-text-muted);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-left: 20px; /* Add some space */
+        }
+        .theme-toggle-btn:hover {
+            color: var(--brand-gold);
+            border-color: var(--brand-gold);
+            transform: translateY(-2px);
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -27,9 +66,9 @@
         body {
             font-family: var(--font-body);
             background-color: var(--color-bg);
-            color: var(--color-text-light);
+            color: var(--color-text-dark);
             overflow-x: hidden;
-            padding-top: 90px; /* Add this line */
+            padding-top: 90px; /* Added padding for fixed header */
         }
 
         /* Digital Aurora Background */
@@ -57,7 +96,7 @@
         .section-heading { font-family: var(--font-heading); font-size: 3rem; text-align: center; margin-bottom: 20px; }
         .section-subheading { text-align: center; max-width: 700px; margin: 0 auto 80px auto; color: var(--color-text-muted); line-height: 1.7; font-size: 1.1rem; }
         .btn { display: inline-block; padding: 12px 32px; border-radius: 50px; text-decoration: none; font-weight: 500; font-family: var(--font-heading); transition: all 0.3s ease; border: 1px solid transparent; cursor: pointer;}
-        .btn-primary { background: var(--brand-gold); color: #0B0C10; box-shadow: 0 5px 20px rgba(212, 175, 55, 0.2); }
+        .btn-primary { background: var(--brand-gold); color: var(--color-text-dark); box-shadow: 0 5px 20px rgba(212, 175, 55, 0.2); }
         .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(212, 175, 55, 0.3); }
         .glass-card { background: var(--glass-bg); border: 1px solid var(--color-border); border-radius: 16px; backdrop-filter: blur(12px); transition: all 0.4s ease; }
         .glass-card:hover { border-color: rgba(0, 128, 128, 0.5); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2); transform: translateY(-8px); }
@@ -66,16 +105,21 @@
 
         /* --- Header --- */
         .main-header { position: fixed; top: 0; left:0; width: 100%; z-index: 100; padding: 20px 0; transition: all 0.4s ease; }
-        .main-header.scrolled { background: rgba(16, 20, 26, 0.8); backdrop-filter: blur(15px); padding: 15px 0; border-bottom: 1px solid var(--color-border); } /* Updated scrolled bg color */
+        .main-header.scrolled { background: rgba(248, 249, 250, 0.8); backdrop-filter: blur(15px); padding: 15px 0; border-bottom: 1px solid var(--color-border); }
         .header-container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 20px;}
         .header-logo img { height: 45px; }
-        .main-nav a { text-decoration: none; color: var(--color-text-light); margin-left: 40px; font-weight: 500; font-size: 1rem; }
+        .main-nav a { text-decoration: none; color: var(--color-text-dark); margin-left: 40px; font-weight: 500; font-size: 1rem; }
         .main-nav a:hover { color: var(--brand-gold); }
 
         /* --- Hero Section --- */
-        .hero { min-height: 100vh; display: flex; align-items: center; text-align: center; position: relative; padding-bottom: 150px; /* Add padding to bottom to avoid overlap */ }
+        .hero { 
+            min-height: calc(100vh - 90px); /* Adjust min-height because of body padding */ 
+            display: flex; align-items: center; text-align: center; position: relative; 
+            padding-top: 60px; /* Add some internal top padding */
+            padding-bottom: 150px; 
+        }
         #hero-orb-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; opacity: 0.7; }
-        .hero-content { position: relative; z-index: 2; /* Ensure content is above canvas */}
+        .hero-content { position: relative; z-index: 2; }
         .hero-content h1 { font-family: var(--font-heading); font-size: 4.5rem; font-weight: 700; line-height: 1.15; letter-spacing: -1.5px; margin-bottom: 24px; }
         .hero-content p { font-size: 1.2rem; color: var(--color-text-muted); margin: 0 auto 40px auto; max-width: 600px; }
         .hero-focus-cards { display: flex; justify-content: center; gap: 25px; margin-bottom: 50px; }
@@ -83,45 +127,45 @@
         .hero-card:hover { transform: translateY(-8px); background: var(--glass-bg); border-color: var(--color-border); color: var(--color-text-light); backdrop-filter: blur(10px); }
         .hero-card .icon { font-size: 2.5rem; color: var(--color-text-muted); transition: color 0.4s ease; height: 40px; }
         .hero-card:hover .icon { color: var(--brand-gold); }
-        .hero-card h4 { font-family: var(--font-heading); font-weight: 500; font-size: 1.2rem; color: var(--color-text-light); }
+        .hero-card h4 { font-family: var(--font-heading); font-weight: 500; font-size: 1.2rem; color: var(--color-text-dark); }
         .hero-card p { font-size: 0.9rem; line-height: 1.6; margin: 0; color: var(--color-text-muted); }
 
-        /* --- Job Search Section --- UPDATED --- */
+        /* --- Job Search Section --- */
         .job-search-section {
-            padding: 60px 0 120px 0; /* Reduced top padding, normal bottom */
-            background-color: var(--color-bg-secondary); /* Give it a background */
+            padding: 60px 0 120px 0; 
+            background-color: var(--color-bg-secondary); 
             position: relative;
-            z-index: 5; /* Lower z-index than header */
+            z-index: 5; 
         }
         .job-search-card {
-            padding: 50px 40px; /* Adjust internal padding */
+            padding: 50px 40px; 
             text-align: center;
-            max-width: 900px; /* Limit width */
-            margin: 0 auto; /* Center the card */
+            max-width: 900px; 
+            margin: 0 auto; 
         }
         .job-search-heading {
             font-family: var(--font-heading);
             font-size: 2.5rem;
             font-weight: 500;
-            margin-bottom: 40px; /* More space below heading */
-            color: var(--color-text-light);
+            margin-bottom: 40px; 
+            color: var(--color-text-dark);
             line-height: 1.3;
         }
         .rotating-text-wrapper {
             color: var(--brand-gold);
             display: inline-block;
             vertical-align: top;
-            height: calc(2.5rem * 1.3); /* Match heading line height */
+            height: calc(2.5rem * 1.3); 
             overflow: hidden;
             margin-left: 10px;
         }
         .rotating-text-wrapper span {
             display: block;
-            height: calc(2.5rem * 1.3); /* Match heading line height */
-            line-height: calc(2.5rem * 1.3); /* Vertically center text */
+            height: calc(2.5rem * 1.3); 
+            line-height: calc(2.5rem * 1.3); 
             animation: slide-up 9s infinite;
         }
-        @keyframes slide-up { /* Adjust translateY based on new height */
+        @keyframes slide-up { 
             0%, 11% { transform: translateY(0); }
             33%, 44% { transform: translateY(calc(-2.5rem * 1.3)); }
             66%, 77% { transform: translateY(calc(-2.5rem * 1.3 * 2)); }
@@ -131,11 +175,11 @@
             display: flex;
             flex-wrap: wrap;
             gap: 15px;
-            background: rgba(0, 0, 0, 0.2);
+            background: var(--color-input-bg);
             border-radius: 12px;
             border: 1px solid var(--color-border);
             padding: 15px;
-            margin-bottom: 30px; /* More space below form */
+            margin-bottom: 30px; 
         }
         .form-field {
             flex: 1;
@@ -149,7 +193,7 @@
         .job-search-form input {
             width: 100%; background: transparent; border: none;
             padding: 15px 15px 15px 45px;
-            font-family: var(--font-body); font-size: 1rem; color: var(--color-text-light);
+            font-family: var(--font-body); font-size: 1rem; color: var(--color-input-text);
         }
         .job-search-form input::placeholder { color: var(--color-text-muted); }
         .job-search-form input:focus { outline: none; }
@@ -159,56 +203,40 @@
         .job-search-form button .fa-solid { font-size: 1rem; }
         .popular-searches {
             display: flex; flex-wrap: wrap; justify-content: center; align-items: center;
-            gap: 10px 15px; /* More horizontal gap */
+            gap: 10px 15px; 
             color: var(--color-text-muted); font-size: 0.9rem;
         }
          .popular-searches span {
-            margin-right: 5px; /* Space after "Popular Searches:" */
+            margin-right: 5px; 
         }
         .popular-searches a {
-            text-decoration: none; color: var(--color-text-light);
+            text-decoration: none; color: var(--color-text-dark);
             background: rgba(255, 255, 255, 0.05); border: 1px solid var(--color-border);
             padding: 5px 12px; border-radius: 20px; transition: all 0.3s ease;
         }
         .popular-searches a:hover {
             background: var(--glass-bg); border-color: var(--brand-gold); color: var(--brand-gold);
         }
-        @media (max-width: 992px) {
-            .job-search-heading { font-size: 2rem; }
-            .rotating-text-wrapper, .rotating-text-wrapper span { height: calc(2rem * 1.3); line-height: calc(2rem * 1.3);} /* Adjust animation height for smaller heading */
-             @keyframes slide-up { /* Adjust translateY based on new height */
-                0%, 11% { transform: translateY(0); }
-                33%, 44% { transform: translateY(calc(-2rem * 1.3)); }
-                66%, 77% { transform: translateY(calc(-2rem * 1.3 * 2)); }
-                100% { transform: translateY(calc(-2rem * 1.3 * 3)); }
-            }
-        }
-        @media (max-width: 768px) {
-            .job-search-form { flex-direction: column; }
-            .job-search-form button { width: 100%; justify-content: center; }
-        }
-        /* --- END Job Search Section --- */
-
 
         /* --- Stats Section --- */
-        .stats-section { padding: 80px 0; background-color: var(--color-bg); } /* Adjusted padding/bg */
+        .stats-section { padding: 80px 0; background-color: var(--color-bg); } 
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; text-align: center; }
         .stat-item .stat-number { font-family: var(--font-heading); font-size: 3.5rem; font-weight: 700; color: var(--brand-gold); }
         .stat-item .stat-label { color: var(--color-text-muted); }
 
         /* --- Client Logos Section --- */
         .logos-section {
-             padding: 80px 0; /* Match stats padding */
-             background-color: var(--color-bg); /* Use main bg */
+             padding: 80px 0; 
+             background-color: var(--color-bg); 
         }
-        .logos-section .section-subheading { margin-bottom: 60px; } /* More space below heading */
+        .logos-section .section-subheading { margin-bottom: 60px; } 
         .logo-grid {
              display: flex; flex-wrap: wrap; justify-content: center; align-items: center;
-             gap: 60px 80px; /* Row and column gap */
+             gap: 60px 80px; 
         }
         .logo-item img {
              height: 40px; max-width: 150px;
-             filter: grayscale(100%) opacity(0.6); transition: all 0.3s ease;
+             filter: grayscale(100%) opacity(0.7); transition: all 0.3s ease;
         }
         .logo-item img:hover { filter: grayscale(0%) opacity(1); }
 
@@ -216,7 +244,7 @@
         .sticky-services-container { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: flex-start; }
         .sticky-visual { position: sticky; top: 150px; height: 400px; display: flex; align-items: center; justify-content: center; }
         .visual-content .icon { font-size: 5rem; color: var(--brand-teal); transition: color 0.5s ease, transform 0.5s ease; }
-        .scroll-content .service-panel { min-height: 400px; padding: 20px; opacity: 0.3; transition: opacity 0.5s ease; margin-bottom: 80px; /* Add space between panels */}
+        .scroll-content .service-panel { min-height: 400px; padding: 20px; opacity: 0.3; transition: opacity 0.5s ease; margin-bottom: 80px; }
         .scroll-content .service-panel:last-child { margin-bottom: 0; }
         .scroll-content .service-panel.is-active { opacity: 1; }
         .service-panel h3 { font-family: var(--font-heading); font-size: 2rem; margin-bottom: 15px; color: var(--brand-gold); }
@@ -242,9 +270,9 @@
         .timeline-item.active .timeline-dot { border-color: var(--brand-gold); transform: scale(1.2); }
         
         /* --- Technologies Section --- */
-        .tech-grid { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 50px 80px; } /* Added column gap */
+        .tech-grid { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 50px 80px; } 
         .tech-item { text-align: center; color: var(--color-text-muted); transition: color 0.3s ease, transform 0.3s ease; }
-        .tech-item:hover { color: var(--color-text-light); transform: translateY(-5px); }
+        .tech-item:hover { color: var(--color-text-dark); transform: translateY(-5px); }
         .tech-item .icon { font-size: 3rem; }
         .tech-item span { display: block; margin-top: 15px; font-family: var(--font-heading); }
 
@@ -259,7 +287,7 @@
         @keyframes pulse { from { transform: scale(0.8); opacity: 0.7; } to { transform: scale(1.2); opacity: 1; } }
         
         /* --- Testimonials Section --- */
-         .testimonials-section { background-color: var(--color-bg-secondary); } /* Added background */
+         .testimonials-section { background-color: var(--color-bg-secondary); } 
         .testimonials-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
         .testimonial-card { padding: 40px; position: relative; }
         .testimonial-card .quote-icon { position: absolute; top: 30px; left: 30px; font-size: 3rem; color: var(--color-border); }
@@ -273,7 +301,7 @@
         .cta-container h2 { font-size: 2.5rem; margin-bottom: 20px; }
         .cta-container p { color: var(--color-text-muted); max-width: 500px; margin: 0 auto 30px auto; }
         
-        /* --- Contact Section --- Added from previous step */
+        /* --- Contact Section --- */
         .contact-container {
              display: grid; grid-template-columns: 1fr 1.5fr; gap: 60px;
              padding: 60px; text-align: left;
@@ -284,25 +312,25 @@
         .contact-info p {
              color: var(--color-text-muted); line-height: 1.7; margin-bottom: 30px;
         }
-        .contact-info ul { list-style: none; color: var(--color-text-light); padding: 0;} /* Reset padding */
+        .contact-info ul { list-style: none; color: var(--color-text-dark); padding: 0;} 
         .contact-info ul li { margin-bottom: 15px; display: flex; align-items: center; gap: 15px; }
         .contact-info ul li .fa-solid { color: var(--brand-gold); font-size: 1.1rem; }
         .form-group { margin-bottom: 25px; }
         .form-group label { display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--color-text-muted); }
         .contact-form input,
         .contact-form textarea {
-             width: 100%; padding: 14px; background-color: rgba(0, 0, 0, 0.2);
+             width: 100%; padding: 14px; background-color: var(--color-input-bg);
              border: 1px solid var(--color-border); border-radius: 8px;
-             color: var(--color-text-light); font-family: var(--font-body); font-size: 1rem;
+             color: var(--color-input-text); font-family: var(--font-body); font-size: 1rem;
         }
         .contact-form input:focus,
         .contact-form textarea:focus { outline: none; border-color: var(--brand-gold); }
         .contact-form button { width: 100%; }
         
-        /* --- Footer --- Added from previous step */
+        /* --- Footer --- */
         .main-footer {
              background-color: var(--color-bg); padding: 80px 0 30px 0; font-size: 0.95rem;
-             border-top: 1px solid var(--color-border); /* Add separator */
+             border-top: 1px solid var(--color-border); 
         }
         .footer-grid {
              display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 50px; margin-bottom: 60px;
@@ -311,9 +339,9 @@
         .footer-col p { color: var(--color-text-muted); line-height: 1.7; max-width: 300px; }
         .footer-col h4 {
              font-family: var(--font-heading); font-size: 1.2rem;
-             color: var(--color-text-light); margin-bottom: 25px;
+             color: var(--color-text-dark); margin-bottom: 25px;
         }
-        .footer-col ul { list-style: none; padding: 0; } /* Reset padding */
+        .footer-col ul { list-style: none; padding: 0; } 
         .footer-col ul li { margin-bottom: 15px; color: var(--color-text-muted); }
         .footer-col ul a { text-decoration: none; color: var(--color-text-muted); transition: color 0.3s ease; }
         .footer-col ul a:hover { color: var(--brand-gold); }
@@ -327,24 +355,34 @@
 
         /* --- Responsive --- */
         @media (max-width: 992px) {
+            body { padding-top: 75px; } /* Adjust body padding for smaller header */
+            .hero { min-height: calc(100vh - 75px); }
             .section-heading { font-size: 2.5rem; }
             .hero-content h1 { font-size: 3.5rem; }
             .stats-grid { grid-template-columns: 1fr; gap: 50px; }
             .sticky-services-container { grid-template-columns: 1fr; }
             .sticky-visual { display: none; }
-            .scroll-content .service-panel { min-height: auto; opacity: 1; padding-bottom: 80px; margin-bottom: 0; } /* Adjust for mobile */
+            .scroll-content .service-panel { min-height: auto; opacity: 1; padding-bottom: 80px; margin-bottom: 0; } 
             .grid-3-col, .testimonials-grid { grid-template-columns: 1fr; }
             .contact-container { grid-template-columns: 1fr; }
             .footer-grid { grid-template-columns: 1fr 1fr; }
+            .rotating-text-wrapper, .rotating-text-wrapper span { height: calc(2rem * 1.3); line-height: calc(2rem * 1.3);} 
+             @keyframes slide-up { /* Adjust translateY based on new height */
+                0%, 11% { transform: translateY(0); }
+                33%, 44% { transform: translateY(calc(-2rem * 1.3)); }
+                66%, 77% { transform: translateY(calc(-2rem * 1.3 * 2)); }
+                100% { transform: translateY(calc(-2rem * 1.3 * 3)); }
+            }
         }
         @media (max-width: 768px) {
-            .section { padding: 100px 0; } /* Reduce padding on small screens */
+            .section { padding: 100px 0; } 
             .job-search-section { padding: 40px 0 80px 0; }
-            .hero { padding-bottom: 100px; }
+            .hero { padding-bottom: 100px; padding-top: 40px; }
             .hero-content h1 { font-size: 2.8rem; }
             .section-heading { font-size: 2rem; }
             .section-subheading { margin-bottom: 60px; }
             .footer-grid { grid-template-columns: 1fr; }
+            .popular-searches { justify-content: flex-start; } /* Align left on small screens */
         }
     </style>
 </head>
@@ -359,6 +397,9 @@
                 <a href="#process">Our Process</a>
                 <a href="#contact">Contact</a>
             </nav>
+            <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle theme">
+                <i class="fa-solid fa-moon"></i>
+            </button>
             <a href="#contact" class="btn btn-primary">Start Your Project</a>
         </div>
     </header>
@@ -691,6 +732,45 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+        
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = themeToggle.querySelector('i');
+        const body = document.body;
+
+        // Function to apply the saved theme on load
+        const applySavedTheme = () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                body.classList.add('dark-mode');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                body.classList.remove('dark-mode');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        };
+
+        // Click event to toggle theme
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            
+            // Update icon and save preference
+            if (body.classList.contains('dark-mode')) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // Apply the theme when the page loads
+        applySavedTheme();
+        
+        
         // --- Header Scroll Effect ---
         const header = document.getElementById('main-header');
         window.addEventListener('scroll', () => {
@@ -921,31 +1001,23 @@
         document.querySelectorAll('.stat-number').forEach(stat => statsObserver.observe(stat));
 
         // --- Sticky Services Section ---
-        const servicePanels = document.querySelectorAll('.scroll-content .service-panel'); // More specific selector
-        const stickyIconElement = document.getElementById('sticky-icon'); // Renamed variable
-        if (servicePanels.length > 0 && stickyIconElement) { // Check if elements exist
+        const servicePanels = document.querySelectorAll('.scroll-content .service-panel'); 
+        const stickyIconElement = document.getElementById('sticky-icon'); 
+        if (servicePanels.length > 0 && stickyIconElement) { 
              const stickyServicesObserver = new IntersectionObserver((entries) => {
-                 let intersected = false; // Flag to see if any panel is intersecting
+                 let intersected = false; 
                  entries.forEach(entry => {
                     if (entry.isIntersecting && entry.intersectionRatio >= 0.6) {
-                         // Remove active class from all panels first
                          servicePanels.forEach(panel => panel.classList.remove('is-active'));
-                         // Add active class to the intersecting panel
                          entry.target.classList.add('is-active');
-                         // Update the icon
                          const iconClass = entry.target.dataset.icon;
                          if (iconClass) {
                              stickyIconElement.innerHTML = `<i class="${iconClass}"></i>`;
                          }
                          intersected = true;
-                     } else {
-                        // Optionally remove active class if scrolling out and ratio is low
-                         // entry.target.classList.remove('is-active'); 
-                     }
+                     } 
                  });
-                  // Fallback: If scrolling fast and none meet threshold, maybe activate the first visible one?
-                 // (Could add more complex logic here if needed)
-             }, { threshold: [0.6, 0.7] }); // Trigger when 60% or 70% is visible
+             }, { threshold: [0.6, 0.7] }); 
 
              servicePanels.forEach(panel => stickyServicesObserver.observe(panel));
         }
@@ -955,50 +1027,43 @@
         const timeline = document.getElementById('process-timeline');
         if (timeline) {
             const timelineProgress = document.getElementById('timeline-progress');
-            const timelineItems = timeline.querySelectorAll('.timeline-item'); // Query within timeline
-            if (timelineProgress && timelineItems.length > 0) { // Check elements exist
+            const timelineItems = timeline.querySelectorAll('.timeline-item'); 
+            if (timelineProgress && timelineItems.length > 0) { 
                  const timelineObserver = new IntersectionObserver(entries => {
-                    let maxProgress = 0; // Track the highest progress reached
+                    let maxProgress = 0; 
                     let lastActiveEntry = null;
 
                     entries.forEach(entry => {
                          const item = entry.target;
                          const itemRect = item.getBoundingClientRect();
                          const timelineRect = timeline.getBoundingClientRect();
-                         // Calculate the center of the item relative to the timeline top
                          const itemCenterRelativeToTimeline = (itemRect.top - timelineRect.top) + (itemRect.height / 2);
                          const currentProgress = (itemCenterRelativeToTimeline / timelineRect.height) * 100;
 
                          if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
                             item.classList.add('active');
-                             // Find the entry that corresponds to the highest progress point visible
                              if (currentProgress > maxProgress) {
                                  maxProgress = currentProgress;
                                  lastActiveEntry = entry;
                              }
                          } else {
-                             // Only remove 'active' if it's completely out of view or below threshold
                              if (entry.intersectionRatio < 0.1) { 
                                  item.classList.remove('active');
                              }
                          }
                     });
 
-                     // Update progress line based on the last actively intersecting item meeting threshold
                      if (lastActiveEntry) {
                          const activeItemRect = lastActiveEntry.target.getBoundingClientRect();
                          const activeTimelineRect = timeline.getBoundingClientRect();
                          const activeItemCenter = (activeItemRect.top - activeTimelineRect.top) + (activeItemRect.height / 2);
-                         const finalProgress = Math.min(100, (activeItemCenter / activeTimelineRect.height) * 100 + 5); // Add a little extra to cover dot
+                         const finalProgress = Math.min(100, (activeItemCenter / activeTimelineRect.height) * 100 + 5); 
                           timelineProgress.style.height = `${finalProgress}%`;
-                     } else {
-                        // Optional: Reset or adjust progress if nothing is active
-                        // timelineProgress.style.height = `0%`; 
-                     }
+                     } 
 
                  }, { 
-                     rootMargin: "0px 0px -40% 0px", // Adjust rootMargin to trigger when item is near center/top
-                     threshold: [0.1, 0.5, 1.0] // Trigger at different visibility levels
+                     rootMargin: "0px 0px -40% 0px", 
+                     threshold: [0.1, 0.5, 1.0] 
                  });
 
                  timelineItems.forEach(item => timelineObserver.observe(item));
