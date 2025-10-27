@@ -1,1075 +1,333 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CygniSoft Inc. - Redesigned Professional Agency</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        :root {
-            --brand-gold: #D4AF37; /* Slightly desaturated gold for light bg */
-            --brand-teal: #008080;
-            
-            /* --- NEW LIGHT THEME COLORS --- */
-            --color-bg: #F8F9FA;            /* Very light gray */
-            --color-bg-secondary: #E9ECEF;  /* Slightly darker light gray */
-            --color-text-dark: #212529;     /* Dark text */
-            --color-text-muted: #6C757D;    /* Medium gray text */
-            --color-border: rgba(33, 37, 41, 0.1); /* Dark border, low opacity */
-            --glass-bg: rgba(255, 255, 255, 0.6); /* Whiter glass */
-            /* --- END NEW COLORS --- */
+<?php
+/* Template Name: Home Template*/
+get_header(); // This will load your OLD dark header
+?>
 
-            --font-heading: 'Space Grotesk', sans-serif;
-            --font-body: 'Inter', sans-serif;
-            
-            --color-input-bg: rgba(0, 0, 0, 0.2); /* Dark bg on light glass */
-    --color-input-text: #F8F9FA;
-        }
-        
-        body.dark-mode {
-            --color-bg: #1A1A1A;                /* Dark background */
-            --color-bg-secondary: #2C2C2C;      /* Darker secondary bg */
-            --color-text-dark: #F8F9FA;         /* Light text */
-            --color-text-muted: #ADB5BD;        /* Lighter muted text */
-            --color-border: rgba(255, 255, 255, 0.1); /* Light border */
-            --glass-bg: rgba(44, 44, 44, 0.6);  /* Dark glass */
+<style>
+    body.page-template-page-home .site-content {
+        padding-top: 0;
+    }
+</style>
 
-            /* --- Theme-aware variables for forms --- */
-            --color-input-bg: rgba(255, 255, 255, 0.08); /* Light bg on dark glass */
-            --color-input-text: #F8F9FA;                /* Light text for inputs */
-        }
-        
-        /* --- ADD THIS - THEME TOGGLE BUTTON STYLE --- */
-        .theme-toggle-btn {
-            background: none;
-            border: 1px solid var(--color-border);
-            color: var(--color-text-muted);
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-left: 20px; /* Add some space */
-        }
-        .theme-toggle-btn:hover {
-            color: var(--brand-gold);
-            border-color: var(--brand-gold);
-            transform: translateY(-2px);
-        }
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        body {
-            font-family: var(--font-body);
-            background-color: var(--color-bg);
-            color: var(--color-text-dark);
-            overflow-x: hidden;
-            padding-top: 90px; /* Added padding for fixed header */
-        }
-
-        /* Digital Aurora Background */
-        .aurora-bg {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; overflow: hidden; z-index: -1;
-        }
-        .aurora-bg::before, .aurora-bg::after {
-            content: ''; position: absolute; border-radius: 50%;
-            filter: blur(150px); opacity: 0.1;
-            animation: moveGradient 30s infinite alternate;
-        }
-        .aurora-bg::before { background: var(--brand-teal); width: 800px; height: 800px; top: -10%; left: -10%; }
-        .aurora-bg::after { background: var(--brand-gold); width: 900px; height: 900px; bottom: -15%; right: -10%; animation-delay: 15s; }
-        @keyframes moveGradient {
-            from { transform: translate(0, 0) scale(1) rotate(0deg); } to { transform: translate(70px, -70px) scale(1.1) rotate(15deg); }
-        }
-
-        /* --- Reusable Components --- */
-        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 2;}
-        .section {
-            padding: 120px 0; /* Default padding for most sections */
-            position: relative;
-        }
-        .section-heading { font-family: var(--font-heading); font-size: 3rem; text-align: center; margin-bottom: 20px; }
-        .section-subheading { text-align: center; max-width: 700px; margin: 0 auto 80px auto; color: var(--color-text-muted); line-height: 1.7; font-size: 1.1rem; }
-        .btn { display: inline-block; padding: 12px 32px; border-radius: 50px; text-decoration: none; font-weight: 500; font-family: var(--font-heading); transition: all 0.3s ease; border: 1px solid transparent; cursor: pointer;}
-        .btn-primary { background: var(--brand-gold); color: var(--color-text-dark); box-shadow: 0 5px 20px rgba(212, 175, 55, 0.2); }
-        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(212, 175, 55, 0.3); }
-        .glass-card { background: var(--glass-bg); border: 1px solid var(--color-border); border-radius: 16px; backdrop-filter: blur(12px); transition: all 0.4s ease; }
-        .glass-card:hover { border-color: rgba(0, 128, 128, 0.5); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2); transform: translateY(-8px); }
-        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-
-        /* --- Header --- */
-        .main-header { position: fixed; top: 0; left:0; width: 100%; z-index: 100; padding: 20px 0; transition: all 0.4s ease; }
-        .main-header.scrolled { background: rgba(248, 249, 250, 0.8); backdrop-filter: blur(15px); padding: 15px 0; border-bottom: 1px solid var(--color-border); }
-        .header-container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 20px;}
-        .header-logo img { height: 45px; }
-        .main-nav a { text-decoration: none; color: var(--color-text-dark); margin-left: 40px; font-weight: 500; font-size: 1rem; }
-        .main-nav a:hover { color: var(--brand-gold); }
-
-        /* --- Hero Section --- */
-        .hero { 
-            min-height: calc(100vh - 90px); /* Adjust min-height because of body padding */ 
-            display: flex; align-items: center; text-align: center; position: relative; 
-            padding-top: 60px; /* Add some internal top padding */
-            padding-bottom: 150px; 
-        }
-        #hero-orb-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; opacity: 0.7; }
-        .hero-content { position: relative; z-index: 2; }
-        .hero-content h1 { font-family: var(--font-heading); font-size: 4.5rem; font-weight: 700; line-height: 1.15; letter-spacing: -1.5px; margin-bottom: 24px; }
-        .hero-content p { font-size: 1.2rem; color: var(--color-text-muted); margin: 0 auto 40px auto; max-width: 600px; }
-        .hero-focus-cards { display: flex; justify-content: center; gap: 25px; margin-bottom: 50px; }
-        .hero-card { padding: 25px; border-radius: 16px; text-decoration: none; color: var(--color-text-muted); width: 280px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 15px; border: 1px solid transparent; background: transparent; backdrop-filter: blur(0px); transition: all 0.4s ease; }
-        .hero-card:hover { transform: translateY(-8px); background: var(--glass-bg); border-color: var(--color-border); color: var(--color-text-light); backdrop-filter: blur(10px); }
-        .hero-card .icon { font-size: 2.5rem; color: var(--color-text-muted); transition: color 0.4s ease; height: 40px; }
-        .hero-card:hover .icon { color: var(--brand-gold); }
-        .hero-card h4 { font-family: var(--font-heading); font-weight: 500; font-size: 1.2rem; color: var(--color-text-dark); }
-        .hero-card p { font-size: 0.9rem; line-height: 1.6; margin: 0; color: var(--color-text-muted); }
-
-        /* --- Job Search Section --- */
-        .job-search-section {
-            padding: 60px 0 120px 0; 
-            background-color: var(--color-bg-secondary); 
-            position: relative;
-            z-index: 5; 
-        }
-        .job-search-card {
-            padding: 50px 40px; 
-            text-align: center;
-            max-width: 900px; 
-            margin: 0 auto; 
-        }
-        .job-search-heading {
-            font-family: var(--font-heading);
-            font-size: 2.5rem;
-            font-weight: 500;
-            margin-bottom: 40px; 
-            color: var(--color-text-dark);
-            line-height: 1.3;
-        }
-        .rotating-text-wrapper {
-            color: var(--brand-gold);
-            display: inline-block;
-            vertical-align: top;
-            height: calc(2.5rem * 1.3); 
-            overflow: hidden;
-            margin-left: 10px;
-        }
-        .rotating-text-wrapper span {
-            display: block;
-            height: calc(2.5rem * 1.3); 
-            line-height: calc(2.5rem * 1.3); 
-            animation: slide-up 9s infinite;
-        }
-        @keyframes slide-up { 
-            0%, 11% { transform: translateY(0); }
-            33%, 44% { transform: translateY(calc(-2.5rem * 1.3)); }
-            66%, 77% { transform: translateY(calc(-2.5rem * 1.3 * 2)); }
-            100% { transform: translateY(calc(-2.5rem * 1.3 * 3)); }
-        }
-        .job-search-form {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            background: var(--color-input-bg);
-            border-radius: 12px;
-            border: 1px solid var(--color-border);
-            padding: 15px;
-            margin-bottom: 30px; 
-        }
-        .form-field {
-            flex: 1;
-            position: relative;
-            min-width: 200px;
-        }
-        .form-field .fa-solid {
-            position: absolute; top: 50%; left: 15px; transform: translateY(-50%);
-            color: var(--color-text-muted);
-        }
-        .job-search-form input {
-            width: 100%; background: transparent; border: none;
-            padding: 15px 15px 15px 45px;
-            font-family: var(--font-body); font-size: 1rem; color: var(--color-input-text);
-        }
-        .job-search-form input::placeholder { color: var(--color-text-muted); }
-        .job-search-form input:focus { outline: none; }
-        .job-search-form button {
-            flex-shrink: 0; display: flex; align-items: center; gap: 10px;
-        }
-        .job-search-form button .fa-solid { font-size: 1rem; }
-        .popular-searches {
-            display: flex; flex-wrap: wrap; justify-content: center; align-items: center;
-            gap: 10px 15px; 
-            color: var(--color-text-muted); font-size: 0.9rem;
-        }
-         .popular-searches span {
-            margin-right: 5px; 
-        }
-        .popular-searches a {
-            text-decoration: none; color: var(--color-text-dark);
-            background: rgba(255, 255, 255, 0.05); border: 1px solid var(--color-border);
-            padding: 5px 12px; border-radius: 20px; transition: all 0.3s ease;
-        }
-        .popular-searches a:hover {
-            background: var(--glass-bg); border-color: var(--brand-gold); color: var(--brand-gold);
-        }
-
-        /* --- Stats Section --- */
-        .stats-section { padding: 80px 0; background-color: var(--color-bg); } 
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; text-align: center; }
-        .stat-item .stat-number { font-family: var(--font-heading); font-size: 3.5rem; font-weight: 700; color: var(--brand-gold); }
-        .stat-item .stat-label { color: var(--color-text-muted); }
-
-        /* --- Client Logos Section --- */
-        .logos-section {
-             padding: 80px 0; 
-             background-color: var(--color-bg); 
-        }
-        .logos-section .section-subheading { margin-bottom: 60px; } 
-        .logo-grid {
-             display: flex; flex-wrap: wrap; justify-content: center; align-items: center;
-             gap: 60px 80px; 
-        }
-        .logo-item img {
-             height: 40px; max-width: 150px;
-             filter: grayscale(100%) opacity(0.7); transition: all 0.3s ease;
-        }
-        .logo-item img:hover { filter: grayscale(0%) opacity(1); }
-
-        /* --- Sticky Services Section --- */
-        .sticky-services-container { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: flex-start; }
-        .sticky-visual { position: sticky; top: 150px; height: 400px; display: flex; align-items: center; justify-content: center; }
-        .visual-content .icon { font-size: 5rem; color: var(--brand-teal); transition: color 0.5s ease, transform 0.5s ease; }
-        .scroll-content .service-panel { min-height: 400px; padding: 20px; opacity: 0.3; transition: opacity 0.5s ease; margin-bottom: 80px; }
-        .scroll-content .service-panel:last-child { margin-bottom: 0; }
-        .scroll-content .service-panel.is-active { opacity: 1; }
-        .service-panel h3 { font-family: var(--font-heading); font-size: 2rem; margin-bottom: 15px; color: var(--brand-gold); }
-        .service-panel p { color: var(--color-text-muted); font-size: 1.1rem; line-height: 1.8; }
-        
-        /* --- Industries Section --- */
-        .grid-3-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
-        .info-card { padding: 40px; }
-        .info-card .icon { font-size: 2.5rem; color: var(--brand-teal); margin-bottom: 20px; }
-        .info-card h3 { font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 15px; }
-        .info-card p { color: var(--color-text-muted); line-height: 1.7; }
-        
-        /* --- "Our Process" Timeline Section --- */
-        .process-timeline { max-width: 800px; margin: 0 auto; position: relative; }
-        .timeline-line { position: absolute; top: 0; left: 24px; width: 2px; height: 100%; background: var(--color-border); }
-        .timeline-line-progress { width: 100%; height: 0%; background: linear-gradient(to bottom, var(--brand-gold), var(--brand-teal)); transition: height 1s ease-out; }
-        .timeline-item { position: relative; padding-left: 80px; margin-bottom: 80px; }
-        .timeline-item:last-child { margin-bottom: 0; }
-        .timeline-dot { position: absolute; top: 5px; left: 15px; width: 20px; height: 20px; background: var(--color-bg-secondary); border: 2px solid var(--color-border); border-radius: 50%; transition: all 0.5s ease; }
-        .timeline-content .step-number { font-family: var(--font-heading); font-size: 1rem; color: var(--brand-gold); margin-bottom: 10px; }
-        .timeline-content h3 { font-family: var(--font-heading); font-size: 1.8rem; margin-bottom: 15px; }
-        .timeline-content p { color: var(--color-text-muted); line-height: 1.8; }
-        .timeline-item.active .timeline-dot { border-color: var(--brand-gold); transform: scale(1.2); }
-        
-        /* --- Technologies Section --- */
-        .tech-grid { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 50px 80px; } 
-        .tech-item { text-align: center; color: var(--color-text-muted); transition: color 0.3s ease, transform 0.3s ease; }
-        .tech-item:hover { color: var(--color-text-dark); transform: translateY(-5px); }
-        .tech-item .icon { font-size: 3rem; }
-        .tech-item span { display: block; margin-top: 15px; font-family: var(--font-heading); }
-
-        /* --- Global Map Section --- */
-        .map-section { text-align: center; }
-        .map-container { position: relative; max-width: 800px; margin: 0 auto; }
-        .map-svg { width: 100%; height: auto; fill: var(--color-border); }
-        .map-dot { position: absolute; width: 12px; height: 12px; background-color: var(--brand-teal); border-radius: 50%; box-shadow: 0 0 15px var(--brand-teal); animation: pulse 2s infinite alternate; }
-        .map-dot.north-america { top: 35%; left: 22%; }
-        .map-dot.europe { top: 30%; left: 48%; animation-delay: 0.5s; }
-        .map-dot.asia { top: 40%; left: 75%; animation-delay: 1s; }
-        @keyframes pulse { from { transform: scale(0.8); opacity: 0.7; } to { transform: scale(1.2); opacity: 1; } }
-        
-        /* --- Testimonials Section --- */
-         .testimonials-section { background-color: var(--color-bg-secondary); } 
-        .testimonials-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        .testimonial-card { padding: 40px; position: relative; }
-        .testimonial-card .quote-icon { position: absolute; top: 30px; left: 30px; font-size: 3rem; color: var(--color-border); }
-        .testimonial-card p { font-size: 1.1rem; line-height: 1.8; margin-top: 50px; font-style: italic; }
-        .testimonial-card .author { margin-top: 25px; font-weight: 700; }
-        .testimonial-card .author span { display: block; font-weight: 400; color: var(--color-text-muted); font-style: normal; }
-        
-        /* --- CTA Sections --- */
-        .cta-section { text-align: center; }
-        .cta-container { padding: 60px; }
-        .cta-container h2 { font-size: 2.5rem; margin-bottom: 20px; }
-        .cta-container p { color: var(--color-text-muted); max-width: 500px; margin: 0 auto 30px auto; }
-        
-        /* --- Contact Section --- */
-        .contact-container {
-             display: grid; grid-template-columns: 1fr 1.5fr; gap: 60px;
-             padding: 60px; text-align: left;
-        }
-        .contact-info h3 {
-             font-family: var(--font-heading); font-size: 1.8rem; margin-bottom: 20px;
-        }
-        .contact-info p {
-             color: var(--color-text-muted); line-height: 1.7; margin-bottom: 30px;
-        }
-        .contact-info ul { list-style: none; color: var(--color-text-dark); padding: 0;} 
-        .contact-info ul li { margin-bottom: 15px; display: flex; align-items: center; gap: 15px; }
-        .contact-info ul li .fa-solid { color: var(--brand-gold); font-size: 1.1rem; }
-        .form-group { margin-bottom: 25px; }
-        .form-group label { display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--color-text-muted); }
-        .contact-form input,
-        .contact-form textarea {
-             width: 100%; padding: 14px; background-color: var(--color-input-bg);
-             border: 1px solid var(--color-border); border-radius: 8px;
-             color: var(--color-input-text); font-family: var(--font-body); font-size: 1rem;
-        }
-        .contact-form input:focus,
-        .contact-form textarea:focus { outline: none; border-color: var(--brand-gold); }
-        .contact-form button { width: 100%; }
-        
-        /* --- Footer --- */
-        .main-footer {
-             background-color: var(--color-bg); padding: 80px 0 30px 0; font-size: 0.95rem;
-             border-top: 1px solid var(--color-border); 
-        }
-        .footer-grid {
-             display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 50px; margin-bottom: 60px;
-        }
-        .footer-col .footer-logo { height: 40px; margin-bottom: 20px; }
-        .footer-col p { color: var(--color-text-muted); line-height: 1.7; max-width: 300px; }
-        .footer-col h4 {
-             font-family: var(--font-heading); font-size: 1.2rem;
-             color: var(--color-text-dark); margin-bottom: 25px;
-        }
-        .footer-col ul { list-style: none; padding: 0; } 
-        .footer-col ul li { margin-bottom: 15px; color: var(--color-text-muted); }
-        .footer-col ul a { text-decoration: none; color: var(--color-text-muted); transition: color 0.3s ease; }
-        .footer-col ul a:hover { color: var(--brand-gold); }
-        .social-links { margin-top: 25px; display: flex; gap: 20px; }
-        .social-links a { color: var(--color-text-muted); font-size: 1.5rem; transition: color 0.3s ease; }
-        .social-links a:hover { color: var(--brand-gold); }
-        .footer-bottom {
-             text-align: center; padding-top: 30px; border-top: 1px solid var(--color-border);
-             color: var(--color-text-muted); font-size: 0.9rem;
-        }
-
-        /* --- Responsive --- */
-        @media (max-width: 992px) {
-            body { padding-top: 75px; } /* Adjust body padding for smaller header */
-            .hero { min-height: calc(100vh - 75px); }
-            .section-heading { font-size: 2.5rem; }
-            .hero-content h1 { font-size: 3.5rem; }
-            .stats-grid { grid-template-columns: 1fr; gap: 50px; }
-            .sticky-services-container { grid-template-columns: 1fr; }
-            .sticky-visual { display: none; }
-            .scroll-content .service-panel { min-height: auto; opacity: 1; padding-bottom: 80px; margin-bottom: 0; } 
-            .grid-3-col, .testimonials-grid { grid-template-columns: 1fr; }
-            .contact-container { grid-template-columns: 1fr; }
-            .footer-grid { grid-template-columns: 1fr 1fr; }
-            .rotating-text-wrapper, .rotating-text-wrapper span { height: calc(2rem * 1.3); line-height: calc(2rem * 1.3);} 
-             @keyframes slide-up { /* Adjust translateY based on new height */
-                0%, 11% { transform: translateY(0); }
-                33%, 44% { transform: translateY(calc(-2rem * 1.3)); }
-                66%, 77% { transform: translateY(calc(-2rem * 1.3 * 2)); }
-                100% { transform: translateY(calc(-2rem * 1.3 * 3)); }
-            }
-        }
-        @media (max-width: 768px) {
-            .section { padding: 100px 0; } 
-            .job-search-section { padding: 40px 0 80px 0; }
-            .hero { padding-bottom: 100px; padding-top: 40px; }
-            .hero-content h1 { font-size: 2.8rem; }
-            .section-heading { font-size: 2rem; }
-            .section-subheading { margin-bottom: 60px; }
-            .footer-grid { grid-template-columns: 1fr; }
-            .popular-searches { justify-content: flex-start; } /* Align left on small screens */
-        }
-    </style>
-</head>
-<body>
-    <div class="aurora-bg"></div>
-    <header class="main-header" id="main-header">
-        <div class="header-container">
-            <a href="#" class="header-logo"><img src="cygnisoft_logo.jpg" alt="CygniSoft Logo"></a>
-            <nav class="main-nav">
-                <a href="#solutions">Solutions</a>
-                <a href="#industries">Industries</a>
-                <a href="#process">Our Process</a>
-                <a href="#contact">Contact</a>
-            </nav>
-            <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle theme">
-                <i class="fa-solid fa-moon"></i>
-            </button>
-            <a href="#contact" class="btn btn-primary">Start Your Project</a>
-        </div>
-    </header>
-
-    <main>
-        <section class="hero">
-            <canvas id="hero-orb-canvas"></canvas>
-            <div class="container">
-                <div class="hero-content reveal">
-                    <h1>We Engineer Clarity from Complexity.</h1>
-                    <p>CygniSoft orchestrates elite talent and bespoke technology to build your future, today.</p>
-                    <div class="hero-focus-cards">
-                        <a href="#solutions" class="hero-card">
-                            <div class="icon"><i class="fa-solid fa-code"></i></div>
-                            <h4>IT & Technology</h4>
-                            <p>Bespoke software and elite staffing for a competitive digital edge.</p>
-                        </a>
-                        <a href="#solutions" class="hero-card">
-                            <div class="icon"><i class="fa-solid fa-heart-pulse"></i></div>
-                            <h4>Healthcare</h4>
-                            <p>Specialized talent sourcing to elevate patient care and operations.</p>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="job-search-section">
-            <div class="container">
-                <div class="job-search-card glass-card reveal">
-                    <h2 class="job-search-heading">
-                        Find your next
-                        <span class="rotating-text-wrapper">
-                            <span>dream job</span>
-                            <span>career opportunity</span>
-                            <span>healthcare role</span>
-                            <span>dream job</span> </span>
-                    </h2>
-                    <form class="job-search-form" action="#" method="GET">
-                        <div class="form-field">
-                            <i class="fa-solid fa-briefcase"></i>
-                            <input type="text" placeholder="Job title or keyword">
-                        </div>
-                        <div class="form-field">
-                            <i class="fa-solid fa-map-marker-alt"></i>
-                            <input type="text" placeholder="Location (e.g., City, State)">
-                        </div>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fa-solid fa-search"></i>
-                            <span>Search</span>
-                        </button>
-                    </form>
-                    <div class="popular-searches">
-                        <span>Popular Searches:</span>
-                        <a href="#">IT Project Manager</a>
-                        <a href="#">Registered Nurse</a>
-                        <a href="#">React Developer</a>
-                        <a href="#">Azure Architect</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="section stats-section reveal">
-            <div class="container">
-                <div class="stats-grid">
-                    <div class="stat-item">
-                        <div class="stat-number" data-target="10">0</div>
-                        <div class="stat-label">Years of Experience</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number" data-target="500">0</div>
-                        <div class="stat-label">Successful Placements</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number" data-target="98">0</div>
-                        <div class="stat-label">Client Satisfaction (%)</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="section logos-section">
-            <div class="container">
-                <h3 class="section-subheading reveal" style="margin: 0 auto 50px auto; font-size: 1rem; color: var(--color-text-muted);">
-                    Trusted by industry-leading partners
-                </h3>
-                <div class="logo-grid reveal">
-                    <div class="logo-item"><img src="client-logo-1.png" alt="Client 1"></div>
-                    <div class="logo-item"><img src="client-logo-2.png" alt="Client 2"></div>
-                    <div class="logo-item"><img src="client-logo-3.png" alt="Client 3"></div>
-                    <div class="logo-item"><img src="client-logo-4.png" alt="Client 4"></div>
-                    <div class="logo-item"><img src="client-logo-5.png" alt="Client 5"></div>
-                </div>
-            </div>
-        </section>
-
-        <section class="section" id="solutions">
-            <div class="container">
-                <h2 class="section-heading reveal">Integrated Solutions</h2>
-                <p class="section-subheading reveal">Our strength lies in a holistic approach, blending human potential with technological power to create unmatched value for your enterprise.</p>
-                <div class="sticky-services-container">
-                    <div class="sticky-visual">
-                        <div class="visual-content">
-                            <div class="icon" id="sticky-icon"><i class="fa-solid fa-users-line"></i></div>
-                        </div>
-                    </div>
-                    <div class="scroll-content">
-                        <div class="service-panel" data-icon="fa-solid fa-users-line">
-                            <h3>Elite Talent Sourcing</h3>
-                            <p>We connect you with visionary professionals who don't just fill a role—they elevate your entire organization. Our rigorous vetting process ensures you get not just the right skills, but the right cultural fit for long-term success.</p>
-                        </div>
-                        <div class="service-panel" data-icon="fa-solid fa-cubes">
-                            <h3>Custom Software Development</h3>
-                            <p>We architect robust, scalable software and mobile applications that serve as the engine for your business's growth. From initial strategy to final deployment, we build solutions that are secure, efficient, and perfectly aligned with your goals.</p>
-                        </div>
-                        <div class="service-panel" data-icon="fa-solid fa-shield-halved">
-                            <h3>Managed Tech Services</h3>
-                            <p>Our proactive IT management and strategic consulting ensure your infrastructure is secure, optimized, and always future-ready. We handle the technology so you can focus on what you do best: running your business.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="section" id="industries">
-            <div class="container">
-                <h2 class="section-heading reveal">Expertise Across Key Sectors</h2>
-                <p class="section-subheading reveal">We speak your language. Our tailored solutions are built on a deep understanding of the sectors we serve.</p>
-                <div class="grid-3-col">
-                    <div class="info-card glass-card reveal">
+<main>
+    <section class="hero">
+        <canvas id="hero-orb-canvas"></canvas>
+        <div class="container">
+            <div class="hero-content reveal">
+                <h1>We Engineer Clarity from Complexity.</h1>
+                <p>Empowering organizations through intelligent staffing and digital transformation — from Dynamics 365 to mobile app solutions.</p>
+                <div class="hero-focus-cards">
+                    <a href="#solutions" class="hero-card">
+                        <div class="icon"><i class="fa-solid fa-code"></i></div>
+                        <h4>IT & Technology</h4>
+                        <p>Bespoke software and elite staffing for a competitive digital edge.</p>
+                    </a>
+                    <a href="#solutions" class="hero-card">
                         <div class="icon"><i class="fa-solid fa-heart-pulse"></i></div>
-                        <h3>Healthcare</h3>
-                        <p>Navigating the complexities of healthcare with specialized staffing for clinical and administrative roles.</p>
+                        <h4>Healthcare</h4>
+                        <p>Specialized talent sourcing to elevate patient care and operations.</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+	
+	
+	<section id="services" class="section services-section">
+    <div class="container">
+        <h2 class="section-heading">Our Services</h2>
+        <p class="section-subheading">We provide a range of staffing and IT solutions tailored to help your business thrive.</p>
+
+        <div class="services-grid">
+            <div class="service-card glass-card reveal">
+                <div class="icon"><i class="fa-solid fa-briefcase"></i></div>
+                <h3>Staffing Solutions</h3>
+                <p>We connect companies with top talent in healthcare IT, finance, and technology industries.</p>
+            </div>
+            <div class="service-card glass-card reveal">
+                <div class="icon"><i class="fa-solid fa-code"></i></div>
+                <h3>IT Consulting</h3>
+                <p>Our IT experts help streamline your projects with custom software solutions and best practices.</p>
+            </div>
+            <div class="service-card glass-card reveal">
+                <div class="icon"><i class="fa-solid fa-chart-line"></i></div>
+                <h3>Business Strategy</h3>
+                <p>We provide actionable insights to optimize your recruitment process and enhance growth.</p>
+            </div>
+            <div class="service-card glass-card reveal">
+                <div class="icon"><i class="fa-solid fa-people-group"></i></div>
+                <h3>Candidate Training</h3>
+                <p>We offer professional development programs to prepare candidates for high-demand roles.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!--
+
+    <section class="job-search-section">
+        <div class="container">
+            <div class="job-search-card glass-card reveal">
+                <h2 class="job-search-heading">
+                    Find your next
+                    <span class="rotating-text-wrapper">
+                        <span>dream job</span>
+                        <span>career opportunity</span>
+                        <span>healthcare role</span>
+                        <span>dream job</span> </span>
+                </h2>
+                <form class="job-search-form" action="#" method="GET">
+                    <div class="form-field">
+                        <i class="fa-solid fa-briefcase"></i>
+                        <input type="text" placeholder="Job title or keyword">
                     </div>
-                    <div class="info-card glass-card reveal">
-                        <div class="icon"><i class="fa-solid fa-landmark"></i></div>
-                        <h3>Finance & Banking</h3>
-                        <p>Providing secure, compliant technology solutions and expert talent for the financial industry.</p>
+                    <div class="form-field">
+                        <i class="fa-solid fa-map-marker-alt"></i>
+                        <input type="text" placeholder="Location (e.g., City, State)">
                     </div>
-                    <div class="info-card glass-card reveal">
-                        <div class="icon"><i class="fa-solid fa-store"></i></div>
-                        <h3>Retail & E-commerce</h3>
-                        <p>Powering modern retail with scalable e-commerce platforms and the talent to manage them.</p>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-solid fa-search"></i>
+                        <span>Search</span>
+                    </button>
+                </form>
+                <div class="popular-searches">
+                    <span>Popular Searches:</span>
+                    <a href="#">IT Project Manager</a>
+                    <a href="#">Registered Nurse</a>
+                    <a href="#">React Developer</a>
+                    <a href="#">Azure Architect</a>
+                </div>
+            </div>
+        </div>
+    </section>
+ -->
+    <section class="section stats-section reveal">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number" data-target="10">0</div>
+                    <div class="stat-label">Years of Experience</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="500">0</div>
+                    <div class="stat-label">Successful Placements</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="98">0</div>
+                    <div class="stat-label">Client Satisfaction (%)</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section logos-section">
+        <div class="container">
+            <h3 class="section-subheading reveal" style="margin: 0 auto 50px auto; font-size: 1rem; color: var(--color-text-muted);">
+                Trusted by industry-leading partners
+            </h3>
+            <div class="logo-grid reveal">
+                <div class="logo-item"><img src="<?php echo get_template_directory_uri(); ?>/images/client-logo-1.png" alt="Client 1"></div>
+                <div class="logo-item"><img src="<?php echo get_template_directory_uri(); ?>/images/client-logo-2.png" alt="Client 2"></div>
+                <div class="logo-item"><img src="<?php echo get_template_directory_uri(); ?>/images/client-logo-3.png" alt="Client 3"></div>
+                <div class="logo-item"><img src="<?php echo get_template_directory_uri(); ?>/images/client-logo-4.png" alt="Client 4"></div>
+                <div class="logo-item"><img src="<?php echo get_template_directory_uri(); ?>/images/client-logo-5.png" alt="Client 5"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="solutions">
+        <div class="container">
+            <h2 class="section-heading reveal">Integrated Solutions</h2>
+            <p class="section-subheading reveal">Our strength lies in a holistic approach, blending human potential with technological power to create unmatched value for your enterprise.</p>
+            <div class="sticky-services-container">
+                <div class="sticky-visual">
+                    <div class="visual-content">
+                        <div class="icon" id="sticky-icon"><i class="fa-solid fa-users-line"></i></div>
+                    </div>
+                </div>
+                <div class="scroll-content">
+                    <div class="service-panel" data-icon="fa-solid fa-users-line">
+                        <h3>Elite Talent Sourcing</h3>
+                        <p>We connect you with visionary professionals who don't just fill a role—they elevate your entire organization. Our rigorous vetting process ensures you get not just the right skills, but the right cultural fit for long-term success.</p>
+                    </div>
+                    <div class="service-panel" data-icon="fa-solid fa-cubes">
+                        <h3>Custom Software Development</h3>
+                        <p>We architect robust, scalable software and mobile applications that serve as the engine for your business's growth. From initial strategy to final deployment, we build solutions that are secure, efficient, and perfectly aligned with your goals.</p>
+                    </div>
+                    <div class="service-panel" data-icon="fa-solid fa-shield-halved">
+                        <h3>Managed Tech Services</h3>
+                        <p>Our proactive IT management and strategic consulting ensure your infrastructure is secure, optimized, and always future-ready. We handle the technology so you can focus on what you do best: running your business.</p>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section class="section" id="process">
-            <div class="container">
-                <h2 class="section-heading reveal">Your Blueprint for Success</h2>
-                <p class="section-subheading reveal">We follow a meticulous, transparent process to ensure exceptional results, every time.</p>
-                <div class="process-timeline" id="process-timeline">
-                    <div class="timeline-line"><div class="timeline-line-progress" id="timeline-progress"></div></div>
-                    <div class="timeline-item">
-                        <div class="timeline-dot"></div>
-                        <div class="timeline-content">
-                            <div class="step-number">01</div>
-                            <h3>Discovery & Strategy</h3>
-                            <p>We begin by deeply understanding your goals to build a comprehensive project roadmap.</p>
-                        </div>
+    <!-- <section class="section" id="industries">
+        <div class="container">
+            <h2 class="section-heading reveal">Expertise Across Key Sectors</h2>
+            <p class="section-subheading reveal">We speak your language. Our tailored solutions are built on a deep understanding of the sectors we serve.</p>
+            <div class="grid-3-col">
+                <div class="info-card glass-card reveal">
+                    <div class="icon"><i class="fa-solid fa-heart-pulse"></i></div>
+                    <h3>Healthcare</h3>
+                    <p>Navigating the complexities of healthcare with specialized staffing for clinical and administrative roles.</p>
+                </div>
+                <div class="info-card glass-card reveal">
+                    <div class="icon"><i class="fa-solid fa-landmark"></i></div>
+                    <h3>Finance & Banking</h3>
+                    <p>Providing secure, compliant technology solutions and expert talent for the financial industry.</p>
+                </div>
+                <div class="info-card glass-card reveal">
+                    <div class="icon"><i class="fa-solid fa-store"></i></div>
+                    <h3>Retail & E-commerce</h3>
+                    <p>Powering modern retail with scalable e-commerce platforms and the talent to manage them.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+ -->
+ 
+    <section class="section" id="process">
+        <div class="container">
+            <h2 class="section-heading reveal">Your Blueprint for Success</h2>
+            <p class="section-subheading reveal">We follow a meticulous, transparent process to ensure exceptional results, every time.</p>
+            <div class="process-timeline" id="process-timeline">
+                <div class="timeline-line"><div class="timeline-line-progress" id="timeline-progress"></div></div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="step-number">01</div>
+                        <h3>Discovery & Strategy</h3>
+                        <p>We begin by deeply understanding your goals to build a comprehensive project roadmap.</p>
                     </div>
-                    <div class="timeline-item">
-                        <div class="timeline-dot"></div>
-                        <div class="timeline-content">
-                            <div class="step-number">02</div>
-                            <h3>Sourcing & Design</h3>
-                            <p>Our experts architect the technical solution or source ideal candidates from our elite, vetted global network.</p>
-                        </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="step-number">02</div>
+                        <h3>Sourcing & Design</h3>
+                        <p>Our experts architect the technical solution or source ideal candidates from our elite, vetted global network.</p>
                     </div>
-                    <div class="timeline-item">
-                        <div class="timeline-dot"></div>
-                        <div class="timeline-content">
-                            <div class="step-number">03</div>
-                            <h3>Execution & Vetting</h3>
-                            <p>We build with agile methodologies or rigorously vet talent to ensure a perfect technical and cultural fit.</p>
-                        </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="step-number">03</div>
+                        <h3>Execution & Vetting</h3>
+                        <p>We build with agile methodologies or rigorously vet talent to ensure a perfect technical and cultural fit.</p>
                     </div>
-                    <div class="timeline-item">
-                        <div class="timeline-dot"></div>
-                        <div class="timeline-content">
-                            <div class="step-number">04</div>
-                            <h3>Delivery & Partnership</h3>
-                            <p>We ensure a seamless deployment and provide ongoing support for a long-term partnership.</p>
-                        </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="step-number">04</div>
+                        <h3>Delivery & Partnership</h3>
+                        <p>We ensure a seamless deployment and provide ongoing support for a long-term partnership.</p>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section class="section tech-section" id="tech">
-            <div class="container">
-                <h2 class="section-heading reveal">Powered by Leading-Edge Technology</h2>
-                <p class="section-subheading reveal">We leverage a modern, powerful technology stack to build robust and scalable solutions.</p>
-                <div class="tech-grid">
-                    <div class="tech-item reveal"><div class="icon"><i class="fab fa-windows"></i></div><span>Dynamics 365</span></div>
-                    <div class="tech-item reveal"><div class="icon"><i class="fab fa-azure"></i></div><span>Microsoft Azure</span></div>
-                    <div class="tech-item reveal"><div class="icon"><i class="fab fa-aws"></i></div><span>Amazon Web Services</span></div>
-                    <div class="tech-item reveal"><div class="icon"><i class="fab fa-react"></i></div><span>React</span></div>
-                    <div class="tech-item reveal"><div class="icon"><i class="fab fa-python"></i></div><span>Python</span></div>
-                </div>
+    <section class="section tech-section" id="tech">
+        <div class="container">
+            <h2 class="section-heading reveal">Powered by Leading-Edge Technology</h2>
+            <p class="section-subheading reveal">We leverage a modern, powerful technology stack to build robust and scalable solutions.</p>
+            <div class="tech-grid">
+                <div class="tech-item reveal"><div class="icon"><i class="fab fa-windows"></i></div><span>Dynamics 365</span></div>
+                <div class="tech-item reveal"><div class="icon"><i class="fab fa-azure"></i></div><span>Microsoft Azure</span></div>
+                <div class="tech-item reveal"><div class="icon"><i class="fab fa-aws"></i></div><span>Amazon Web Services</span></div>
+                <div class="tech-item reveal"><div class="icon"><i class="fab fa-react"></i></div><span>React</span></div>
+                <div class="tech-item reveal"><div class="icon"><i class="fab fa-python"></i></div><span>Python</span></div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section class="section map-section" id="about">
-             <div class="container">
-                <h2 class="section-heading reveal">Connecting Global Talent with Opportunity</h2>
-                <p class="section-subheading reveal">Our network spans continents, giving you access to a world-class pool of vetted professionals.</p>
-                <div class="map-container reveal">
-                    <svg class="map-svg" viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg"><path d="M990,216.5c-5.9-2.9-10.9-7.1-15.1-12.1... (path data omitted for brevity) ...c-0.9,0-1.8,0-2.6,0z" /></svg>
-                    <div class="map-dot north-america"></div>
-                    <div class="map-dot europe"></div>
-                    <div class="map-dot asia"></div>
-                </div>
+    <section class="section map-section" id="about">
+         <div class="container">
+            <h2 class="section-heading reveal">Connecting Global Talent with Opportunity</h2>
+            <p class="section-subheading reveal">Our network spans continents, giving you access to a world-class pool of vetted professionals.</p>
+            <div class="map-container reveal">
+                <svg class="map-svg" viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg"><path d="M990,216.5c-5.9-2.9-10.9-7.1-15.1-12.1... (path data omitted for brevity) ...c-0.9,0-1.8,0-2.6,0z" /></svg>
+                <div class="map-dot north-america"></div>
+                <div class="map-dot europe"></div>
+                <div class="map-dot asia"></div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section class="section testimonials-section">
-            <div class="container">
-                 <h2 class="section-heading reveal">What Our Partners Say</h2>
-                 <p class="section-subheading reveal">Our success is reflected in the lasting partnerships we build.</p>
-                 <div class="testimonials-grid">
-                     <div class="testimonial-card glass-card reveal">
+    <section class="section testimonials-section">
+        <div class="container">
+             <h2 class="section-heading reveal">What Our Partners Say</h2>
+             <p class="section-subheading reveal">Our success is reflected in the lasting partnerships we build.</p>
+             <div class="testimonials-grid">
+                   <div class="testimonial-card glass-card reveal">
                          <div class="quote-icon"><i class="fa-solid fa-quote-left"></i></div>
                          <p>"CygniSoft's approach is different. They didn't just find us a developer; they found us a strategic partner who has become essential to our team's success."</p>
                          <div class="author">Jane Doe <span>CTO, InnovateX</span></div>
-                     </div>
-                     <div class="testimonial-card glass-card reveal">
+                   </div>
+                   <div class="testimonial-card glass-card reveal">
                          <div class="quote-icon"><i class="fa-solid fa-quote-left"></i></div>
                          <p>"The software solution they built for us was a game-changer. It streamlined our operations and the team was professional and insightful throughout the entire process."</p>
                           <div class="author">John Smith <span>CEO, HealthSys</span></div>
-                     </div>
-                 </div>
-            </div>
-        </section>
-        
-        <section class="section cta-section" id="careers">
-             <div class="container">
-                <div class="cta-container glass-card reveal">
-                    <h2>Join a Team of Visionaries</h2>
-                    <p>We're a team of innovators, problem-solvers, and strategic thinkers. Discover where you fit in and help us shape the future.</p>
-                    <a href="#" class="btn btn-primary">Explore Open Roles</a>
-                </div>
-            </div>
-        </section>
-
-        <section class="section" id="contact">
-            <div class="container">
-                <h2 class="section-heading reveal">Ready to Build What's Next?</h2>
-                <p class="section-subheading reveal">
-                    Your vision requires more than just a service provider—it requires a partner.
-                    Let's start the conversation.
-                </p>
-                <div class="contact-container glass-card reveal">
-                    <div class="contact-info">
-                        <h3>Get in Touch</h3>
-                        <p>
-                            We're here to help you solve complex challenges. Reach out by
-                            phone, email, or through our form.
-                        </p>
-                        <ul>
-                            <li><i class="fa-solid fa-envelope"></i> contact@cygnisoft.com</li>
-                            <li><i class="fa-solid fa-phone"></i> +1 (555) 123-4567</li>
-                            <li><i class="fa-solid fa-map-marker-alt"></i> 123 Innovation Dr, Tech City</li>
-                        </ul>
-                    </div>
-                    <form class="contact-form" action="#" method="POST">
-                        <div class="form-group">
-                            <label for="name">Full Name</label>
-                            <input type="text" id="name" name="name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="message">How can we help?</label>
-                            <textarea id="message" name="message" rows="5" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Initiate Your Project</button>
-                    </form>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer class="main-footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-col">
-                    <img src="cygnisoft_logo.jpg" alt="CygniSoft Logo" class="footer-logo">
-                    <p>Engineering clarity from complexity, building your future, today.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-linkedin"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-github"></i></a>
-                    </div>
-                </div>
-                <div class="footer-col">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="#solutions">Solutions</a></li>
-                        <li><a href="#industries">Industries</a></li>
-                        <li><a href="#process">Our Process</a></li>
-                        <li><a href="#careers">Careers</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>Legal</h4>
-                    <ul>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>Contact Us</h4>
-                    <ul>
-                        <li>contact@cygnisoft.com</li>
-                        <li>+1 (555) 123-4567</li>
-                        <li>123 Innovation Dr, Tech City</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 CygniSoft Inc. All rights reserved.</p>
+                   </div>
+             </div>
+        </div>
+    </section>
+    
+    <section class="section cta-section" id="careers">
+         <div class="container">
+            <div class="cta-container glass-card reveal">
+                <h2>Join a Team of Visionaries</h2>
+                <p>We're a team of innovators, problem-solvers, and strategic thinkers. Discover where you fit in and help us shape the future.</p>
+                <a href="#" class="btn btn-primary">Explore Open Roles</a>
             </div>
         </div>
-    </footer>
+    </section>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        
-        const themeToggle = document.getElementById('theme-toggle');
-        const themeIcon = themeToggle.querySelector('i');
-        const body = document.body;
+   <!-- <section class="section" id="contact">
+        <div class="container">
+            <h2 class="section-heading reveal">Ready to Build What's Next?</h2>
+            <p class="section-subheading reveal">
+                Your vision requires more than just a service provider—it requires a partner.
+                Let's start the conversation.
+            </p>
+            <div class="contact-container glass-card reveal">
+                <div class="contact-info">
+                    <h3>Get in Touch</h3>
+                    <p>
+                        We're here to help you solve complex challenges. Reach out by
+                        phone, email, or through our form.
+                    </p>
+                    <ul>
+                        <li><i class="fa-solid fa-envelope"></i> contact@cygnisoft.com</li>
+                        <li><i class="fa-solid fa-phone"></i> +1 (555) 123-4567</li>
+                        <li><i class="fa-solid fa-map-marker-alt"></i> 123 Innovation Dr, Tech City</li>
+                    </ul>
+                </div>
+                <form class="contact-form" action="#" method="POST">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">How can we help?</label>
+                        <textarea id="message" name="message" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Initiate Your Project</button>
+                </form>
+            </div>
+        </div>
+    </section> -->
+	
+</main>
 
-        // Function to apply the saved theme on load
-        const applySavedTheme = () => {
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark') {
-                body.classList.add('dark-mode');
-                themeIcon.classList.remove('fa-moon');
-                themeIcon.classList.add('fa-sun');
-            } else {
-                body.classList.remove('dark-mode');
-                themeIcon.classList.remove('fa-sun');
-                themeIcon.classList.add('fa-moon');
-            }
-        };
-
-        // Click event to toggle theme
-        themeToggle.addEventListener('click', () => {
-            body.classList.toggle('dark-mode');
-            
-            // Update icon and save preference
-            if (body.classList.contains('dark-mode')) {
-                themeIcon.classList.remove('fa-moon');
-                themeIcon.classList.add('fa-sun');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                themeIcon.classList.remove('fa-sun');
-                themeIcon.classList.add('fa-moon');
-                localStorage.setItem('theme', 'light');
-            }
-        });
-
-        // Apply the theme when the page loads
-        applySavedTheme();
-        
-        
-        // --- Header Scroll Effect ---
-        const header = document.getElementById('main-header');
-        window.addEventListener('scroll', () => {
-            header.classList.toggle('scrolled', window.scrollY > 50);
-        });
-
-        // --- On-Scroll Reveal ---
-        const revealObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
-        }, { threshold: 0.1 });
-        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
-
-        // --- Professional Constellation (v9 - Drifting Home + Bounce) ---
-        const canvas = document.getElementById('hero-orb-canvas');
-        if (canvas) {
-            const ctx = canvas.getContext('2d');
-            let width, height, particles;
-
-            // --- Mouse Object ---
-            let mouse = {
-                x: null,
-                y: null,
-                radius: 100 // Radius of the "bounce" force
-            };
-
-            // --- Configuration ---
-            const particleCount = 150;  // Total number of random particles
-            const maxDistance = 100;    // Max distance for particle-to-particle lines
-            const particleRadius = 1.5;   // Base particle size
-            
-            // --- Physics ---
-            const baseDriftSpeed = 0.1;   // --- SPEED FOR AUTOMATIC MOVEMENT ---
-            const damping = 0.90;       // Simulates friction (how fast they slow down)
-            const returnForce = 0.01;   // How strongly particles return to "home"
-            const mouseForce = 3;       // How strong the "bounce" is
-
-            // Get colors
-            const nodeColor = 'rgba(136, 146, 176, 0.7)'; // --color-text-muted
-            const nodeGlow = 'rgba(136, 146, 176, 0.5)';
-            const mouseLineColor = 'rgba(255, 179, 71, 0.4)'; // --brand-gold
-            const particleLineColor = 'rgba(136, 146, 176, 0.1)';
-
-            class Particle {
-                constructor() {
-                    // Initialize width and height dependent properties here
-                    if (!width || !height) { // Ensure width/height are available
-                         width = canvas.offsetWidth;
-                         height = canvas.offsetHeight;
-                    }
-                    this.baseX = Math.random() * width;
-                    this.baseY = Math.random() * height;
-                    this.driftVX = (Math.random() - 0.5) * baseDriftSpeed;
-                    this.driftVY = (Math.random() - 0.5) * baseDriftSpeed;
-                    this.x = this.baseX;
-                    this.y = this.baseY;
-                    this.vx = 0; this.vy = 0;
-                    this.ax = 0; this.ay = 0;
-                    this.radius = Math.random() * 0.5 + particleRadius;
-                }
-
-                update() {
-                    // Update dimensions if changed (e.g., resize)
-                    if (!width || !height) {
-                         width = canvas.offsetWidth;
-                         height = canvas.offsetHeight;
-                    }
-
-                    this.baseX += this.driftVX;
-                    this.baseY += this.driftVY;
-
-                    if (this.baseX + this.radius > width || this.baseX - this.radius < 0) {
-                        this.driftVX *= -1;
-                        this.baseX = Math.max(this.radius, Math.min(this.baseX, width - this.radius));
-                    }
-                    if (this.baseY + this.radius > height || this.baseY - this.radius < 0) {
-                        this.driftVY *= -1;
-                        this.baseY = Math.max(this.radius, Math.min(this.baseY, height - this.radius));
-                    }
-
-                    if (mouse.x !== null) {
-                        const dx_mouse = this.x - mouse.x;
-                        const dy_mouse = this.y - mouse.y;
-                        const dist_mouse = Math.sqrt(dx_mouse * dx_mouse + dy_mouse * dy_mouse);
-
-                        if (dist_mouse < mouse.radius) {
-                            const force = (mouse.radius - dist_mouse) / mouse.radius;
-                            const angle = Math.atan2(dy_mouse, dx_mouse);
-                            this.ax += Math.cos(angle) * force * mouseForce;
-                            this.ay += Math.sin(angle) * force * mouseForce;
-                        }
-                    }
-
-                    const dx_base = this.baseX - this.x;
-                    const dy_base = this.baseY - this.y;
-                    this.ax += dx_base * returnForce;
-                    this.ay += dy_base * returnForce;
-
-                    this.vx += this.ax;
-                    this.vy += this.ay;
-                    this.vx *= damping;
-                    this.vy *= damping;
-                    this.x += this.vx;
-                    this.y += this.vy;
-                    this.ax = 0;
-                    this.ay = 0;
-                }
-
-                draw() {
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                    ctx.fillStyle = nodeColor;
-                    ctx.shadowColor = nodeGlow;
-                    ctx.shadowBlur = 6;
-                    ctx.fill();
-                    ctx.shadowBlur = 0;
-                }
-            }
-
-            function initCanvas() {
-                width = canvas.offsetWidth;
-                height = canvas.offsetHeight;
-                canvas.width = width;
-                canvas.height = height;
-                
-                particles = [];
-                for (let i = 0; i < particleCount; i++) {
-                    // Pass width/height during init if needed, or ensure they are set before Particle constructor uses them
-                    particles.push(new Particle());
-                }
-            }
-
-            function animate() {
-                // Ensure dimensions are current
-                 if (canvas.offsetWidth !== width || canvas.offsetHeight !== height) {
-                    initCanvas(); // Reinitialize if canvas size changed drastically
-                 } else {
-                    ctx.clearRect(0, 0, width, height);
-                 }
-
-
-                for (let i = 0; i < particles.length; i++) {
-                    const p1 = particles[i];
-                    p1.update();
-                    p1.draw();
-
-                    if (mouse.x !== null) {
-                        const dx_mouse = p1.x - mouse.x;
-                        const dy_mouse = p1.y - mouse.y;
-                        const dist_mouse = Math.sqrt(dx_mouse * dx_mouse + dy_mouse * dy_mouse);
-
-                        if (dist_mouse < mouse.radius) {
-                            const opacity = 1 - (dist_mouse / mouse.radius);
-                            ctx.strokeStyle = `rgba(255, 179, 71, ${opacity * 0.3})`;
-                            ctx.lineWidth = 1;
-                            ctx.beginPath();
-                            ctx.moveTo(p1.x, p1.y);
-                            ctx.lineTo(mouse.x, mouse.y);
-                            ctx.stroke();
-                        }
-                    }
-
-                    for (let j = i + 1; j < particles.length; j++) {
-                        const p2 = particles[j];
-                        const dx = p1.x - p2.x;
-                        const dy = p1.y - p2.y;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
-
-                        if (dist < maxDistance) {
-                            const opacity = 1 - (dist / maxDistance);
-                            ctx.strokeStyle = `rgba(136, 146, 176, ${opacity * 0.15})`;
-                            ctx.lineWidth = 1;
-                            ctx.beginPath();
-                            ctx.moveTo(p1.x, p1.y);
-                            ctx.lineTo(p2.x, p2.y);
-                            ctx.stroke();
-                        }
-                    }
-                }
-                requestAnimationFrame(animate);
-            }
-
-            window.addEventListener('mousemove', (event) => {
-                mouse.x = event.clientX;
-                mouse.y = event.clientY;
-            });
-            window.addEventListener('mouseout', () => {
-                mouse.x = null;
-                mouse.y = null;
-            });
-            
-            initCanvas(); // Initial setup
-            animate(); // Start animation
-             // Debounced resize handler
-            let resizeTimeout;
-            window.addEventListener('resize', () => {
-                 clearTimeout(resizeTimeout);
-                 resizeTimeout = setTimeout(initCanvas, 100); // Reinitialize after resize settles
-            });
-        }
-        
-         // --- Animated Counters ---
-        const statsObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const counter = entry.target;
-                    const target = +counter.getAttribute('data-target');
-                    const duration = 2000; let start = 0;
-                    const increment = target / (duration / 16); // Calculate increment per frame (approx 60fps)
-                    
-                    const updateCounter = () => {
-                        start += increment;
-                        if (start < target) {
-                             counter.textContent = Math.ceil(start);
-                             requestAnimationFrame(updateCounter);
-                        } else {
-                             counter.textContent = target; // Ensure it ends exactly on target
-                        }
-                    };
-                    requestAnimationFrame(updateCounter); // Start the animation
-                    observer.unobserve(counter); // Only run once
-                }
-            });
-        }, { threshold: 0.5 });
-        document.querySelectorAll('.stat-number').forEach(stat => statsObserver.observe(stat));
-
-        // --- Sticky Services Section ---
-        const servicePanels = document.querySelectorAll('.scroll-content .service-panel'); 
-        const stickyIconElement = document.getElementById('sticky-icon'); 
-        if (servicePanels.length > 0 && stickyIconElement) { 
-             const stickyServicesObserver = new IntersectionObserver((entries) => {
-                 let intersected = false; 
-                 entries.forEach(entry => {
-                    if (entry.isIntersecting && entry.intersectionRatio >= 0.6) {
-                         servicePanels.forEach(panel => panel.classList.remove('is-active'));
-                         entry.target.classList.add('is-active');
-                         const iconClass = entry.target.dataset.icon;
-                         if (iconClass) {
-                             stickyIconElement.innerHTML = `<i class="${iconClass}"></i>`;
-                         }
-                         intersected = true;
-                     } 
-                 });
-             }, { threshold: [0.6, 0.7] }); 
-
-             servicePanels.forEach(panel => stickyServicesObserver.observe(panel));
-        }
-
-
-        // --- Interactive Process Timeline ---
-        const timeline = document.getElementById('process-timeline');
-        if (timeline) {
-            const timelineProgress = document.getElementById('timeline-progress');
-            const timelineItems = timeline.querySelectorAll('.timeline-item'); 
-            if (timelineProgress && timelineItems.length > 0) { 
-                 const timelineObserver = new IntersectionObserver(entries => {
-                    let maxProgress = 0; 
-                    let lastActiveEntry = null;
-
-                    entries.forEach(entry => {
-                         const item = entry.target;
-                         const itemRect = item.getBoundingClientRect();
-                         const timelineRect = timeline.getBoundingClientRect();
-                         const itemCenterRelativeToTimeline = (itemRect.top - timelineRect.top) + (itemRect.height / 2);
-                         const currentProgress = (itemCenterRelativeToTimeline / timelineRect.height) * 100;
-
-                         if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
-                            item.classList.add('active');
-                             if (currentProgress > maxProgress) {
-                                 maxProgress = currentProgress;
-                                 lastActiveEntry = entry;
-                             }
-                         } else {
-                             if (entry.intersectionRatio < 0.1) { 
-                                 item.classList.remove('active');
-                             }
-                         }
-                    });
-
-                     if (lastActiveEntry) {
-                         const activeItemRect = lastActiveEntry.target.getBoundingClientRect();
-                         const activeTimelineRect = timeline.getBoundingClientRect();
-                         const activeItemCenter = (activeItemRect.top - activeTimelineRect.top) + (activeItemRect.height / 2);
-                         const finalProgress = Math.min(100, (activeItemCenter / activeTimelineRect.height) * 100 + 5); 
-                          timelineProgress.style.height = `${finalProgress}%`;
-                     } 
-
-                 }, { 
-                     rootMargin: "0px 0px -40% 0px", 
-                     threshold: [0.1, 0.5, 1.0] 
-                 });
-
-                 timelineItems.forEach(item => timelineObserver.observe(item));
-            }
-        }
-    });
-</script>
-</body>
-</html>
+<?php 
+get_footer(); // This will load your OLD dark footer
+?>
