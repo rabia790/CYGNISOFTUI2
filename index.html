@@ -1,995 +1,471 @@
-
-<style>
-
-:root {
-    /* --- OLD THEME VARS (DARK) --- */
-    --color-bg-body: #222;
-    --color-bg-surface: #1a1a1a;
-    --color-text-primary: #fff;
-    --color-text-secondary: #ccc;
-    --color-accent: #f7941e;
-    --color-shadow: rgba(0,0,0,0.2);
-
-    /* --- NEW HOMEPAGE VARS (DARK) --- */
-    --brand-gold: #D4AF37;
-    --brand-teal: #008080;
-    --color-bg: #1A1A1A;
-    --color-bg-secondary: #2C2C2C;
-    --color-text-dark: #F8F9FA;
-    --color-text-muted: #ADB5BD;
-    --color-border: rgba(255, 255, 255, 0.1);
-    --glass-bg: rgba(44, 44, 44, 0.6);
-    --font-heading: 'Space Grotesk', sans-serif;
-    --font-body: 'Inter', sans-serif;
-    --color-input-bg: rgba(255, 255, 255, 0.08); 
-    --color-input-text: #F8F9FA;
-}
-
-/* Light Mode Variables */
-html.light-mode {
-    /* --- OLD THEME VARS (LIGHT) --- */
-    --color-bg-body: #f4f4f4;
-    --color-bg-surface: #ffffff;
-    --color-text-primary: #333;
-    --color-text-secondary: #555;
-    --color-accent: #f7941e;
-    --color-shadow: rgba(0,0,0,0.1);
-
-    /* --- NEW HOMEPAGE VARS (LIGHT) --- */
-    --brand-gold: #D4AF37;
-    --brand-teal: #008080;
-    --color-bg: #F8F9FA;
-    --color-bg-secondary: #E9ECEF;
-    --color-text-dark: #212529;
-    --color-text-muted: #6C757D;
-    --color-border: rgba(33, 37, 41, 0.1);
-    --glass-bg: rgba(255, 255, 255, 0.6);
-    --font-heading: 'Space Grotesk', sans-serif;
-    --font-body: 'Inter', sans-serif;
-    --color-input-bg: rgba(0, 0, 0, 0.2);
-    --color-input-text: #F8F9FA;
-}
-
-/* --- Base Styles --- */
-body {
-    display: block;
-    margin: 0px;
-    background-color: var(--color-bg-body);
-    color: var(--color-text-primary);
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-html, body {
-    height: 100%;
-    margin: 0;
-}
-
-.site-wrapper {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-.site-content {
-    flex: 1; /* Takes remaining space */
-    padding-top: 100px; /* Space for fixed header (DEFAULT) */
-}
-
-/* --- Header Styling --- */
-#site-header {
-    background-color: var(--color-bg-surface);
-    padding: 20px 0;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    z-index: 999;
-    box-shadow: 0 2px 8px var(--color-shadow);
-    transition: background-color 0.3s ease, top 0.3s ease;
-}
-
-html {
-    margin-top: 0 !important; /* Default */
-}
-body.admin-bar #site-header {
-    top: 32px; /* Default admin bar height for desktop */
-}
-#site-header .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-/* Logo styling */
-.site-logo {
-    display: flex;
-    align-items: center;
-}
-.site-logo img {
-    max-height: 64px;
-    max-width: 155px;
-}
-.site-logo a {
-    color: var(--color-text-primary);
-    text-decoration: none;
-}
-.site-title {
-    color: var(--color-text-primary);
-    font-size: 24px;
-    font-weight: 600;
-}
-.site-logo h1 {
-    font-size: 24px;
-    margin: 0;
-}
-
-/* Navigation */
-.main-navigation ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-}
-.main-navigation li {
-    margin-left: 30px;
-}
-.main-navigation a {
-    color: var(--color-text-primary);
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s;
-}
-.main-navigation a:hover {
-    color: var(--color-accent);
-}
-
-/* --- Header Controls (Toggles) --- */
-.header-controls {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-.menu-toggle {
-    display: none; /* Default: hidden */
-    cursor: pointer;
-    color: var(--color-text-primary);
-    font-size: 24px;
-    font-weight: bold;
-}
-
-/* Theme Toggle Button Style */
-.theme-toggle {
-    background: none;
-    border: none;
-    color: var(--color-text-primary);
-    cursor: pointer;
-    font-size: 20px;
-    padding: 0;
-    line-height: 1;
-}
-/* By default, show sun (dark mode), hide moon */
-.theme-toggle .icon-moon {
-    display: none;
-}
-/* In light mode, hide sun, show moon */
-html.light-mode .theme-toggle .icon-sun {
-    display: none;
-}
-html.light-mode .theme-toggle .icon-moon {
-    display: inline;
-}
-
-
-/* --- Footer Styling --- */
-#site-footer {
-    background-color: var(--color-bg-surface);
-    color: var(--color-text-primary);
-    padding: 40px 0;
-    text-align: center;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-.footer-navigation ul {
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    padding: 0;
-    margin-bottom: 20px;
-}
-.footer-navigation li a {
-    color: var(--color-text-primary);
-    text-decoration: none;
-}
-.footer-navigation li a:hover {
-    color: var(--color-accent);
-}
-.footer-widgets {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 30px;
-    margin-bottom: 20px;
-}
-.footer-widgets .widget {
-    flex: 1 1 200px;
-}
-.widget.widget_media_image img{
-    /* Your styles */
-}
-.site-info p {
-    font-size: 14px;
-    color: var(--color-text-secondary);
-    margin: 0;
-}
-
-/* --- Services Section --- */
-.services-section {
-    background-color: var(--color-bg-secondary);
-    padding: 80px 0;
-}
-
-.services-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
-    margin-top: 50px;
-}
-
-.service-card {
-    padding: 30px 20px;
-    text-align: center;
-    border-radius: 16px;
-    transition: all 0.4s ease;
-    cursor: default;
-}
-
-.service-card .icon {
-    font-size: 3rem;
-    color: var(--brand-teal);
-    margin-bottom: 20px;
-    transition: all 0.4s ease;
-}
-
-.service-card h3 {
-    font-family: var(--font-heading);
-    font-size: 1.5rem;
-    margin-bottom: 15px;
-    color: var(--color-text-dark);
-}
-
-.service-card p {
-    color: var(--color-text-muted);
-    line-height: 1.7;
-    font-size: 1rem;
-}
-
-/* Hover Effect */
-.service-card:hover {
-    transform: translateY(-8px);
-    border: 1px solid var(--brand-gold);
-    background: var(--glass-bg);
-}
-
-.service-card:hover .icon {
-    color: var(--brand-gold);
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .services-grid {
-        grid-template-columns: 1fr;
-    }
-}
- 
-/* --- Mobile Responsive --- */
-@media (max-width: 768px) {
-     .menu-toggle {
-        display: block;
-    }
-
-    #site-header .container {
-        flex-direction: row; /* Keep logo and controls in a row */
-        flex-wrap: wrap;     /* Allow nav to wrap below */
-        align-items: center;
-    }
-
-    .main-navigation {
-        width: 100%; /* Make nav full-width */
-        order: 3;    /* Place nav below logo and controls */
-    }
-
-    .main-navigation ul {
-        flex-direction: column;
-        width: 100%;
-        display: none; /* Hidden by default, toggled with JS */
-        background-color: var(--color-bg-surface);
-        padding: 10px 0;
-        margin-top: 15px; /* Space from header items */
-    }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Command Center V4 - Dynamic Banner</title>
     
-    /* This class is toggled by JS */
-    .main-navigation ul.toggled {
-        display: flex;
-    }
+    <style>
+        /* --- Global Theme & Styles (Same) --- */
+        :root {
+            --color-bg: #0a0f1a;
+            --color-surface: #1a202c;
+            --color-text: #e0e0e0;
+            --color-text-secondary: #a0a0a0;
+            --color-accent: #00f0ff;
+            --color-accent-dark: #002e33;
+        }
+        .light-mode {
+            --color-bg: #f4f7f6;
+            --color-surface: #ffffff;
+            --color-text: #1a202c;
+            --color-text-secondary: #555;
+            --color-accent: #007acc;
+            --color-accent-dark: #e0f4ff;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            line-height: 1.6;
+        }
+        .container { width: 90%; max-width: 1100px; margin: auto; padding: 3rem 0; }
+        h1, h2, h3 { color: var(--color-text); margin-bottom: 1rem; line-height: 1.2; }
+        h1 { font-size: 3rem; }
+        h2 { font-size: 2.2rem; border-bottom: 2px solid var(--color-accent-dark); padding-bottom: 0.5rem; }
+        h3 { font-size: 1.5rem; color: var(--color-accent); }
+        p { font-size: 1.1rem; color: var(--color-text-secondary); max-width: 60ch; }
+        section { margin-bottom: 2rem; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; background-color: var(--color-surface); border-bottom: 1px solid var(--color-accent-dark); position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 1.5rem; font-weight: bold; color: var(--color-text); }
+        .theme-toggle { font-size: 1.5rem; cursor: pointer; background: none; border: none; color: var(--color-text); }
 
-    .main-navigation li {
-        margin: 10px 0;
-        text-align: center;
-    }
+        /* --- ======== HERO SECTION (NOW DYNAMIC!) ======== --- */
+        .hero { position: relative; height: 70vh; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; padding: 0 2rem; }
+        .hero-video { position: absolute; top: 50%; left: 50%; width: 100%; height: 100%; object-fit: cover; transform: translate(-50%, -50%); z-index: 1; }
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(10, 15, 26, 0.85);
+            z-index: 2;
+            overflow: hidden; /* Keep particles inside */
+        }
+        .hero-content { position: relative; z-index: 3; }
+        
+        /* NEW: Hero H1 is now split for the typing effect */
+        .hero h1 {
+            color: #ffffff;
+            margin-bottom: 1.5rem;
+        }
+        /* This is the part that will be typed */
+        #typing-target {
+            color: var(--color-accent); /* Make the dynamic word stand out */
+        }
+        /* The blinking cursor */
+        #typing-target::after {
+            content: '|';
+            display: inline-block;
+            animation: blink 0.7s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
 
-    body.admin-bar #site-header {
-        top: 46px;
-    }
-}
+        .hero p { color: #e0e0e0; font-size: 1.2rem; margin-bottom: 2.5rem; }
+        .hero-buttons .cta-button { text-decoration: none; font-size: 1rem; font-weight: bold; padding: 12px 24px; border-radius: 4px; margin: 0 0.5rem; transition: all 0.3s ease; }
+        .hero-buttons .cta-button.primary { background-color: var(--color-accent); color: var(--color-bg); }
+        .hero-buttons .cta-button.primary:hover { transform: translateY(-3px); box-shadow: 0 4px 20px rgba(0, 240, 255, 0.4); }
+        .hero-buttons .cta-button.secondary { background-color: transparent; border: 2px solid var(--color-accent); color: var(--color-accent); }
+        .hero-buttons .cta-button.secondary:hover { background-color: var(--color-accent); color: var(--color-bg); transform: translateY(-3px); }
+
+        /* NEW: CSS-only Particle Effect */
+        #particle-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Let clicks pass through */
+        }
+        .particle {
+            position: absolute;
+            background: var(--color-accent);
+            border-radius: 50%;
+            opacity: 0.6;
+            box-shadow: 0 0 8px var(--color-accent);
+            animation: float 20s infinite linear;
+            bottom: -20px; /* Start from just off-screen */
+        }
+
+        /* Keyframe for floating up */
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0.6;
+            }
+            100% {
+                /* Moves up 110vh (off screen) and drifts sideways */
+                transform: translateY(-110vh) translateX(var(--float-x)); 
+                opacity: 0;
+            }
+        }
 
 
+        /* --- SERVICES (Same) --- */
+        .services { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        .service-box { background-color: var(--color-surface); padding: 2rem; border-radius: 8px; border: 1px solid var(--color-accent-dark); }
+        .service-box h2 { color: var(--color-accent); font-size: 1.8rem; }
+        
+        /* --- SOLUTION MATCHER (Same) --- */
+        .solution-matcher { background-color: var(--color-surface); border-radius: 8px; padding: 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; border: 1px solid var(--color-accent); }
+        .matcher-options h3 { color: #fff; border: none; }
+        .matcher-options p { margin-bottom: 1.5rem; }
+        .matcher-checkbox { display: block; margin-bottom: 1rem; font-size: 1.1rem; cursor: pointer; }
+        .matcher-checkbox input { margin-right: 0.75rem; appearance: none; width: 1.2em; height: 1.2em; border: 2px solid var(--color-accent); border-radius: 3px; position: relative; top: 0.2em; cursor: pointer; }
+        .matcher-checkbox input:checked { background-color: var(--color-accent); }
+        .matcher-checkbox input:checked::after { content: '✔'; color: var(--color-bg); position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); font-size: 0.9em; font-weight: bold; }
+        .matcher-result { background-color: var(--color-bg); border-radius: 6px; padding: 2rem; }
+        .matcher-result h3 { color: var(--color-accent); }
+        .result-content { display: none; }
+        #result-default { display: block; }
 
-body.page-template-page-home .site-content {
-    padding-top: 0; /* Removes 100px padding from old theme */
-}
-body.page-template-page-home {
-    /* Overrides default body to use NEW homepage variables */
-    font-family: var(--font-body);
-    background-color: var(--color-bg);
-    color: var(--color-text-dark);
-    overflow-x: hidden;
-}
+        /* --- PORTFOLIO (Same) --- */
+        .portfolio-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2rem; }
+        .portfolio-item { position: relative; overflow: hidden; border-radius: 8px; background-color: var(--color-surface); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .portfolio-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
+        .portfolio-item-overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 1.5rem; background: linear-gradient(to top, rgba(10, 15, 26, 0.95), transparent); opacity: 0; transform: translateY(20px); transition: all 0.4s ease; }
+        .portfolio-item:hover img { transform: scale(1.05); }
+        .portfolio-item:hover .portfolio-item-overlay { opacity: 1; transform: translateY(0); }
+
+        /* --- CAREERS (Same) --- */
+        .careers-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-top: 2rem; }
+        .job-card { background-color: var(--color-surface); border: 1px solid var(--color-accent-dark); border-radius: 6px; padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; transition: all 0.3s ease; }
+        .job-card:hover { border-color: var(--color-accent); transform: translateY(-5px); box-shadow: 0 4px 15px rgba(0, 240, 255, 0.1); }
+        .job-card h3 { margin: 0; color: #fff; }
+        .job-card .cta-button { text-decoration: none; font-size: 0.9rem; font-weight: bold; padding: 8px 16px; border-radius: 4px; background-color: var(--color-accent); color: var(--color-bg); }
+
+        /* --- BLUEPRINT / TIMELINE (Same) --- */
+        .timeline { position: relative; max-width: 600px; margin: 2rem auto; padding: 2rem 0; }
+        .timeline::after { content: ''; position: absolute; width: 4px; background-color: var(--color-accent-dark); top: 0; bottom: 0; left: 50%; margin-left: -2px; z-index: 1; }
+        .timeline-item { padding: 1rem 2.5rem; position: relative; width: 50%; }
+        .timeline-item::after { content: ''; position: absolute; width: 20px; height: 20px; right: -10px; background-color: var(--color-accent); border: 4px solid var(--color-bg); top: 25px; border-radius: 50%; z-index: 2; box-shadow: 0 0 10px rgba(0, 240, 255, 0.5); }
+        .timeline-item.left { left: 0; text-align: right; }
+        .timeline-item.right { left: 50%; }
+        .timeline-item.right::after { left: -10px; }
+        .timeline-content { padding: 1rem; background-color: var(--color-surface); border-radius: 6px; }
+
+        /* --- TECH STACK / TABS (Same) --- */
+        .tech-stack-container { background-color: var(--color-surface); border-radius: 8px; padding: 2rem; border: 1px solid var(--color-accent-dark); }
+        .tab-buttons { display: flex; border-bottom: 2px solid var(--color-accent-dark); margin-bottom: 1.5rem; }
+        .tab-button { background: none; border: none; color: var(--color-text-secondary); padding: 1rem 1.5rem; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; }
+        .tab-button.active { color: var(--color-accent); border-bottom: 3px solid var(--color-accent); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* --- NEW STYLES FOR TECH LOGOS --- */
+        .tech-logos {
+            display: flex;
+            flex-wrap: wrap;     /* Allows logos to wrap on smaller screens */
+            align-items: center; /* Vertically centers the logos */
+            gap: 2.5rem;         /* Adds space between each logo */
+            margin-top: 1.5rem;  /* Adds space below the "Frontend/Backend" heading */
+        }
+        .tech-logos img {
+            height: 48px;  /* Sets a consistent height for all logos */
+            width: auto;   /* Lets the width adjust automatically */
+        }
+        /* --- END OF NEW STYLES --- */
 
 
-/* --- New Homepage Styles Start Here --- */
+        /* --- FINAL CTA (Same) --- */
+        .final-cta { background-color: var(--color-surface); background-image: linear-gradient(45deg, var(--color-accent-dark) 25%, transparent 25%), linear-gradient(-45deg, var(--color-accent-dark) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, var(--color-accent-dark) 75%), linear-gradient(-45deg, transparent 75%, var(--color-accent-dark) 75%); background-size: 20px 20px; border: 1px solid var(--color-accent-dark); border-radius: 8px; padding: 3rem; text-align: center; }
+        .final-cta h2 { font-size: 2.5rem; color: #fff; border: none; }
+        .final-cta .cta-button.primary { font-size: 1.2rem; padding: 15px 30px; text-decoration: none; }
+        
+        /* --- Responsive for Mobile (Adjusted) --- */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.3rem; } /* Slightly smaller for typing effect */
+            .services, .portfolio-gallery, .solution-matcher { grid-template-columns: 1fr; }
+            .hero-buttons { display: flex; flex-direction: column; gap: 1rem; }
+            .timeline::after { left: 20px; }
+            .timeline-item, .timeline-item.left, .timeline-item.right { width: 100%; padding-left: 50px; left: 0; text-align: left; }
+            .timeline-item::after { left: 10px; }
+            .tab-buttons { flex-direction: column; }
+            .job-card { flex-direction: column; align-items: flex-start; gap: 1rem; }
+        }
 
-* { 
-    margin: 0; 
-    padding: 0; 
-    box-sizing: border-box; 
-}
-html { 
-    scroll-behavior: smooth; 
-}
+    </style>
+</head>
 
-/* Digital Aurora Background */
-.aurora-bg {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    pointer-events: none; overflow: hidden; z-index: -1;
-}
-.aurora-bg::before, .aurora-bg::after {
-    content: ''; position: absolute; border-radius: 50%;
-    filter: blur(150px); opacity: 0.1;
-    animation: moveGradient 30s infinite alternate;
-}
-.aurora-bg::before { background: var(--brand-teal); width: 800px; height: 800px; top: -10%; left: -10%; }
-.aurora-bg::after { background: var(--brand-gold); width: 900px; height: 900px; bottom: -15%; right: -10%; animation-delay: 15s; }
-@keyframes moveGradient {
-    from { transform: translate(0, 0) scale(1) rotate(0deg); } to { transform: translate(70px, -70px) scale(1.1) rotate(15deg); }
-}
+<body class="dark-mode">
 
-/* --- Reusable Components --- */
-/* NOTE: The new .container class will override the .container 
-  class from the old header on the homepage.
-*/
-.container { max-width: 1100px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 2;}
-.section {
-    padding: 120px 0; /* Default padding for most sections */
-    position: relative;
-}
-.section-heading { font-family: var(--font-heading); font-size: 3rem; text-align: center; margin-bottom: 20px; }
-.section-subheading { text-align: center; max-width: 700px; margin: 0 auto 80px auto; color: var(--color-text-muted); line-height: 1.7; font-size: 1.1rem; }
-.btn { display: inline-block; padding: 12px 32px; border-radius: 50px; text-decoration: none; font-weight: 500; font-family: var(--font-heading); transition: all 0.3s ease; border: 1px solid transparent; cursor: pointer;}
-.btn-primary { background: var(--brand-gold); color: var(--color-text-dark); box-shadow: 0 5px 20px rgba(212, 175, 55, 0.2); }
-.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(212, 175, 55, 0.3); }
-.glass-card { background: var(--glass-bg); border: 1px solid var(--color-border); border-radius: 16px; backdrop-filter: blur(12px); transition: all 0.4s ease; }
-.glass-card:hover { border-color: rgba(0, 128, 128, 0.5); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2); transform: translateY(-8px); }
-.reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
-.reveal.active { opacity: 1; transform: translateY(0); }
+    <header>
+        <div class="logo">CygniSoft</div>
+        <button class="theme-toggle" id="theme-toggle">☀️</button>
+    </header>
 
-/* --- Header --- */
-/* These styles are for the NEW header, not the old one */
-.main-header { position: fixed; top: 0; left:0; width: 100%; z-index: 100; padding: 20px 0; transition: all 0.4s ease; }
-.main-header.scrolled { background: rgba(248, 249, 250, 0.8); backdrop-filter: blur(15px); padding: 15px 0; border-bottom: 1px solid var(--color-border); }
-.header-container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 20px;}
-.header-logo img { height: 45px; }
-.main-nav a { text-decoration: none; color: var(--color-text-dark); margin-left: 40px; font-weight: 500; font-size: 1rem; }
-.main-nav a:hover { color: var(--brand-gold); }
+    <main>
+        <section class="hero">
+             <video class="hero-video" autoplay loop muted playsinline 
+                     src="https://assets.mixkit.co/videos/preview/mixkit-digital-animation-of-a-curved-screen-with-code-42130-large.mp4">
+                <img src="https://via.placeholder.com/1920x1080/0a0f1a/ffffff?text=Tech+Background" alt="Tech Background">
+            </video>
+            
+            <div class="hero-overlay">
+                <div id="particle-container"></div>
+            </div>
 
-/* --- Hero Section --- */
-.hero { 
-    /* We are NOT inside .site-content, so we don't need to adjust
-      for the old header's 100px padding.
-    */
-    min-height: 100vh; 
-    display: flex; align-items: center; text-align: center; position: relative; 
-    padding-top: 60px; /* Internal top padding */
-    padding-bottom: 150px; 
-}
-#hero-orb-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; opacity: 0.7; }
-.hero-content { position: relative; z-index: 2; }
-.hero-content h1 { font-family: var(--font-heading); font-size: 4.5rem; font-weight: 700; line-height: 1.15; letter-spacing: -1.5px; margin-bottom: 24px; }
-.hero-content p { font-size: 1.2rem; color: var(--color-text-muted); margin: 0 auto 40px auto; max-width: 600px; }
-.hero-focus-cards { display: flex; justify-content: center; gap: 25px; margin-bottom: 50px; }
-.hero-card { padding: 25px; border-radius: 16px; text-decoration: none; color: var(--color-text-muted); width: 280px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 15px; border: 1px solid transparent; background: transparent; backdrop-filter: blur(0px); transition: all 0.4s ease; }
-.hero-card:hover { transform: translateY(-8px); background: var(--glass-bg); border-color: var(--color-border); color: var(--color-text-light); backdrop-filter: blur(10px); }
-.hero-card .icon { font-size: 2.5rem; color: var(--color-text-muted); transition: color 0.4s ease; height: 40px; }
-.hero-card:hover .icon { color: var(--brand-gold); }
-.hero-card h4 { font-family: var(--font-heading); font-weight: 500; font-size: 1.2rem; color: var(--color-text-dark); }
-.hero-card p { font-size: 0.9rem; line-height: 1.6; margin: 0; color: var(--color-text-muted); }
+            <div class="hero-content">
+                <h1>Engineering the Future of <span id="typing-target"></span></h1>
+                <p>We deliver bespoke software, cloud solutions, and elite technology talent.</p>
+                <div class="hero-buttons">
+                    <a href="#build" class="cta-button primary">BUILD YOUR SOFTWARE</a>
+                    <a href="#hire" class="cta-button secondary">HIRE YOUR ENGINEERS</a>
+                </div>
+            </div>
+        </section>
 
-/* --- Job Search Section --- */
-.job-search-section {
-    padding: 60px 0 120px 0; 
-    background-color: var(--color-bg-secondary); 
-    position: relative;
-    z-index: 5; 
-}
-.job-search-card {
-    padding: 50px 40px; 
-    text-align: center;
-    max-width: 900px; 
-    margin: 0 auto; 
-}
-.job-search-heading {
-    font-family: var(--font-heading);
-    font-size: 2.5rem;
-    font-weight: 500;
-    margin-bottom: 40px; 
-    color: var(--color-text-dark);
-    line-height: 1.3;
-}
-.rotating-text-wrapper {
-    color: var(--brand-gold);
-    display: inline-block;
-    vertical-align: top;
-    height: calc(2.5rem * 1.3); 
-    overflow: hidden;
-    margin-left: 10px;
-}
-.rotating-text-wrapper span {
-    display: block;
-    height: calc(2.5rem * 1.3); 
-    line-height: calc(2.5rem * 1.3); 
-    animation: slide-up 9s infinite;
-}
-@keyframes slide-up { 
-    0%, 11% { transform: translateY(0); }
-    33%, 44% { transform: translateY(calc(-2.5rem * 1.3)); }
-    66%, 77% { transform: translateY(calc(-2.5rem * 1.3 * 2)); }
-    100% { transform: translateY(calc(-2.5rem * 1.3 * 3)); }
-}
-.job-search-form {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    background: var(--color-input-bg);
-    border-radius: 12px;
-    border: 1px solid var(--color-border);
-    padding: 15px;
-    margin-bottom: 30px; 
-}
-.form-field {
-    flex: 1;
-    position: relative;
-    min-width: 200px;
-}
-.form-field .fa-solid {
-    position: absolute; top: 50%; left: 15px; transform: translateY(-50%);
-    color: var(--color-text-muted);
-}
-.job-search-form input {
-    width: 100%; background: transparent; border: none;
-    padding: 15px 15px 15px 45px;
-    font-family: var(--font-body); font-size: 1rem; color: var(--color-input-text);
-}
-.job-search-form input::placeholder { color: var(--color-text-muted); }
-.job-search-form input:focus { outline: none; }
-.job-search-form button {
-    flex-shrink: 0; display: flex; align-items: center; gap: 10px;
-}
-.job-search-form button .fa-solid { font-size: 1rem; }
-.popular-searches {
-    display: flex; flex-wrap: wrap; justify-content: center; align-items: center;
-    gap: 10px 15px; 
-    color: var(--color-text-muted); font-size: 0.9rem;
-}
- .popular-searches span {
-    margin-right: 5px; 
-}
-.popular-searches a {
-    text-decoration: none; color: var(--color-text-dark);
-    background: rgba(255, 255, 255, 0.05); border: 1px solid var(--color-border);
-    padding: 5px 12px; border-radius: 20px; transition: all 0.3s ease;
-}
-.popular-searches a:hover {
-    background: var(--glass-bg); border-color: var(--brand-gold); color: var(--brand-gold);
-}
-
-/* --- Stats Section --- */
-.stats-section { padding: 80px 0; background-color: var(--color-bg); } 
-.stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; text-align: center; }
-.stat-item .stat-number { font-family: var(--font-heading); font-size: 3.5rem; font-weight: 700; color: var(--brand-gold); }
-.stat-item .stat-label { color: var(--color-text-muted); }
-
-/* --- Client Logos Section --- */
-.logos-section {
-     padding: 80px 0; 
-     background-color: var(--color-bg); 
-}
-.logos-section .section-subheading { margin-bottom: 60px; } 
-.logo-grid {
-     display: flex; flex-wrap: wrap; justify-content: center; align-items: center;
-     gap: 60px 80px; 
-}
-.logo-item img {
-     height: 40px; max-width: 150px;
-     filter: grayscale(100%) opacity(0.7); transition: all 0.3s ease;
-}
-.logo-item img:hover { filter: grayscale(0%) opacity(1); }
-
-/* --- Sticky Services Section --- */
-.sticky-services-container { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: flex-start; }
-.sticky-visual { position: sticky; top: 150px; height: 400px; display: flex; align-items: center; justify-content: center; }
-.visual-content .icon { font-size: 5rem; color: var(--brand-teal); transition: color 0.5s ease, transform 0.5s ease; }
-.scroll-content .service-panel { min-height: 400px; padding: 20px; opacity: 0.3; transition: opacity 0.5s ease; margin-bottom: 80px; }
-.scroll-content .service-panel:last-child { margin-bottom: 0; }
-.scroll-content .service-panel.is-active { opacity: 1; }
-.service-panel h3 { font-family: var(--font-heading); font-size: 2rem; margin-bottom: 15px; color: var(--brand-gold); }
-.service-panel p { color: var(--color-text-muted); font-size: 1.1rem; line-height: 1.8; }
- 
-/* --- Industries Section --- */
-.grid-3-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
-.info-card { padding: 40px; }
-.info-card .icon { font-size: 2.5rem; color: var(--brand-teal); margin-bottom: 20px; }
-.info-card h3 { font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 15px; }
-.info-card p { color: var(--color-text-muted); line-height: 1.7; }
- 
-/* --- "Our Process" Timeline Section --- */
-.process-timeline { max-width: 800px; margin: 0 auto; position: relative; }
-.timeline-line { position: absolute; top: 0; left: 24px; width: 2px; height: 100%; background: var(--color-border); }
-.timeline-line-progress { width: 100%; height: 0%; background: linear-gradient(to bottom, var(--brand-gold), var(--brand-teal)); transition: height 1s ease-out; }
-.timeline-item { position: relative; padding-left: 80px; margin-bottom: 80px; }
-.timeline-item:last-child { margin-bottom: 0; }
-.timeline-dot { position: absolute; top: 5px; left: 15px; width: 20px; height: 20px; background: var(--color-bg-secondary); border: 2px solid var(--color-border); border-radius: 50%; transition: all 0.5s ease; }
-.timeline-content .step-number { font-family: var(--font-heading); font-size: 1rem; color: var(--brand-gold); margin-bottom: 10px; }
-.timeline-content h3 { font-family: var(--font-heading); font-size: 1.8rem; margin-bottom: 15px; }
-.timeline-content p { color: var(--color-text-muted); line-height: 1.8; }
-.timeline-item.active .timeline-dot { border-color: var(--brand-gold); transform: scale(1.2); }
- 
-/* --- Technologies Section --- */
-.tech-grid { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 50px 80px; } 
-.tech-item { text-align: center; color: var(--color-text-muted); transition: color 0.3s ease, transform 0.3s ease; }
-.tech-item:hover { color: var(--color-text-dark); transform: translateY(-5px); }
-.tech-item .icon { font-size: 3rem; }
-.tech-item span { display: block; margin-top: 15px; font-family: var(--font-heading); }
-
-/* --- Global Map Section --- */
-.map-section { text-align: center; }
-.map-container { position: relative; max-width: 800px; margin: 0 auto; }
-.map-svg { width: 100%; height: auto; fill: var(--color-border); }
-.map-dot { position: absolute; width: 12px; height: 12px; background-color: var(--brand-teal); border-radius: 50%; box-shadow: 0 0 15px var(--brand-teal); animation: pulse 2s infinite alternate; }
-.map-dot.north-america { top: 35%; left: 22%; }
-.map-dot.europe { top: 30%; left: 48%; animation-delay: 0.5s; }
-.map-dot.asia { top: 40%; left: 75%; animation-delay: 1s; }
-@keyframes pulse { from { transform: scale(0.8); opacity: 0.7; } to { transform: scale(1.2); opacity: 1; } }
- 
-/* --- Testimonials Section --- */
- .testimonials-section { background-color: var(--color-bg-secondary); } 
-.testimonials-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-.testimonial-card { padding: 40px; position: relative; }
-.testimonial-card .quote-icon { position: absolute; top: 30px; left: 30px; font-size: 3rem; color: var(--color-border); }
-.testimonial-card p { font-size: 1.1rem; line-height: 1.8; margin-top: 50px; font-style: italic; }
-.testimonial-card .author { margin-top: 25px; font-weight: 700; }
-.testimonial-card .author span { display: block; font-weight: 400; color: var(--color-text-muted); font-style: normal; }
- 
-/* --- CTA Sections --- */
-.cta-section { text-align: center; }
-.cta-container { padding: 60px; }
-.cta-container h2 { font-size: 2.5rem; margin-bottom: 20px; }
-.cta-container p { color: var(--color-text-muted); max-width: 500px; margin: 0 auto 30px auto; }
- 
-/* --- Contact Section --- */
-.contact-container {
-     display: grid; grid-template-columns: 1fr 1.5fr; gap: 60px;
-     padding: 60px; text-align: left;
-}
-.contact-info h3 {
-     font-family: var(--font-heading); font-size: 1.8rem; margin-bottom: 20px;
-}
-.contact-info p {
-     color: var(--color-text-muted); line-height: 1.7; margin-bottom: 30px;
-}
-.contact-info ul { list-style: none; color: var(--color-text-dark); padding: 0;} 
-.contact-info ul li { margin-bottom: 15px; display: flex; align-items: center; gap: 15px; }
-.contact-info ul li .fa-solid { color: var(--brand-gold); font-size: 1.1rem; }
-.form-group { margin-bottom: 25px; }
-.form-group label { display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--color-text-muted); }
-.contact-form input,
-.contact-form textarea {
-     width: 100%; padding: 14px; background-color: var(--color-input-bg);
-     border: 1px solid var(--color-border); border-radius: 8px;
-     color: var(--color-input-text); font-family: var(--font-body); font-size: 1rem;
-}
-.contact-form input:focus,
-.contact-form textarea:focus { outline: none; border-color: var(--brand-gold); }
-.contact-form button { width: 100%; }
- 
-/* --- Footer --- */
-/* These styles are for the NEW footer, not the old one */
-.main-footer {
-     background-color: var(--color-bg); padding: 80px 0 30px 0; font-size: 0.95rem;
-     border-top: 1px solid var(--color-border); 
-}
-.footer-grid {
-     display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 50px; margin-bottom: 60px;
-}
-.footer-col .footer-logo { height: 40px; margin-bottom: 20px; }
-.footer-col p { color: var(--color-text-muted); line-height: 1.7; max-width: 300px; }
-.footer-col h4 {
-     font-family: var(--font-heading); font-size: 1.2rem;
-     color: var(--color-text-dark); margin-bottom: 25px;
-}
-.footer-col ul { list-style: none; padding: 0; } 
-.footer-col ul li { margin-bottom: 15px; color: var(--color-text-muted); }
-.footer-col ul a { text-decoration: none; color: var(--color-text-muted); transition: color 0.3s ease; }
-.footer-col ul a:hover { color: var(--brand-gold); }
-.social-links { margin-top: 25px; display: flex; gap: 20px; }
-.social-links a { color: var(--color-text-muted); font-size: 1.5rem; transition: color 0.3s ease; }
-.social-links a:hover { color: var(--brand-gold); }
-.footer-bottom {
-     text-align: center; padding-top: 30px; border-top: 1px solid var(--color-border);
-     color: var(--color-text-muted); font-size: 0.9rem;
-}
-
-/* --- Responsive --- */
-@media (max-width: 992px) {
-    /* We don't need body padding or hero height adjustments
-      because we are not using the new header/footer.
-    */
-    .section-heading { font-size: 2.5rem; }
-    .hero-content h1 { font-size: 3.5rem; }
-    .stats-grid { grid-template-columns: 1fr; gap: 50px; }
-    .sticky-services-container { grid-template-columns: 1fr; }
-    .sticky-visual { display: none; }
-    .scroll-content .service-panel { min-height: auto; opacity: 1; padding-bottom: 80px; margin-bottom: 0; } 
-    .grid-3-col, .testimonials-grid { grid-template-columns: 1fr; }
-    .contact-container { grid-template-columns: 1fr; }
-    .footer-grid { grid-template-columns: 1fr 1fr; }
-    .rotating-text-wrapper, .rotating-text-wrapper span { height: calc(2rem * 1.3); line-height: calc(2rem * 1.3);} 
-     @keyframes slide-up { /* Adjust translateY based on new height */
-         0%, 11% { transform: translateY(0); }
-         33%, 44% { transform: translateY(calc(-2rem * 1.3)); }
-         66%, 77% { transform: translateY(calc(-2rem * 1.3 * 2)); }
-         100% { transform: translateY(calc(-2rem * 1.3 * 3)); }
-    }
-}
-@media (max-width: 768px) {
-    .section { padding: 100px 0; } 
-    .job-search-section { padding: 40px 0 80px 0; }
-    .hero { padding-bottom: 100px; padding-top: 40px; }
-    .hero-content h1 { font-size: 2.8rem; }
-    .section-heading { font-size: 2rem; }
-    .section-subheading { margin-bottom: 60px; }
-    .footer-grid { grid-template-columns: 1fr; }
-    .popular-searches { justify-content: flex-start; } /* Align left on small screens */
-}
-</style>
-
-<main>
-    <section class="hero">
-        <canvas id="hero-orb-canvas"></canvas>
         <div class="container">
-            <div class="hero-content reveal">
-                <h1>We Engineer Clarity from Complexity.</h1>
-                <p>Empowering organizations through intelligent staffing and digital transformation — from Dynamics 365 to mobile app solutions.</p>
-                <div class="hero-focus-cards">
-                    <a href="#solutions" class="hero-card">
-                        <div class="icon"><i class="fa-solid fa-code"></i></div>
-                        <h4>IT & Technology</h4>
-                        <p>Bespoke software and elite staffing for a competitive digital edge.</p>
-                    </a>
-                    <a href="#solutions" class="hero-card">
-                        <div class="icon"><i class="fa-solid fa-heart-pulse"></i></div>
-                        <h4>Healthcare</h4>
-                        <p>Specialized talent sourcing to elevate patient care and operations.</p>
-                    </a>
+            <section class="services" id="services">
+                <div class="service-box" id="hire">
+                    <h2>Hire Your Expert Tech Team</h2>
+                    <p>We find the top 1% of tech talent to augment your team. Ready to deploy.</p>
                 </div>
-            </div>
+                <div class="service-box" id="build">
+                    <h2>We Build Your Vision: Apps & Websites</h2>
+                    <p>Custom platforms, high-performance web apps, and native mobile apps.</p>
+                </div>
+            </section>
         </div>
-    </section>
-	
-	
-	<section id="services" class="section services-section">
-    <div class="container">
-        <h2 class="section-heading">Our Services</h2>
-        <p class="section-subheading">We provide a range of staffing and IT solutions tailored to help your business thrive.</p>
 
-        <div class="services-grid">
-            <div class="service-card glass-card reveal">
-                <div class="icon"><i class="fa-solid fa-briefcase"></i></div>
-                <h3>Staffing Solutions</h3>
-                <p>We connect companies with top talent in healthcare IT, finance, and technology industries.</p>
-            </div>
-            <div class="service-card glass-card reveal">
-                <div class="icon"><i class="fa-solid fa-code"></i></div>
-                <h3>IT Consulting</h3>
-                <p>Our IT experts help streamline your projects with custom software solutions and best practices.</p>
-            </div>
-            <div class="service-card glass-card reveal">
-                <div class="icon"><i class="fa-solid fa-chart-line"></i></div>
-                <h3>Business Strategy</h3>
-                <p>We provide actionable insights to optimize your recruitment process and enhance growth.</p>
-            </div>
-            <div class="service-card glass-card reveal">
-                <div class="icon"><i class="fa-solid fa-people-group"></i></div>
-                <h3>Candidate Training</h3>
-                <p>We offer professional development programs to prepare candidates for high-demand roles.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-
-<!--
-
-    <section class="job-search-section">
         <div class="container">
-            <div class="job-search-card glass-card reveal">
-                <h2 class="job-search-heading">
-                    Find your next
-                    <span class="rotating-text-wrapper">
-                        <span>dream job</span>
-                        <span>career opportunity</span>
-                        <span>healthcare role</span>
-                        <span>dream job</span> </span>
-                </h2>
-                <form class="job-search-form" action="#" method="GET">
-                    <div class="form-field">
-                        <i class="fa-solid fa-briefcase"></i>
-                        <input type="text" placeholder="Job title or keyword">
-                    </div>
-                    <div class="form-field">
-                        <i class="fa-solid fa-map-marker-alt"></i>
-                        <input type="text" placeholder="Location (e.g., City, State)">
-                    </div>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fa-solid fa-search"></i>
-                        <span>Search</span>
-                    </button>
-                </form>
-                <div class="popular-searches">
-                    <span>Popular Searches:</span>
-                    <a href="#">IT Project Manager</a>
-                    <a href="#">Registered Nurse</a>
-                    <a href="#">React Developer</a>
-                    <a href="#">Azure Architect</a>
+            <section class="solution-matcher" id="matcher">
+                <div class="matcher-options">
+                    <h2>Find Your Solution</h2>
+                    <p>Check all that apply. Your recommended path will appear on the right.</p>
+                    <label class="matcher-checkbox"> <input type="checkbox" id="check-build-app"> I need to build a new app or website. </label>
+                    <label class="matcher-checkbox"> <input type="checkbox" id="check-hire-team"> I need to hire engineers for my team. </label>
+                    <label class="matcher-checkbox"> <input type="checkbox" id="check-cloud"> I need help with cloud (AWS, Azure) or DevOps. </label>
                 </div>
-            </div>
+                <div class="matcher-result">
+                    <h3>Your Recommended Path:</h3>
+                    <div class="result-content" id="result-default"> <p>Select an option on the left to see our recommendation!</p> </div>
+                    <div class="result-content" id="result-build-app"> <p>Our **Bespoke Software** team is your perfect match. We'll take your idea from discovery to deployment.</p> </div>
+                    <div class="result-content" id="result-hire-team"> <p>Our **Elite Tech Staffing** service is what you need. We'll find you the top 1% of talent.</p> </div>
+                    <div class="result-content" id="result-cloud"> <p>Our **Cloud & DevOps** experts can optimize your infrastructure and automate your deployments.</p> </div>
+                </div>
+            </section>
         </div>
-    </section>
- -->
-    <section class="section stats-section reveal">
-        <div class="container">
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-number" data-target="10">0</div>
-                    <div class="stat-label">Years of Experience</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number" data-target="500">0</div>
-                    <div class="stat-label">Successful Placements</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number" data-target="98">0</div>
-                    <div class="stat-label">Client Satisfaction (%)</div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <section class="section logos-section">
         <div class="container">
-            <h3 class="section-subheading reveal" style="margin: 0 auto 50px auto; font-size: 1rem; color: var(--color-text-muted);">
-                Trusted by industry-leading partners
-            </h3>
-            <div class="logo-grid reveal">
-                <div class="logo-item"><img src="<?php echo get_template_directory_uri(); ?>/images/client-logo-1.png" alt="Client 1"></div>
-                <div class="logo-item"><img src="<?php echo get_template_directory_uri(); ?>/images/client-logo-2.png" alt="Client 2"></div>
-                <div class="logo-item"><img src="<?php echo get_template_directory_uri(); ?>/images/client-logo-3.png" alt="Client 3"></div>
-                <div class="logo-item"><img src="<?php echo get_template_directory_uri(); ?>/images/client-logo-4.png" alt="Client 4"></div>
-                <div class="logo-item"><img src="<?php echo get_template_directory_uri(); ?>/images/client-logo-5.png" alt="Client 5"></div>
-            </div>
+            <section class="portfolio" id="portfolio">
+                <h2>See Our Code in Action</h2>
+                <div class="portfolio-gallery">
+                     <div class="portfolio-item"> <img src="https://images.pexels.com/photos/38519/macbook-laptop-ipad-apple-38519.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Project 1"> <div class="portfolio-item-overlay"> <h3>Enterprise Web Platform</h3> <a href="#">View Case Study &rarr;</a> </div> </div>
+                    <div class="portfolio-item"> <img src="https://images.pexels.com/photos/5082579/pexels-photo-5082579.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Project 2"> <div class="portfolio-item-overlay"> <h3>Native Mobile App</h3> <a href="#">View Case Study &rarr;</a> </div> </div>
+                    <div class="portfolio-item"> <img src="https://images.pexels.com/photos/1779487/pexels-photo-1779487.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Project 3"> <div class="portfolio-item-overlay"> <h3>Cloud Migration Dashboard</h3> <a href="#">View Case Study &rarr;</a> </div> </div>
+                </div>
+            </section>
         </div>
-    </section>
 
-    <section class="section" id="solutions">
         <div class="container">
-            <h2 class="section-heading reveal">Integrated Solutions</h2>
-            <p class="section-subheading reveal">Our strength lies in a holistic approach, blending human potential with technological power to create unmatched value for your enterprise.</p>
-            <div class="sticky-services-container">
-                <div class="sticky-visual">
-                    <div class="visual-content">
-                        <div class="icon" id="sticky-icon"><i class="fa-solid fa-users-line"></i></div>
-                    </div>
-                </div>
-                <div class="scroll-content">
-                    <div class="service-panel" data-icon="fa-solid fa-users-line">
-                        <h3>Elite Talent Sourcing</h3>
-                        <p>We connect you with visionary professionals who don't just fill a role—they elevate your entire organization. Our rigorous vetting process ensures you get not just the right skills, but the right cultural fit for long-term success.</p>
-                    </div>
-                    <div class="service-panel" data-icon="fa-solid fa-cubes">
-                        <h3>Custom Software Development</h3>
-                        <p>We architect robust, scalable software and mobile applications that serve as the engine for your business's growth. From initial strategy to final deployment, we build solutions that are secure, efficient, and perfectly aligned with your goals.</p>
-                    </div>
-                    <div class="service-panel" data-icon="fa-solid fa-shield-halved">
-                        <h3>Managed Tech Services</h3>
-                        <p>Our proactive IT management and strategic consulting ensure your infrastructure is secure, optimized, and always future-ready. We handle the technology so you can focus on what you do best: running your business.</p>
-                    </div>
-                </div>
-            </div>
+            <section class="careers" id="careers">
+                <h2>Live Tech Careers</h2>
+                <p style="text-align: center; max-width: 60ch; margin: 0 auto 1rem;">See our open roles, dynamically loaded.</p>
+                <div class="careers-grid" id="job-listings"> </div>
+            </section>
         </div>
-    </section>
 
-    <!-- <section class="section" id="industries">
         <div class="container">
-            <h2 class="section-heading reveal">Expertise Across Key Sectors</h2>
-            <p class="section-subheading reveal">We speak your language. Our tailored solutions are built on a deep understanding of the sectors we serve.</p>
-            <div class="grid-3-col">
-                <div class="info-card glass-card reveal">
-                    <div class="icon"><i class="fa-solid fa-heart-pulse"></i></div>
-                    <h3>Healthcare</h3>
-                    <p>Navigating the complexities of healthcare with specialized staffing for clinical and administrative roles.</p>
+            <section class="blueprint" id="process">
+                <h2>Our Agile Blueprint</h2>
+                <div class="timeline">
+                    <div class="timeline-item left"> <div class="timeline-content"> <h3>1. Discover & Define</h3> <p>We dive deep into your goals, challenges, and requirements.</p> </div> </div>
+                    <div class="timeline-item right"> <div class="timeline-content"> <h3>2. Design & Prototype (UX/UI)</h3> <p>We design intuitive, high-fidelity prototypes for your approval.</p> </div> </div>
+                    <div class="timeline-item left"> <div class="timeline-content"> <h3>3. Develop & Iterate</h3> <p>Our elite engineers write clean, scalable code in agile sprints.</p> </div> </div>
+                    <div class="timeline-item right"> <div class="timeline-content"> <h3>4. Deploy & Scale</h3> <p>We manage cloud deployment, ensuring your app is fast and secure.</p> </div> </div>
                 </div>
-                <div class="info-card glass-card reveal">
-                    <div class="icon"><i class="fa-solid fa-landmark"></i></div>
-                    <h3>Finance & Banking</h3>
-                    <p>Providing secure, compliant technology solutions and expert talent for the financial industry.</p>
-                </div>
-                <div class="info-card glass-card reveal">
-                    <div class="icon"><i class="fa-solid fa-store"></i></div>
-                    <h3>Retail & E-commerce</h3>
-                    <p>Powering modern retail with scalable e-commerce platforms and the talent to manage them.</p>
-                </div>
-            </div>
+            </section>
         </div>
-    </section>
- -->
- 
-    <section class="section" id="process">
+
         <div class="container">
-            <h2 class="section-heading reveal">Your Blueprint for Success</h2>
-            <p class="section-subheading reveal">We follow a meticulous, transparent process to ensure exceptional results, every time.</p>
-            <div class="process-timeline" id="process-timeline">
-                <div class="timeline-line"><div class="timeline-line-progress" id="timeline-progress"></div></div>
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <div class="step-number">01</div>
-                        <h3>Discovery & Strategy</h3>
-                        <p>We begin by deeply understanding your goals to build a comprehensive project roadmap.</p>
+            <section class="tech-stack" id="stack">
+                <h2>The Tech We Master</h2>
+                <div class="tech-stack-container">
+                    <div class="tab-buttons">
+                        <button class="tab-button active" data-tab="frontend">Frontend</button>
+                        <button class="tab-button" data-tab="backend">Backend</button>
+                        <button class="tab-button" data-tab="cloud">Cloud & DevOps</button>
                     </div>
+                    <div id="frontend" class="tab-content active"> <h3>Frontend</h3> <div class="tech-logos"> <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/react.svg" alt="React"> <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/vuedotjs.svg" alt="Vue.js"> <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/typescript.svg" alt="TypeScript"> </div> </div>
+                    <div id="backend" class="tab-content"> <h3>Backend</h3> <div class="tech-logos"> <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/nodedotjs.svg" alt="Node.js"> <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/python.svg" alt="Python"> <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/postgresql.svg" alt="PostgreSQL"> </div> </div>
+                    <div id="cloud" class="tab-content"> <h3>Cloud & DevOps</h3> <div class="tech-logos"> <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/amazonaws.svg" alt="AWS"> <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/microsoftazure.svg" alt="Azure"> <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/docker.svg" alt="Docker"> </div> </div>
                 </div>
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <div class="step-number">02</div>
-                        <h3>Sourcing & Design</h3>
-                        <p>Our experts architect the technical solution or source ideal candidates from our elite, vetted global network.</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <div class="step-number">03</div>
-                        <h3>Execution & Vetting</h3>
-                        <p>We build with agile methodologies or rigorously vet talent to ensure a perfect technical and cultural fit.</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <div class="step-number">04</div>
-                        <h3>Delivery & Partnership</h3>
-                        <p>We ensure a seamless deployment and provide ongoing support for a long-term partnership.</p>
-                    </div>
-                </div>
-            </div>
+            </section>
         </div>
-    </section>
-
-    <section class="section tech-section" id="tech">
+        
         <div class="container">
-            <h2 class="section-heading reveal">Powered by Leading-Edge Technology</h2>
-            <p class="section-subheading reveal">We leverage a modern, powerful technology stack to build robust and scalable solutions.</p>
-            <div class="tech-grid">
-                <div class="tech-item reveal"><div class="icon"><i class="fab fa-windows"></i></div><span>Dynamics 365</span></div>
-                <div class="tech-item reveal"><div class="icon"><i class="fab fa-azure"></i></div><span>Microsoft Azure</span></div>
-                <div class="tech-item reveal"><div class="icon"><i class="fab fa-aws"></i></div><span>Amazon Web Services</span></div>
-                <div class="tech-item reveal"><div class="icon"><i class="fab fa-react"></i></div><span>React</span></div>
-                <div class="tech-item reveal"><div class="icon"><i class="fab fa-python"></i></div><span>Python</span></div>
-            </div>
+             <section class="final-cta" id="contact">
+                <h2>Let's Engineer Your Future.</h2>
+                <p>Have an ambitious project? Need to scale your team? We're ready to help you build it.</p>
+                <a href="#contact" class="cta-button primary">START YOUR PROJECT</a>
+            </section>
         </div>
-    </section>
+    </main>
 
-    <section class="section map-section" id="about">
-         <div class="container">
-            <h2 class="section-heading reveal">Connecting Global Talent with Opportunity</h2>
-            <p class="section-subheading reveal">Our network spans continents, giving you access to a world-class pool of vetted professionals.</p>
-            <div class="map-container reveal">
-                <svg class="map-svg" viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg"><path d="M990,216.5c-5.9-2.9-10.9-7.1-15.1-12.1... (path data omitted for brevity) ...c-0.9,0-1.8,0-2.6,0z" /></svg>
-                <div class="map-dot north-america"></div>
-                <div class="map-dot europe"></div>
-                <div class="map-dot asia"></div>
-            </div>
-        </div>
-    </section>
+    <script>
+        // --- Theme Toggle (Same) ---
+        const toggleButton = document.getElementById('theme-toggle');
+        toggleButton.addEventListener('click', () => {
+            document.body.classList.toggle('light-mode');
+            toggleButton.textContent = document.body.classList.contains('light-mode') ? '🌙' : '☀️';
+        });
 
-    <section class="section testimonials-section">
-        <div class="container">
-             <h2 class="section-heading reveal">What Our Partners Say</h2>
-             <p class="section-subheading reveal">Our success is reflected in the lasting partnerships we build.</p>
-             <div class="testimonials-grid">
-                   <div class="testimonial-card glass-card reveal">
-                         <div class="quote-icon"><i class="fa-solid fa-quote-left"></i></div>
-                         <p>"CygniSoft's approach is different. They didn't just find us a developer; they found us a strategic partner who has become essential to our team's success."</p>
-                         <div class="author">Jane Doe <span>CTO, InnovateX</span></div>
-                   </div>
-                   <div class="testimonial-card glass-card reveal">
-                         <div class="quote-icon"><i class="fa-solid fa-quote-left"></i></div>
-                         <p>"The software solution they built for us was a game-changer. It streamlined our operations and the team was professional and insightful throughout the entire process."</p>
-                          <div class="author">John Smith <span>CEO, HealthSys</span></div>
-                   </div>
-             </div>
-        </div>
-    </section>
-    
-    <section class="section cta-section" id="careers">
-         <div class="container">
-            <div class="cta-container glass-card reveal">
-                <h2>Join a Team of Visionaries</h2>
-                <p>We're a team of innovators, problem-solvers, and strategic thinkers. Discover where you fit in and help us shape the future.</p>
-                <a href="#" class="btn btn-primary">Explore Open Roles</a>
-            </div>
-        </div>
-    </section>
+        // --- Tabbed Section Logic (Same) ---
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabTarget = button.getAttribute('data-tab');
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                button.classList.add('active');
+                document.getElementById(tabTarget).classList.add('active');
+            });
+        });
 
-   <!-- <section class="section" id="contact">
-        <div class="container">
-            <h2 class="section-heading reveal">Ready to Build What's Next?</h2>
-            <p class="section-subheading reveal">
-                Your vision requires more than just a service provider—it requires a partner.
-                Let's start the conversation.
-            </p>
-            <div class="contact-container glass-card reveal">
-                <div class="contact-info">
-                    <h3>Get in Touch</h3>
-                    <p>
-                        We're here to help you solve complex challenges. Reach out by
-                        phone, email, or through our form.
-                    </p>
-                    <ul>
-                        <li><i class="fa-solid fa-envelope"></i> contact@cygnisoft.com</li>
-                        <li><i class="fa-solid fa-phone"></i> +1 (555) 123-4567</li>
-                        <li><i class="fa-solid fa-map-marker-alt"></i> 123 Innovation Dr, Tech City</li>
-                    </ul>
-                </div>
-                <form class="contact-form" action="#" method="POST">
-                    <div class="form-group">
-                        <label for="name">Full Name</label>
-                        <input type="text" id="name" name="name" required>
+        // --- Run startup functions when page is loaded ---
+        document.addEventListener('DOMContentLoaded', () => {
+            setupHeroAnimations(); // NEW!
+            loadJobPostings();
+            setupMatcher();
+        });
+
+        // --- ======== NEW: Hero Animation Logic ======== ---
+        function setupHeroAnimations() {
+            // 1. Setup Typing Effect
+            const typingTarget = document.getElementById('typing-target');
+            if (typingTarget) {
+                const words = ["Code.", "Software.", "Talent.", "Innovation."];
+                let wordIndex = 0;
+                let charIndex = 0;
+                let isDeleting = false;
+                const typeSpeed = 150;
+                const deleteSpeed = 100;
+                const delay = 2000;
+
+                function type() {
+                    const currentWord = words[wordIndex];
+                    let displayText;
+
+                    if (isDeleting) {
+                        displayText = currentWord.substring(0, charIndex - 1);
+                        charIndex--;
+                    } else {
+                        displayText = currentWord.substring(0, charIndex + 1);
+                        charIndex++;
+                    }
+
+                    typingTarget.textContent = displayText;
+                    let speed = isDeleting ? deleteSpeed : typeSpeed;
+
+                    if (!isDeleting && charIndex === currentWord.length) {
+                        speed = delay;
+                        isDeleting = true;
+                    } else if (isDeleting && charIndex === 0) {
+                        isDeleting = false;
+                        wordIndex = (wordIndex + 1) % words.length;
+                        speed = typeSpeed;
+                    }
+                    setTimeout(type, speed);
+                }
+                type(); // Start the effect
+            }
+
+            // 2. Setup Particle Effect
+            const particleContainer = document.getElementById('particle-container');
+            if (particleContainer) {
+                const particleCount = 50; // More particles = denser field
+
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('div');
+                    particle.classList.add('particle');
+                    
+                    const size = Math.random() * 3 + 1; // Size 1px to 4px
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    
+                    particle.style.left = `${Math.random() * 100}%`; // Random horizontal start
+                    
+                    const animationDelay = Math.random() * 20; // Start at different times
+                    particle.style.animationDelay = `${animationDelay}s`;
+                    
+                    // Custom property for sideways drift
+                    const xDrift = (Math.random() - 0.5) * 200; // Drift -100px to +100px
+                    particle.style.setProperty('--float-x', `${xDrift}px`);
+                    
+                    particleContainer.appendChild(particle);
+                }
+            }
+        }
+
+        // --- "Live Tech Careers" Logic (Same) ---
+        function loadJobPostings() {
+            const jobData = [
+                { title: 'Senior Full-Stack Developer (React/Node)', location: 'Toronto, ON • Full-Time' },
+                { title: 'Azure Cloud Architect', location: 'Remote (Canada) • Contract' },
+                { title: 'Data Engineer (Python & AWS)', location: 'Vancouver, BC • Full-Time' }
+            ];
+            const listingsGrid = document.getElementById('job-listings');
+            if (!listingsGrid) return;
+            listingsGrid.innerHTML = ''; 
+            jobData.forEach(job => {
+                listingsGrid.innerHTML += `
+                    <div class="job-card">
+                        <div class="job-info">
+                            <h3>${job.title}</h3>
+                            <p>${job.location}</p>
+                        </div>
+                        <a href="#" class="cta-button">Apply Now</a>
                     </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="message">How can we help?</label>
-                        <textarea id="message" name="message" rows="5" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Initiate Your Project</button>
-                </form>
-            </div>
-        </div>
-    </section> -->
-	
-</main>
+                `;
+            });
+        }
 
-<?php 
-get_footer(); // This will load your OLD dark footer
-?>
+        // --- "Solution Matcher" Logic (Same) ---
+        function setupMatcher() {
+            const checkBuild = document.getElementById('check-build-app');
+            const checkHire = document.getElementById('check-hire-team');
+            const checkCloud = document.getElementById('check-cloud');
+            const resultDefault = document.getElementById('result-default');
+            const resultBuild = document.getElementById('result-build-app');
+            const resultHire = document.getElementById('result-hire-team');
+            const resultCloud = document.getElementById('result-cloud');
+            const allChecks = [checkBuild, checkHire, checkCloud];
+
+            function updateMatcherResults() {
+                if (!resultDefault) return; // Exit if elements aren't on page
+                resultDefault.style.display = 'none';
+                resultBuild.style.display = 'none';
+                resultHire.style.display = 'none';
+                resultCloud.style.display = 'none';
+                let hasSelection = false;
+                if (checkBuild.checked) { resultBuild.style.display = 'block'; hasSelection = true; }
+                if (checkHire.checked) { resultHire.style.display = 'block'; hasSelection = true; }
+                if (checkCloud.checked) { resultCloud.style.display = 'block'; hasSelection = true; }
+                if (!hasSelection) { resultDefault.style.display = 'block'; }
+            }
+            allChecks.forEach(checkbox => {
+                if (checkbox) checkbox.addEventListener('change', updateMatcherResults);
+            });
+        }
+    </script>
+
+</body>
+</html>
