@@ -3,25 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tech Command Center V6 - Streamlined</title>
+    <title>CygniHealth Staffing - Find Healthcare Talent & Careers</title>
     
     <style>
-        /* --- Global Theme & Styles (Same) --- */
+        /* --- Global Theme & Styles (Healthcare Palette) --- */
         :root {
-            --color-bg: #0a0f1a;
-            --color-surface: #1a202c;
-            --color-text: #e0e0e0;
-            --color-text-secondary: #a0a0a0;
-            --color-accent: #B87333;
-            --color-accent-dark: #3D2610;
+            /* DARK MODE (Original) */
+            --color-bg-dark: #102a27;       /* Very Dark Teal */
+            --color-surface-dark: #193e3a;  /* Dark Teal Surface */
+            --color-text-dark: #e0e0e0;
+            --color-text-secondary-dark: #a0a0a0;
+            --color-accent-dark-theme: #009688; /* Accent remains Teal */
+            --color-accent-dark-bg: #102a27;    /* Dark BG for borders */
+
+            /* LIGHT MODE (New Default) */
+            --color-bg-light: #f4f7f6;      /* Off-white/light grey */
+            --color-surface-light: #ffffff;
+            --color-text-light: #1a202c;
+            --color-text-secondary-light: #555;
+            --color-accent-light-theme: #009688; /* Healthcare Teal */
+            --color-accent-light-bg: #E0F2F1;  /* Very Light Teal */
         }
-        .light-mode {
-            --color-bg: #f4f7f6;
-            --color-surface: #ffffff;
-            --color-text: #1a202c;
-            --color-text-secondary: #555;
-            --color-accent: #B87333;
-            --color-accent-dark: #F7EFE5;
+
+        /* Set Light Mode as default */
+        :root {
+            --color-bg: var(--color-bg-light);
+            --color-surface: var(--color-surface-light);
+            --color-text: var(--color-text-light);
+            --color-text-secondary: var(--color-text-secondary-light);
+            --color-accent: var(--color-accent-light-theme);
+            --color-accent-dark: var(--color-accent-light-bg);
+        }
+
+        /* Set Dark Mode when .dark-mode is on body */
+        body.dark-mode {
+            --color-bg: var(--color-bg-dark);
+            --color-surface: var(--color-surface-dark);
+            --color-text: var(--color-text-dark);
+            --color-text-secondary: var(--color-text-secondary-dark);
+            --color-accent: var(--color-accent-dark-theme);
+            --color-accent-dark: var(--color-accent-dark-bg);
         }
 
         /* --- Smooth Scrolling (Same) --- */
@@ -43,68 +64,147 @@
         h2 { font-size: 2.2rem; border-bottom: 2px solid var(--color-accent-dark); padding-bottom: 0.5rem; }
         h3 { font-size: 1.5rem; color: var(--color-accent); }
         p { font-size: 1.1rem; color: var(--color-text-secondary); max-width: 60ch; }
+        
+        /* --- NEW: Section Description Style (Fixes Spacing) --- */
+        .section-description {
+            font-size: 1.1rem;
+            color: var(--color-text-secondary);
+            max-width: 60ch;
+            margin: -0.5rem auto 1.5rem auto; /* Fixes spacing issue */
+            text-align: center;
+        }
+
         section { margin-bottom: 2rem; }
-        header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; background-color: var(--color-surface); border-bottom: 1px solid var(--color-accent-dark); position: sticky; top: 0; z-index: 100; }
+        header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 1rem 5%; 
+            background-color: var(--color-surface); 
+            border-bottom: 1px solid var(--color-accent-dark); 
+            position: sticky; 
+            top: 0; 
+            z-index: 100; 
+        }
         .logo { font-size: 1.5rem; font-weight: bold; color: var(--color-text); }
         .theme-toggle { font-size: 1.5rem; cursor: pointer; background: none; border: none; color: var(--color-text); }
 
-        /* --- HERO SECTION (Same) --- */
-        .hero { position: relative; height: 70vh; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; padding: 0 2rem; }
-        .hero-video { position: absolute; top: 50%; left: 50%; width: 100%; height: 100%; object-fit: cover; transform: translate(-50%, -50%); z-index: 1; }
-        .hero-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
+        /* --- INTERACTIVE SPLIT HERO STYLES --- */
+        .hero-split-container {
+            display: flex;
             width: 100%;
-            height: 100%;
-            background-color: rgba(10, 15, 26, 0.85);
-            z-index: 2;
-            overflow: hidden; /* Keep particles inside */
+            height: 70vh;
+            min-height: 500px;
+            overflow: hidden;
+            background-color: var(--color-bg);
         }
-        .hero-content { position: relative; z-index: 3; }
-        .hero h1 {
+        .hero-split-panel {
+            position: relative;
+            width: 50%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            overflow: hidden;
+            transition: width 0.75s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .hero-split-content {
+            position: relative;
+            z-index: 3;
+            width: 100%;
+            max-width: 500px; 
+        }
+        .hero-split-panel h1 {
+            font-size: 2.8rem;
+            color: var(--color-text);
+            margin-bottom: 1rem;
+        }
+        .hero-split-panel p {
+            font-size: 1.1rem;
+            color: var(--color-text-secondary);
+            margin-bottom: 2rem;
+        }
+        .hero-split-panel .cta-button {
+             text-decoration: none; 
+             font-size: 1rem; 
+             font-weight: bold; 
+             padding: 12px 24px; 
+             border-radius: 4px; 
+             transition: all 0.3s ease;
+             display: inline-block;
+             transform: scale(0.9);
+             opacity: 0.7;
+        }
+        .hero-panel-left {
+            background-color: var(--color-surface);
+        }
+        .hero-panel-left .cta-button.primary {
+            background-color: var(--color-accent);
             color: #ffffff;
-            margin-bottom: 1.5rem;
         }
-        #typing-target {
-            color: var(--color-accent); /* Make the dynamic word stand out */
+        .hero-panel-left .cta-button.primary:hover {
+            transform: translateY(-3px) scale(1);
+            box-shadow: 0 4px 20px rgba(0, 150, 136, 0.4);
         }
-        #typing-target::after {
-            content: '|';
-            display: inline-block;
-            animation: blink 0.7s infinite;
+        .hero-panel-right {
+            background-color: var(--color-accent-dark); 
         }
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
+        .dark-mode .hero-panel-right {
+             background-color: var(--color-surface-dark);
         }
-        .hero p { color: #e0e0e0; font-size: 1.2rem; margin-bottom: 2.5rem; }
-        .hero-buttons .cta-button { text-decoration: none; font-size: 1rem; font-weight: bold; padding: 12px 24px; border-radius: 4px; margin: 0 0.5rem; transition: all 0.3s ease; }
-        .hero-buttons .cta-button.primary { background-color: var(--color-accent); color: var(--color-bg); }
-        .hero-buttons .cta-button.primary:hover { 
-            transform: translateY(-3px); 
-            box-shadow: 0 4px 20px rgba(184, 115, 51, 0.4); 
+        .hero-panel-right h1 {
+            color: var(--color-accent);
         }
-        .hero-buttons .cta-button.secondary { background-color: transparent; border: 2px solid var(--color-accent); color: var(--color-accent); }
-        .hero-buttons .cta-button.secondary:hover { background-color: var(--color-accent); color: var(--color-bg); transform: translateY(-3px); }
-
-        /* --- Particle Effect (Same) --- */
-        #particle-container {
+        .dark-mode .hero-panel-right h1 {
+             color: var(--color-accent);
+        }
+        .hero-panel-right .cta-button.secondary {
+            background-color: transparent;
+            border: 2px solid var(--color-accent);
+            color: var(--color-accent);
+        }
+        .hero-panel-right .cta-button.secondary:hover {
+            background-color: var(--color-accent);
+            color: #ffffff;
+            transform: translateY(-3px) scale(1);
+        }
+        .hero-split-container:hover .hero-split-panel {
+            width: 40%;
+        }
+        .hero-split-container:hover .hero-split-panel:hover {
+            width: 60%;
+        }
+        .hero-split-container:hover .hero-split-panel .cta-button,
+        .hero-split-container:hover .hero-split-panel p {
+            opacity: 0.7;
+            transform: scale(0.9);
+        }
+        .hero-split-container:hover .hero-split-panel:hover .cta-button,
+        .hero-split-container:hover .hero-split-panel:hover p {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .abstract-bg {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none; 
+            z-index: 1;
+            pointer-events: none;
+            overflow: hidden;
         }
         .particle {
             position: absolute;
             background: var(--color-accent);
             border-radius: 50%;
-            opacity: 0.6;
-            box-shadow: 0 0 8px var(--color-accent);
+            opacity: 0;
             animation: float 20s infinite linear;
             bottom: -20px; 
+            box-shadow: 0 0 8px var(--color-accent);
         }
         @keyframes float {
             0% {
@@ -116,245 +216,325 @@
                 opacity: 0;
             }
         }
+        .hero-panel-right .particle {
+            background: var(--color-text-secondary);
+             box-shadow: 0 0 8px var(--color-text-secondary);
+        }
+        @media (max-width: 768px) {
+            .hero-split-container {
+                flex-direction: column;
+                height: auto;
+                min-height: 0;
+            }
+            .hero-split-panel {
+                width: 100% !important;
+                height: 50vh;
+                min-height: 350px;
+            }
+            .hero-split-container:hover .hero-split-panel {
+                width: 100% !important;
+            }
+            .hero-split-panel h1 {
+                font-size: 2.3rem;
+            }
+            .hero-split-panel .cta-button,
+            .hero-split-container:hover .hero-split-panel .cta-button,
+            .hero-split-container:hover .hero-split-panel p {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
 
-        /* --- DELETED: .services CSS block --- */
-
-
-        /* --- NEW/UPDATED: SOLUTION MATCHER (ENHANCED V2) --- */
-        .solution-matcher { 
-            background-color: var(--color-surface); 
-            border-radius: 8px; 
+        /* --- "WHY US?" VALUE PROPS --- */
+        .value-props {
+            background-color: var(--color-surface);
+            border-radius: 8px;
             padding: 2.5rem;
             border: 1px solid var(--color-accent-dark);
-            /* NEW: Changed from 2-col grid to block */
-            display: block; 
         }
-
-        /* NEW: Grid for the 3 options */
-        .matcher-options-grid {
+        .value-props-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr); /* 3-column layout */
-            gap: 1.5rem;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            text-align: center;
         }
-
-        /* NEW: Hide the original checkbox input */
-        .matcher-checkbox-input {
-            display: none;
-        }
-
-        /* NEW: Updated card style */
-        .matcher-option-card {
+        .value-prop-item {
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
-            gap: 0.75rem;
-            background-color: var(--color-bg);
-            padding: 1.5rem;
-            border-radius: 6px;
-            border: 2px solid var(--color-surface);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            /* Re-applying 3D tilt */
-            transform-style: preserve-3d;
+            align-items: center;
         }
-
-        /* NEW: Card h3 and p tags */
-        .matcher-option-card h3 {
+        .value-prop-item .option-icon {
+            width: 48px;
+            height: 48px;
+            stroke: var(--color-accent);
+            stroke-width: 2;
+            fill: none;
+            margin-bottom: 1rem;
+        }
+        .value-prop-item h3 {
             color: var(--color-text);
             font-size: 1.25rem;
-            margin-bottom: 0;
-            transition: color 0.3s ease;
+            margin-bottom: 0.5rem;
         }
-        .matcher-option-card p {
+        .value-prop-item p {
             font-size: 0.95rem;
-            color: var(--color-text-secondary);
-            margin-bottom: 0;
-            max-width: 100%; /* Override global p style */
-            transition: color 0.3s ease;
+            max-width: 100%;
         }
 
-        /* NEW: Icon styles */
-        .option-icon {
-            width: 36px;
-            height: 36px;
-            stroke: var(--color-accent);
-            fill: none;
-            stroke-width: 2;
+        /* --- NEW: "FEATURED JOBS" (Attractive Gallery Design) --- */
+        .featured-jobs {
+            text-align: center;
+        }
+        .job-gallery-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 1.5rem; 
+            margin-top: 2rem; 
+            text-align: left;
+        }
+        /* New Card Style */
+        .job-gallery-card {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-accent-dark);
+            border-radius: 8px;
+            padding: 2rem; /* More padding */
+            transition: all 0.3s ease;
+            transform-style: preserve-3d; /* For tilt.js */
+            display: flex;
+            flex-direction: column; /* To push button to bottom */
+        }
+        .job-gallery-card:hover {
+            border-color: var(--color-accent);
+            transform: translateY(-5px) translateZ(5px);
+            box-shadow: 0 4px 15px rgba(0, 150, 136, 0.1);
+        }
+        .job-gallery-card h3 {
+            color: var(--color-text);
+            font-size: 1.35rem; /* Bigger title */
             margin-bottom: 0.5rem;
+        }
+        .job-gallery-card p {
+            font-size: 1rem;
+            color: var(--color-text-secondary);
+            margin-bottom: 1.5rem;
+            flex-grow: 1; /* Pushes button to bottom */
+        }
+        /* New Button Style */
+        .job-card-button {
+            display: block;
+            text-decoration: none;
+            text-align: center;
+            font-weight: bold;
+            padding: 12px 1rem;
+            border-radius: 4px;
+            background-color: var(--color-accent);
+            color: #ffffff;
             transition: all 0.3s ease;
         }
-
-        /* NEW: Hover state for the card */
-        .matcher-option-card:hover {
-            border-color: var(--color-accent);
-            transform: translateY(-5px);
-            box-shadow: 0 4px 15px rgba(184, 115, 51, 0.1);
+        .job-card-button:hover {
+            background-color: var(--color-accent); /* Could darken this on hover */
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 150, 136, 0.3);
         }
-        .matcher-option-card:hover .option-icon {
-            transform: scale(1.1);
+        /* "Search All" button */
+        .featured-jobs .cta-button-container {
+            margin-top: 2.5rem; /* More space */
         }
-
-
-        /* NEW: Selected state using :has() */
-        .matcher-option-card:has(.matcher-checkbox-input:checked) {
-            border-color: var(--color-accent);
-            background-color: var(--color-accent-dark);
-        }
-        /* NEW: Update selected text color */
-        .matcher-option-card:has(.matcher-checkbox-input:checked) h3 {
+        .featured-jobs .cta-button-container .cta-button {
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: bold;
+            padding: 12px 24px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            background-color: transparent;
+            border: 2px solid var(--color-accent);
             color: var(--color-accent);
         }
-        .matcher-option-card:has(.matcher-checkbox-input:checked) p {
-            color: var(--color-text);
+        .featured-jobs .cta-button-container .cta-button:hover {
+            background-color: var(--color-accent);
+            color: #ffffff;
+            transform: translateY(-3px);
         }
 
-
-        /* NEW: Checkmark on selected card */
-        .matcher-option-card:has(.matcher-checkbox-input:checked)::after {
-            content: '✔';
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 1rem;
+        
+        /* --- "HOW IT WORKS" & "SPECIALTIES" (Tabbed Sections) --- */
+        .tabbed-section-container { 
+            background-color: var(--color-surface); 
+            border-radius: 8px; 
+            padding: 2rem; 
+            border: 1px solid var(--color-accent-dark); 
+        }
+        .tab-buttons { 
+            display: flex; 
+            border-bottom: 2px solid var(--color-accent-dark); 
+            margin-bottom: 1.5rem; 
+        }
+        .tab-button { 
+            background: none; 
+            border: none; 
+            color: var(--color-text-secondary); 
+            padding: 1rem 1.5rem; 
+            font-size: 1.1rem; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: all 0.3s ease; 
+        }
+        .tab-button.active { 
+            color: var(--color-accent); 
+            border-bottom: 3px solid var(--color-accent); 
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .how-it-works-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+        .how-it-works-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+         .how-it-works-step .step-number {
+            font-size: 1.2rem;
             font-weight: bold;
-            color: var(--color-bg);
-            background-color: var(--color-accent);
+            color: var(--color-accent);
+            border: 2px solid var(--color-accent);
             border-radius: 50%;
-            width: 24px;
-            height: 24px;
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
+            margin-bottom: 1rem;
         }
-
-        /* Result box styles */
-        .matcher-result { 
-            background-color: var(--color-bg); 
-            border-radius: 6px; 
-            padding: 2rem; 
-            border: 1px solid var(--color-accent-dark);
-            margin-top: 2rem;
-            /* NEW: Hide by default, show when selection is made */
-            display: none;
-            animation: fadeInResult 0.5s ease-out;
+        .how-it-works-step h4 {
+            color: var(--color-text);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
         }
-        .matcher-result h3 { color: var(--color-accent); }
-
-        /* Animation for the result content */
-        .result-content {
-            display: none;
-            animation: fadeInResult 0.4s ease-out;
+        .how-it-works-step p {
+            font-size: 0.9rem;
+            max-width: 100%;
         }
-
-        /* NEW: Keyframe animation for the result fade-in */
-        @keyframes fadeInResult {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .service-list {
+            list-style: none;
+            margin-top: 1.5rem;
+            padding-left: 1.5rem;
+            columns: 2;
         }
-        /* --- END OF MATCHER STYLES --- */
-
-
-        /* --- PORTFOLIO (Same) --- */
-        .portfolio-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2rem; }
-        .portfolio-item { 
-            position: relative; 
-            overflow: hidden; 
-            border-radius: 8px; 
-            background-color: var(--color-surface); 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            transform-style: preserve-3d;
+        .service-list li {
+            font-size: 1.1rem;
+            color: var(--color-text-secondary);
+            position: relative;
+            margin-bottom: 0.75rem;
+            break-inside: avoid-column;
         }
-        .portfolio-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
-        .portfolio-item-overlay { 
-            position: absolute; 
-            bottom: 0; 
-            left: 0; 
-            width: 100%; 
-            padding: 1.5rem; 
-            background: linear-gradient(to top, rgba(10, 15, 26, 0.95), transparent); 
-            opacity: 0; 
-            transform: translateY(20px) translateZ(20px); 
-            transition: all 0.4s ease;
-        }
-        .portfolio-item:hover img { transform: scale(1.05); }
-        .portfolio-item:hover .portfolio-item-overlay { opacity: 1; transform: translateY(0) translateZ(20px); }
-        .portfolio-item-overlay a {
+        .service-list li::before {
+            content: '✓';
             color: var(--color-accent);
-            text-decoration: none;
+            font-weight: bold;
+            position: absolute;
+            left: -1.5rem;
+        }
+
+        /* --- "SUCCESS STORIES" (Testimonials) --- */
+        .success-stories-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        .testimonial-card {
+            background-color: var(--color-surface);
+            border-radius: 8px;
+            padding: 2.5rem;
+            border: 1px solid var(--color-accent-dark);
+            display: flex;
+            flex-direction: column;
+        }
+        .testimonial-card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        .testimonial-card-header img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-right: 1rem;
+            object-fit: cover;
+        }
+        .testimonial-card-header .author-info {
+            line-height: 1.3;
+        }
+        .testimonial-card-header .author-info h4 {
+            color: var(--color-text);
+            margin: 0;
+        }
+        .testimonial-card-header .author-info span {
+            color: var(--color-accent);
+            font-size: 0.9rem;
             font-weight: bold;
         }
+        .testimonial-card-quote {
+            font-size: 1.1rem;
+            font-style: italic;
+            color: var(--color-text-secondary);
+            flex-grow: 1;
+        }
 
-        /* --- CAREERS (Same) --- */
-        .careers-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-top: 2rem; }
-        .job-card { background-color: var(--color-surface); border: 1px solid var(--color-accent-dark); border-radius: 6px; padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; transition: all 0.3s ease; }
-        .job-card:hover { 
-            border-color: var(--color-accent); 
-            transform: translateY(-5px); 
-            box-shadow: 0 4px 15px rgba(184, 115, 51, 0.1); 
-        }
-        .job-card h3 { margin: 0; color: #fff; }
-        .job-card .cta-button { text-decoration: none; font-size: 0.9rem; font-weight: bold; padding: 8px 16px; border-radius: 4px; background-color: var(--color-accent); color: var(--color-bg); }
-
-        /* --- TIMELINE (Same) --- */
-        .timeline { position: relative; max-width: 600px; margin: 2rem auto; padding: 2rem 0; }
-        .timeline::after { content: ''; position: absolute; width: 4px; background-color: var(--color-accent-dark); top: 0; bottom: 0; left: 50%; margin-left: -2px; z-index: 1; }
-        .timeline-item { padding: 1rem 2.5rem; position: relative; width: 50%; }
-        .timeline-item::after { 
-            content: ''; 
-            position: absolute; 
-            width: 20px; 
-            height: 20px; 
-            right: -10px; 
-            background-color: var(--color-accent); 
-            border: 4px solid var(--color-bg); 
-            top: 25px; 
-            border-radius: 50%; 
-            z-index: 2; 
-            box-shadow: 0 0 10px rgba(184, 115, 51, 0.5); 
-        }
-        .timeline-item.left { left: 0; text-align: right; }
-        .timeline-item.right { left: 50%; }
-        .timeline-item.right::after { left: -10px; }
-        .timeline-content { padding: 1rem; background-color: var(--color-surface); border-radius: 6px; }
-
-        /* --- TECH STACK (Same) --- */
-        .tech-stack-container { background-color: var(--color-surface); border-radius: 8px; padding: 2rem; border: 1px solid var(--color-accent-dark); }
-        .tab-buttons { display: flex; border-bottom: 2px solid var(--color-accent-dark); margin-bottom: 1.5rem; }
-        .tab-button { background: none; border: none; color: var(--color-text-secondary); padding: 1rem 1.5rem; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; }
-        .tab-button.active { color: var(--color-accent); border-bottom: 3px solid var(--color-accent); }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        .tech-logos {
-            display: flex;
-            flex-wrap: wrap;    
-            align-items: center; 
-            gap: 2.5rem;         
-            margin-top: 1.5rem; 
-        }
-        .tech-logos img {
-            height: 48px;  
-            width: auto;   
-            transition: transform 0.3s ease;
-            filter: grayscale(20%);
-        }
-        .tech-logos img:hover {
-            transform: scale(1.15);
-            filter: grayscale(0%);
-        }
 
         /* --- FINAL CTA (Same) --- */
-        .final-cta { background-color: var(--color-surface); background-image: linear-gradient(45deg, var(--color-accent-dark) 25%, transparent 25%), linear-gradient(-45deg, var(--color-accent-dark) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, var(--color-accent-dark) 75%), linear-gradient(-45deg, transparent 75%, var(--color-accent-dark) 75%); background-size: 20px 20px; border: 1px solid var(--color-accent-dark); border-radius: 8px; padding: 3rem; text-align: center; }
-        .final-cta h2 { font-size: 2.5rem; color: #fff; border: none; }
-        .final-cta .cta-button.primary { font-size: 1.2rem; padding: 15px 30px; text-decoration: none; }
+        .final-cta { 
+            background-color: var(--color-surface); 
+            background-image: linear-gradient(45deg, var(--color-accent-dark) 25%, transparent 25%), linear-gradient(-45deg, var(--color-accent-dark) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, var(--color-accent-dark) 75%), linear-gradient(-45deg, transparent 75%, var(--color-accent-dark) 75%); 
+            background-size: 20px 20px; 
+            border: 1px solid var(--color-accent-dark); 
+            border-radius: 8px; 
+            padding: 3rem; 
+            text-align: center; 
+        }
+        .dark-mode .final-cta {
+            background-image: linear-gradient(45deg, var(--color-surface-dark) 25%, transparent 25%), linear-gradient(-45deg, var(--color-surface-dark) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, var(--color-surface-dark) 75%), linear-gradient(-45deg, transparent 75%, var(--color-surface-dark) 75%); 
+        }
+        .final-cta h2 { font-size: 2.5rem; color: var(--color-text); border: none; }
+        .final-cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .final-cta-buttons .cta-button { 
+            text-decoration: none; 
+            font-size: 1.1rem; 
+            font-weight: bold; 
+            padding: 12px 24px; 
+            border-radius: 4px; 
+            transition: all 0.3s ease; 
+        }
+        .final-cta-buttons .cta-button.primary { 
+            background-color: var(--color-accent); 
+            color: #ffffff; 
+        }
+        .final-cta-buttons .cta-button.primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 20px rgba(0, 150, 136, 0.4);
+        }
+        .final-cta-buttons .cta-button.secondary {
+             background-color: transparent; 
+             border: 2px solid var(--color-accent); 
+             color: var(--color-accent);
+        }
+         .final-cta-buttons .cta-button.secondary:hover {
+            background-color: var(--color-accent);
+            color: #ffffff;
+            transform: translateY(-3px);
+        }
         
-
         /* --- Scroll-Reveal Animation (Same) --- */
         .reveal-on-scroll {
             opacity: 0;
@@ -366,67 +546,6 @@
             opacity: 1;
             transform: translateY(0);
         }
-
-        /* --- Modal Styles (Same) --- */
-        .modal-overlay {
-            position: fixed;
-            z-index: 1000;
-            left: 0; top: 0;
-            width: 100%; height: 100%;
-            background-color: rgba(10, 15, 26, 0.85);
-            backdrop-filter: blur(5px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .modal-overlay.visible {
-            display: flex;
-            opacity: 1;
-        }
-        .modal-content {
-            background-color: var(--color-surface);
-            padding: 2.5rem;
-            border-radius: 8px;
-            border: 1px solid var(--color-accent-dark);
-            width: 90%;
-            max-width: 600px;
-            position: relative;
-            transform: scale(0.95);
-            transition: transform 0.3s ease;
-        }
-        .modal-overlay.visible .modal-content {
-            transform: scale(1);
-        }
-        .modal-close {
-            position: absolute;
-            top: 1rem;
-            right: 1.5rem;
-            font-size: 2.5rem;
-            font-weight: 300;
-            color: var(--color-text-secondary);
-            background: none;
-            border: none;
-            cursor: pointer;
-            line-height: 1;
-        }
-        .modal-close:hover {
-            color: var(--color-accent);
-        }
-        .modal-content img {
-            width: 100%;
-            height: auto;
-            border-radius: 6px;
-            margin-bottom: 1.5rem;
-        }
-        .modal-content h2 {
-            color: var(--color-accent);
-            margin-bottom: 0.5rem;
-        }
-        .modal-content p {
-            margin-bottom: 2rem;
-        }
         
         /* --- Back to Top Button (Same) --- */
         .back-to-top {
@@ -434,7 +553,7 @@
             bottom: 20px;
             right: 20px;
             background-color: var(--color-accent);
-            color: var(--color-bg);
+            color: #ffffff; 
             width: 45px;
             height: 45px;
             border-radius: 50%;
@@ -459,206 +578,227 @@
             transform: translateY(-3px); 
         }
 
-
         /* --- Responsive for Mobile --- */
         @media (max-width: 768px) {
             h1 { font-size: 2.3rem; } 
-            /* NEW: .services is gone, .solution-matcher is handled by its grid */
-            .portfolio-gallery { grid-template-columns: 1fr; } 
-            .hero-buttons { display: flex; flex-direction: column; gap: 1rem; }
-            .timeline::after { left: 20px; }
-            .timeline-item, .timeline-item.left, .timeline-item.right { width: 100%; padding-left: 50px; left: 0; text-align: left; }
-            .timeline-item::after { left: 10px; }
-            .tab-buttons { flex-direction: column; }
-            .job-card { flex-direction: column; align-items: flex-start; gap: 1rem; }
             
-            /* --- NEW: Stack the 3 matcher cards on mobile --- */
-            .matcher-options-grid { grid-template-columns: 1fr; }
+            .value-props-grid { grid-template-columns: 1fr; }
+            .job-gallery-grid { grid-template-columns: 1fr; } /* Stack job cards */
+            .how-it-works-grid { grid-template-columns: 1fr; }
+            .service-list { columns: 1; }
+            .success-stories-grid { grid-template-columns: 1fr; }
+            .final-cta-buttons { flex-direction: column; }
+            .tab-buttons { flex-direction: column; }
         }
 
     </style>
 </head>
 
-<body class="dark-mode" id="top">
+<body class="light-mode" id="top">
 
     <header>
-        <a href="#" class="logo" style="text-decoration: none; color: inherit;">CygniSoft</a>
-        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light and dark mode">☀️</button>
+        <a href="#" class="logo" style="text-decoration: none; color: inherit;">CygniHealth</a>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">🌙</button>
     </header>
 
     <main>
-        <section class="hero">
-             <video class="hero-video" autoplay loop muted playsinline 
-                    src="https://assets.mixkit.co/videos/preview/mixkit-digital-animation-of-a-curved-screen-with-code-42130-large.mp4"
-                    poster="https://via.placeholder.com/1920x1080/0a0f1a/ffffff?text=Tech+Background"> 
-                <img src="https://via.placeholder.com/1920x1080/0a0f1a/ffffff?text=Tech+Background" alt="Tech Background">
-            </video>
-            
-            <div class="hero-overlay">
-                <div id="particle-container"></div>
-            </div>
-
-            <div class="hero-content">
-                <h1>Engineering the Future of <span id="typing-target"></span></h1>
-                <p>We deliver bespoke software, cloud solutions, and elite technology talent.</p>
-                <div class="hero-buttons">
-                    <a href="#matcher" class="cta-button primary">BUILD YOUR SOFTWARE</a>
-                    <a href="#matcher" class="cta-button secondary">HIRE YOUR ENGINEERS</a>
+        <section class="hero-split-container" id="hero">
+            <div class="hero-split-panel hero-panel-left">
+                <div class="hero-split-content">
+                    <h1>Find Your Next Calling.</h1>
+                    <p>Explore thousands of roles at top-tier healthcare facilities.</p>
+                    <a href="#featured-jobs" class="cta-button primary">EXPLORE CAREERS</a>
                 </div>
+                <div class="abstract-bg" id="particle-container-left"></div>
+            </div>
+            
+            <div class="hero-split-panel hero-panel-right">
+                <div class="hero-split-content">
+                    <h1>Find Your Next All-Star.</h1>
+                    <p>Access the top 1% of pre-vetted, ready-to-work medical talent.</p>
+                    <a href="#how-it-works" class="cta-button secondary">HIRE TALENT</a>
+                </div>
+                <div class="abstract-bg" id="particle-container-right"></div>
             </div>
         </section>
 
         <div class="container">
-            <section class="solution-matcher reveal-on-scroll" id="matcher">
-        
+            <section class="value-props reveal-on-scroll">
                 <div style="text-align: center; max-width: 60ch; margin: 0 auto 2.5rem auto;">
-                    <h2 style="border-bottom: none;">Find Your Solution</h2>
-                    <p>Select your goals. Your recommended path will appear below.</p>
+                    <h2 style="border-bottom: none;">The New Standard in Healthcare Staffing</h2>
+                    <p class="section-description">We built our platform on trust, transparency, and technology.</p>
                 </div>
-        
-                <div class="matcher-options-grid">
-                    
-                    <label class="matcher-option-card" data-tilt>
-                        <input type="checkbox" id="check-build-app" class="matcher-checkbox-input">
-                        <svg class="option-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-                        <h3>Build a Product</h3>
-                        <p>I need to build a new app or website from scratch.</p>
-                    </label>
-        
-                    <label class="matcher-option-card" data-tilt>
-                        <input type="checkbox" id="check-hire-team" class="matcher-checkbox-input">
-                        <svg class="option-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                        <h3>Hire a Team</h3>
-                        <p>I need to hire elite engineers to augment my team.</p>
-                    </label>
-        
-                    <label class="matcher-option-card" data-tilt>
-                        <input type="checkbox" id="check-cloud" class="matcher-checkbox-input">
-                        <svg class="option-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
-                        <h3>Optimize Cloud</h3>
-                        <p>I need help with cloud (AWS, Azure) or DevOps.</p>
-                    </label>
-                </div>
-        
-                <div class="matcher-result">
-                    <h3>Your Recommended Path:</h3>
-                    <div class="result-content" id="result-default"> <p>Select an option on the left to see our recommendation!</p> </div>
-                    <div class="result-content" id="result-build-app"> <p>Our **Bespoke Software** team is your perfect match. We'll take your idea from discovery to deployment.</p> </div>
-                    <div class="result-content" id="result-hire-team"> <p>Our **Elite Tech Staffing** service is what you need. We'll find you the top 1% of talent.</p> </div>
-                    <div class="result-content" id="result-cloud"> <p>Our **Cloud & DevOps** experts can optimize your infrastructure and automate your deployments.</p> </div>
-                    <div class="result-content" id="result-build-hire"> <p>You need a **Full Project Team**. We can provide both our in-house development team to build your vision and embed elite engineers into your team.</p> </div>
-                    <div class="result-content" id="result-build-cloud"> <p>This is a **Modern Application Build**. Our Bespoke Software team works hand-in-hand with our Cloud & DevOps experts to build and deploy scalable apps.</p> </div>
-                    <div class="result-content" id="result-hire-cloud"> <p>You need **Specialized Talent**. We can staff your team with elite Cloud & DevOps engineers who are certified in AWS, Azure, and GCP.</p> </div>
-                    <div class="result-content" id="result-all"> <p>You need an **End-to-End Partner**. We'll build your software, deploy it on a scalable cloud architecture, and staff your team with experts to maintain it.</p> </div>
-                </div>
-            </section>
-        </div>
-
-        <div class="container">
-            <section class="portfolio" id="portfolio">
-                <h2 class="reveal-on-scroll">See Our Code in Action</h2>
-                <div class="portfolio-gallery reveal-on-scroll">
-                    
-                    <div class="portfolio-item" data-tilt> 
-                        <img src="https://images.pexels.com/photos/38519/macbook-laptop-ipad-apple-38519.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Project 1"> 
-                        <div class="portfolio-item-overlay"> 
-                            <h3>Enterprise Web Platform</h3> 
-                            <a href="#" class="portfolio-link"
-                               data-title="Enterprise Web Platform"
-                               data-image="https://images.pexels.com/photos/38519/macbook-laptop-ipad-apple-38519.jpeg?auto=compress&cs=tinysrgb&w=600"
-                               data-description="We designed and built a multi-tenant SaaS platform from scratch, focusing on scalability and security. The tech stack included React, Node.js, and a serverless AWS architecture."
-                               data-link="https://example.com/case-study-1">
-                               View Case Study &rarr;
-                            </a>
-                        </div> 
+                <div class="value-props-grid">
+                    <div class="value-prop-item">
+                        <svg class="option-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
+                        <h3>Elite Vetting</h3>
+                        <p>For employers: We handle 100% of credentialing. Access the top 1% of pre-vetted, ready-to-work medical talent.</p>
                     </div>
-                    
-                    <div class="portfolio-item" data-tilt> 
-                        <img src="https://images.pexels.com/photos/5082579/pexels-photo-5082579.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Project 2"> 
-                        <div class="portfolio-item-overlay"> 
-                            <h3>Native Mobile App</h3> 
-                            <a href="#" class="portfolio-link"
-                               data-title="Native Mobile App"
-                               data-image="https://images.pexels.com/photos/5082579/pexels-photo-5082579.jpeg?auto=compress&cs=tinysrgb&w=600"
-                               data-description="A cross-platform mobile app for iOS and Android, built with React Native. It features real-time data synchronization with Firebase and integrated Stripe payments."
-                               data-link="https://example.com/case-study-2">
-                               View Case Study &rarr;
-                            </a>
-                        </div> 
+                    <div class="value-prop-item">
+                        <svg class="option-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                        <h3>Career Growth</h3>
+                        <p>For candidates: We're your partner. Get access to premier facilities, competitive pay, and roles that match your career goals.</p>
                     </div>
-
-                    <div class="portfolio-item" data-tilt> 
-                        <img src="https://images.pexels.com/photos/1779487/pexels-photo-1779487.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Project 3"> 
-                        <div class="portfolio-item-overlay"> 
-                            <h3>Cloud Migration Dashboard</h3> 
-                            <a href="#" class="portfolio-link"
-                               data-title="Cloud Migration Dashboard"
-                               data-image="https://images.pexels.com/photos/1779487/pexels-photo-1779487.jpeg?auto=compress&cs=tinysrgb&w=600"
-                               data-description="A comprehensive dashboard built in Vue.js for monitoring a large-scale AWS migration. It provided real-time analytics and status updates to stakeholders."
-                               data-link="https://example.com/case-study-3">
-                               View Case Study &rarr;
-                            </a>
-                        </div> 
+                    <div class="value-prop-item">
+                        <svg class="option-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                        <h3>Seamless Tech</h3>
+                        <p>For everyone: Our platform makes it simple. Easily apply, post jobs, manage schedules, and handle timesheets all in one place.</p>
                     </div>
-
+                </div>
+            </section>
+        </div>
+        
+        <div class="container">
+            <section class="featured-jobs reveal-on-scroll" id="featured-jobs">
+                <h2 style="border: none;">Featured Job Openings</h2>
+                <p class="section-description">See our most in-demand roles, updated live. Your next opportunity awaits.</p>
+                <div class="job-gallery-grid reveal-on-scroll" id="job-listings-grid"> 
+                    </div>
+                <div class="cta-button-container">
+                    <a href="#" class="cta-button">SEARCH ALL JOBS &rarr;</a>
                 </div>
             </section>
         </div>
 
         <div class="container">
-            <section class="careers" id="careers">
-                <h2 class="reveal-on-scroll">Live Tech Careers</h2>
-                <p style="text-align: center; max-width: 60ch; margin: 0 auto 1rem;" class="reveal-on-scroll">See our open roles, dynamically loaded.</p>
-                <div class="careers-grid reveal-on-scroll" id="job-listings"> </div>
-            </section>
-        </div>
-
-        <div class="container">
-            <section class="blueprint reveal-on-scroll" id="process">
-                <h2>Our Agile Blueprint</h2>
-                <div class="timeline">
-                    <div class="timeline-item left"> <div class="timeline-content"> <h3>1. Discover & Define</h3> <p>We dive deep into your goals, challenges, and requirements.</p> </div> </div>
-                    <div class="timeline-item right"> <div class="timeline-content"> <h3>2. Design & Prototype (UX/UI)</h3> <p>We design intuitive, high-fidelity prototypes for your approval.</p> </div> </div>
-                    <div class="timeline-item left"> <div class="timeline-content"> <h3>3. Develop & Iterate</h3> <p>Our elite engineers write clean, scalable code in agile sprints.</p> </div> </div>
-                    <div class="timeline-item right"> <div class="timeline-content"> <h3>4. Deploy & Scale</h3> <p>We manage cloud deployment, ensuring your app is fast and secure.</p> </div> </div>
-                </div>
-            </section>
-        </div>
-
-        <div class="container">
-            <section class="tech-stack reveal-on-scroll" id="stack">
-                <h2>The Tech We Master</h2>
-                <div class="tech-stack-container">
+             <section class="how-it-works-tabs reveal-on-scroll" id="how-it-works">
+                <h2 style="text-align: center;">Simple, Fast, & Transparent</h2>
+                <div class="tabbed-section-container">
                     <div class="tab-buttons">
-                        <button class="tab-button active" data-tab="frontend">Frontend</button>
-                        <button class="tab-button" data-tab="backend">Backend</button>
-                        <button class="tab-button" data-tab="cloud">Cloud & DevOps</button>
+                        <button class="tab-button active" data-tab="for-candidates">For Candidates</button>
+                        <button class="tab-button" data-tab="for-employers">For Employers</button>
                     </div>
-                    <div id="frontend" class="tab-content active"> <h3>Frontend</h3> <div class="tech-logos"> <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/react.svg" alt="React"> <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/vuedotjs.svg" alt="Vue.js"> <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/typescript.svg" alt="TypeScript"> </div> </div>
-                    <div id="backend" class="tab-content"> <h3>Backend</h3> <div class="tech-logos"> <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/nodedotjs.svg" alt="Node.js"> <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/python.svg" alt="Python"> <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/postgresql.svg" alt="PostgreSQL"> </div> </div>
-                    <div id="cloud" class="tab-content"> <h3>Cloud & DevOps</h3> <div class="tech-logos"> <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/amazonaws.svg" alt="AWS"> <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/microsoftazure.svg" alt="Azure"> <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/docker.svg" alt="Docker"> </div> </div>
+                    <div id="for-candidates" class="tab-content active"> 
+                        <div class="how-it-works-grid">
+                            <div class="how-it-works-step">
+                                <span class="step-number">1</span>
+                                <h4>Create Your Profile</h4>
+                                <p>Build your professional profile in minutes and upload your credentials one time.</p>
+                            </div>
+                            <div class="how-it-works-step">
+                                <span class="step-number">2</span>
+                                <h4>Get Matched</h4>
+                                <p>Our platform matches you with jobs that fit your skills, schedule, and career goals.</p>
+                            </div>
+                             <div class="how-it-works-step">
+                                <span class="step-number">3</span>
+                                <h4>Apply & Get Hired</h4>
+                                <p>Apply with one click and get hired by top facilities, faster than ever before.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="for-employers" class="tab-content"> 
+                         <div class="how-it-works-grid">
+                            <div class="how-it-works-step">
+                                <span class="step-number">1</span>
+                                <h4>Post Your Needs</h4>
+                                <p>Tell us what you're looking for—per-diem, contract, or full-time. We'll handle the rest.</p>
+                            </div>
+                            <div class="how-it-works-step">
+                                <span class="step-number">2</span>
+                                <h4>Review Top Talent</h4>
+                                <p>Instantly access our pool of pre-vetted, credentialed, and available professionals.</p>
+                            </div>
+                             <div class="how-it-works-step">
+                                <span class="step-number">3</span>
+                                <h4>Onboard Seamlessly</h4>
+                                <p>Fill shifts in minutes, not weeks. Our platform handles scheduling and time-tracking.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="container">
+            <section class="specialties-tabs reveal-on-scroll" id="specialties">
+                <h2 style="text-align: center;">Explore Top Specialties</h2>
+                <div class="tabbed-section-container">
+                    <div class="tab-buttons">
+                        <button class="tab-button active" data-tab="nursing">Nursing</button>
+                        <button class="tab-button" data-tab="allied-health">Allied Health</button>
+                        <button class="tab-button" data-tab="physicians">Physicians & Locums</button>
+                    </div>
+                    <div id="nursing" class="tab-content active"> 
+                        <h3>Find Your Next Nursing Role</h3> 
+                        <ul class="service-list">
+                            <li>Registered Nurse (RN)</li>
+                            <li>Licensed Practical Nurse (LPN)</li>
+                            <li>Certified Nursing Assistant (CNA)</li>
+                            <li>Nurse Practitioner (NP)</li>
+                            <li>ICU / ER / OR Nurses</li>
+                            <li>Travel Nursing</li>
+                        </ul>
+                    </div>
+                    <div id="allied-health" class="tab-content"> 
+                        <h3>Explore Allied Health Careers</h3> 
+                         <ul class="service-list">
+                            <li>Radiologic Technologist</li>
+                            <li>Physical Therapist (PT)</li>
+                            <li>Occupational Therapist (OT)</li>
+                            <li>Lab Technician</li>
+                            <li>Respiratory Therapist</li>
+                            <li>Surgical Tech</li>
+                        </ul>
+                    </div>
+                    <div id="physicians" class="tab-content"> 
+                        <h3>Locum Tenens & Permanent Placement</h3> 
+                        <ul class="service-list">
+                            <li>Hospitalist</li>
+                            <li>Family Medicine (MD/DO)</li>
+                            <li>Internal Medicine</li>
+                            <li>Psychiatrist</li>
+                            <li>Physician Assistant (PA)</li>
+                            <li>Anesthesiologist</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <div class="container">
+            <section class="success-stories reveal-on-scroll" id="testimonials">
+                <h2 style="text-align: center;">Real Stories, Real Results</h2>
+                <div class="success-stories-grid">
+                    <div class="testimonial-card">
+                        <div class="testimonial-card-header">
+                            <img src="https://images.pexels.com/photos/5215024/pexels-photo-5215024.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Anna Smith, RN">
+                            <div class="author-info">
+                                <h4>Anna Smith, RN</h4>
+                                <span>Travel Nurse</span>
+                            </div>
+                        </div>
+                        <blockquote class="testimonial-card-quote">
+                            "CygniHealth's platform is a game-changer. I uploaded my credentials once, and now I get alerts for my dream assignments. I got placed at a top hospital in two days. This is the future of nursing."
+                        </blockquote>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-card-header">
+                            <img src="https://images.pexels.com/photos/5699475/pexels-photo-5699475.jpeg?auto=compress&cs=tinysrgb&w=600" alt="David Lee, Hiring Manager">
+                            <div class="author-info">
+                                <h4>David Lee</h4>
+                                <span>Talent Director, City Medical Center</span>
+                            </div>
+                        </div>
+                        <blockquote class="testimonial-card-quote">
+                            "We had an urgent need for 10 ICU nurses. CygniHealth delivered a list of fully-credentialed candidates in under 24 hours. We filled all roles within the week. They are our go-to partner."
+                        </blockquote>
+                    </div>
                 </div>
             </section>
         </div>
         
         <div class="container">
              <section class="final-cta reveal-on-scroll" id="contact">
-                 <h2>Let's Engineer Your Future.</h2>
-                 <p>Have an ambitious project? Need to scale your team? We're ready to help you build it.</p>
-                 <a href="#contact" class="cta-button primary">START YOUR PROJECT</a>
+                   <h2>Get Started Today</h2>
+                   <p class="section-description" style="color: var(--color-text-secondary); margin-bottom: 2rem;">Whether you're looking for your next role or your next all-star, we're ready to help.</p>
+                   <div class="final-cta-buttons">
+                       <a href="#featured-jobs" class="cta-button primary">START APPLYING</a>
+                       <a href="#how-it-works" class="cta-button secondary">REQUEST TALENT</a>
+                   </div>
              </section>
         </div>
     </main>
-
-    <div id="portfolio-modal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="modal-close" aria-label="Close modal">&times;</button>
-            <img id="modal-image" src="" alt="Project screenshot">
-            <h2 id="modal-title"></h2>
-            <p id="modal-description"></p>
-            <a id="modal-link" href="#" class="cta-button primary" target="_blank" rel="noopener noreferrer">View Live Site</a>
-        </div>
-    </div>
 
     <a href="#top" class="back-to-top" id="back-to-top-btn" aria-label="Scroll back to top">
         &uarr; 
@@ -666,31 +806,32 @@
 
 
     <script>
-        // --- Theme Toggle (Same) ---
+        // --- Theme Toggle (Updated for Light Mode Default) ---
         const toggleButton = document.getElementById('theme-toggle');
         toggleButton.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
             document.body.classList.toggle('light-mode');
-            const isLightMode = document.body.classList.contains('light-mode');
-            toggleButton.textContent = isLightMode ? '🌙' : '☀️';
-            toggleButton.setAttribute('aria-label', isLightMode ? 'Toggle dark mode' : 'Toggle light mode');
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            toggleButton.textContent = isDarkMode ? '☀️' : '🌙';
+            toggleButton.setAttribute('aria-label', isDarkMode ? 'Toggle light mode' : 'Toggle dark mode');
         });
-        if (document.body.classList.contains('light-mode')) {
-            toggleButton.setAttribute('aria-label', 'Toggle dark mode');
-        } else {
-            toggleButton.setAttribute('aria-label', 'Toggle light mode');
-        }
+        toggleButton.setAttribute('aria-label', 'Toggle dark mode');
 
 
-        // --- Tabbed Section Logic (Same) ---
-        const tabButtons = document.querySelectorAll('.tab-button');
-        const tabContents = document.querySelectorAll('.tab-content');
-        tabButtons.forEach(button => {
+        // --- Tabbed Section Logic (REUSED) ---
+        const allTabButtons = document.querySelectorAll('.tab-button');
+        const allTabContents = document.querySelectorAll('.tab-content');
+        
+        allTabButtons.forEach(button => {
             button.addEventListener('click', () => {
+                const tabContainer = button.closest('.tabbed-section-container');
                 const tabTarget = button.getAttribute('data-tab');
-                tabButtons.forEach(btn => btn.classList.remove('active'));
-                tabContents.forEach(content => content.classList.remove('active'));
+
+                tabContainer.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                tabContainer.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                
                 button.classList.add('active');
-                document.getElementById(tabTarget).classList.add('active');
+                tabContainer.querySelector(`#${tabTarget}`).classList.add('active');
             });
         });
 
@@ -698,172 +839,86 @@
         document.addEventListener('DOMContentLoaded', () => {
             setupHeroAnimations();
             loadJobPostings();
-            setupMatcher(); // <-- This function is now UPDATED
             setupScrollAnimations();
-            setupPortfolioModal();
             setupBackToTopButton(); 
 
-            // --- Vanilla-Tilt (Same) ---
-            // This will now pick up the new matcher cards + portfolio items
+            // --- RE-ENABLED Vanilla-Tilt for the new job cards ---
             VanillaTilt.init(document.querySelectorAll("[data-tilt]"), {
-                max: 15,     
-                speed: 400,  
+                max: 10,  // Softer tilt
+                speed: 400, 
                 glare: true, 
-                "max-glare": 0.5 
+                "max-glare": 0.2 // Subtle glare
             });
         });
 
-        // --- Hero Animation Logic (Same) ---
+        // --- Hero Animation Logic (NEW Interactive Split) ---
         function setupHeroAnimations() {
-            // 1. Setup Typing Effect
-            const typingTarget = document.getElementById('typing-target');
-            if (typingTarget) {
-                const words = ["Code.", "Software.", "Talent.", "Innovation."];
-                let wordIndex = 0;
-                let charIndex = 0;
-                let isDeleting = false;
-                const typeSpeed = 150;
-                const deleteSpeed = 100;
-                const delay = 2000;
-
-                function type() {
-                    const currentWord = words[wordIndex];
-                    let displayText;
-
-                    if (isDeleting) {
-                        displayText = currentWord.substring(0, charIndex - 1);
-                        charIndex--;
-                    } else {
-                        displayText = currentWord.substring(0, charIndex + 1);
-                        charIndex++;
-                    }
-
-                    typingTarget.textContent = displayText;
-                    let speed = isDeleting ? deleteSpeed : typeSpeed;
-
-                    if (!isDeleting && charIndex === currentWord.length) {
-                        speed = delay;
-                        isDeleting = true;
-                    } else if (isDeleting && charIndex === 0) {
-                        isDeleting = false;
-                        wordIndex = (wordIndex + 1) % words.length;
-                        speed = typeSpeed;
-                    }
-                    setTimeout(type, speed);
-                }
-                type(); // Start the effect
+            // 1. Setup Particle Effect for LEFT Panel
+            const leftContainer = document.getElementById('particle-container-left');
+            if (leftContainer) {
+                createParticles(leftContainer, 30); // 30 particles
             }
-
-            // 2. Setup Particle Effect
-            const particleContainer = document.getElementById('particle-container');
-            if (particleContainer) {
-                const particleCount = 50; 
-
-                for (let i = 0; i < particleCount; i++) {
-                    const particle = document.createElement('div');
-                    particle.classList.add('particle');
-                    const size = Math.random() * 3 + 1; 
-                    particle.style.width = `${size}px`;
-                    particle.style.height = `${size}px`;
-                    particle.style.left = `${Math.random() * 100}%`; 
-                    const animationDelay = Math.random() * 20; 
-                    particle.style.animationDelay = `${animationDelay}s`;
-                    const xDrift = (Math.random() - 0.5) * 200; 
-                    particle.style.setProperty('--float-x', `${xDrift}px`);
-                    particleContainer.appendChild(particle);
-                }
+            
+            // 2. Setup Particle Effect for RIGHT Panel
+            const rightContainer = document.getElementById('particle-container-right');
+            if (rightContainer) {
+                createParticles(rightContainer, 30); // 30 particles
             }
         }
         
-        // --- "Live Tech Careers" Logic (Same) ---
+        // Helper function to create particles
+        function createParticles(container, particleCount) {
+             for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                const size = Math.random() * 3 + 1; 
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${Math.random() * 100}%`; 
+                
+                const animationDelay = Math.random() * 20; 
+                particle.style.animationDelay = `${animationDelay}s`;
+                
+                const xDrift = (Math.random() - 0.5) * 200; 
+                particle.style.setProperty('--float-x', `${xDrift}px`);
+                
+                container.appendChild(particle);
+            }
+        }
+        
+        // --- UPDATED: "Featured Jobs" Logic (for new Attractive Cards) ---
         function loadJobPostings() {
             const jobData = [
-                { title: 'Senior Full-Stack Developer (React/Node)', location: 'Toronto, ON • Full-Time' },
-                { title: 'Azure Cloud Architect', location: 'Remote (Canada) • Contract' },
-                { title: 'Data Engineer (Python & AWS)', location: 'Vancouver, BC • Full-Time' }
+                { title: 'Registered Nurse (RN) - ICU', location: 'New York, NY', type: 'Travel Contract' },
+                { title: 'Physical Therapist (PT)', location: 'Remote (USA)', type: 'Full-Time Telehealth' },
+                { title: 'Medical Lab Technician', location: 'Boston, MA', type: 'Per-Diem' }
             ];
-            const listingsGrid = document.getElementById('job-listings');
+            // This is the new ID for the grid
+            const listingsGrid = document.getElementById('job-listings-grid'); 
             if (!listingsGrid) return;
             listingsGrid.innerHTML = ''; 
+            
             jobData.forEach(job => {
+                // This is the new HTML for the attractive card
                 listingsGrid.innerHTML += `
-                    <div class="job-card">
-                        <div class="job-info">
-                            <h3>${job.title}</h3>
-                            <p>${job.location}</p>
-                        </div>
-                        <a href="#" class="cta-button">Apply Now</a>
+                    <div class="job-gallery-card" data-tilt>
+                        <h3>${job.title}</h3>
+                        <p>${job.location} • ${job.type}</p>
+                        <a href="#" class="job-card-button">Apply Now</a>
                     </div>
                 `;
             });
+
+            // We must re-init VanillaTilt *after* adding the new data-tilt elements
+            VanillaTilt.init(document.querySelectorAll("[data-tilt]"), {
+                max: 10,
+                speed: 400, 
+                glare: true, 
+                "max-glare": 0.2
+            });
         }
 
-        // --- UPDATED: "Solution Matcher" Logic (for new layout) ---
-       // --- UPDATED: "Solution Matcher" Logic (for new multi-select) ---
-function setupMatcher() {
-    // Get all checkboxes
-    const checkBuild = document.getElementById('check-build-app');
-    const checkHire = document.getElementById('check-hire-team');
-    const checkCloud = document.getElementById('check-cloud');
-    const allChecks = [checkBuild, checkHire, checkCloud];
-
-    // Get the main result container
-    const resultContainer = document.querySelector('.matcher-result');
-
-    // Get the three individual result divs
-    const results = {
-        build: document.getElementById('result-build-app'),
-        hire: document.getElementById('result-hire-team'),
-        cloud: document.getElementById('result-cloud')
-    };
-
-    function updateMatcherResults() {
-        if (!resultContainer) return; // Exit if elements aren't on page
-
-        // Get checked states
-        const isBuild = checkBuild.checked;
-        const isHire = checkHire.checked;
-        const isCloud = checkCloud.checked;
-
-        // Hide all result content first
-        for (let key in results) {
-            if (results[key]) results[key].style.display = 'none';
-        }
-
-        // --- THIS IS THE KEY LOGIC ---
-        // It checks each box independently.
-        // If 'Build' is checked, it will show the 'build' result.
-        if (isBuild) {
-            results.build.style.display = 'block';
-        }
-        // Then, it ALSO checks if 'Hire' is checked.
-        if (isHire) {
-            results.hire.style.display = 'block';
-        }
-        // Then, it ALSO checks if 'Cloud' is checked.
-        if (isCloud) {
-            results.cloud.style.display = 'block';
-        }
-        
-        // Check if *any* selection was made
-        let hasSelection = isBuild || isHire || isCloud;
-
-        // Show or hide the entire result box
-        if (hasSelection) {
-            resultContainer.style.display = 'block';
-        } else {
-            resultContainer.style.display = 'none';
-        }
-    }
-
-    // Add event listener to all checkboxes
-    allChecks.forEach(checkbox => {
-        if (checkbox) checkbox.addEventListener('change', updateMatcherResults);
-    });
-    
-    // Run once on load to set the initial (hidden) state
-    updateMatcherResults();
-}
         // --- Scroll-Reveal Animation Logic (Same) ---
         function setupScrollAnimations() {
             const observer = new IntersectionObserver((entries) => {
@@ -879,41 +934,6 @@ function setupMatcher() {
 
             const elementsToReveal = document.querySelectorAll('.reveal-on-scroll');
             elementsToReveal.forEach(el => observer.observe(el));
-        }
-
-        // --- Portfolio Modal Logic (Same) ---
-        function setupPortfolioModal() {
-            const modal = document.getElementById('portfolio-modal');
-            if (!modal) return;
-            
-            const modalClose = modal.querySelector('.modal-close');
-            const modalTitle = modal.querySelector('#modal-title');
-            const modalImage = modal.querySelector('#modal-image');
-            const modalDesc = modal.querySelector('#modal-description');
-            const modalLink = modal.querySelector('#modal-link');
-            
-            document.querySelectorAll('.portfolio-link').forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault(); 
-                    modalTitle.textContent = link.dataset.title;
-                    modalImage.src = link.dataset.image;
-                    modalImage.alt = link.dataset.title; 
-                    modalDesc.textContent = link.dataset.description;
-                    modalLink.href = link.dataset.link;
-                    modal.classList.add('visible');
-                });
-            });
-            
-            function closeModal() {
-                modal.classList.remove('visible');
-            }
-            
-            modalClose.addEventListener('click', closeModal);
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    closeModal();
-                }
-            });
         }
 
         // --- Back to Top Button Logic (Same) ---
