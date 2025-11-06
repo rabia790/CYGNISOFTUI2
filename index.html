@@ -3,956 +3,404 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CygniHealth Staffing - Find Healthcare Talent & Careers</title>
+    <title>Staffing Solutions - Dynamic Data Flow Final (Transparent Details)</title>
     
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <style>
-        /* --- Global Theme & Styles (Healthcare Palette) --- */
+        /* --- 🎨 Global Theme: Pure Black & Moving Shapes (High Contrast) --- */
         :root {
-            /* DARK MODE (Original) */
-            --color-bg-dark: #102a27;       /* Very Dark Teal */
-            --color-surface-dark: #193e3a;  /* Dark Teal Surface */
-            --color-text-dark: #e0e0e0;
-            --color-text-secondary-dark: #a0a0a0;
-            --color-accent-dark-theme: #009688; /* Accent remains Teal */
-            --color-accent-dark-bg: #102a27;    /* Dark BG for borders */
-
-            /* LIGHT MODE (New Default) */
-            --color-bg-light: #f4f7f6;      /* Off-white/light grey */
-            --color-surface-light: #ffffff;
-            --color-text-light: #1a202c;
-            --color-text-secondary-light: #555;
-            --color-accent-light-theme: #009688; /* Healthcare Teal */
-            --color-accent-light-bg: #E0F2F1;  /* Very Light Teal */
+            --brand-orange: #ff8c00; 
+            --pure-black: #000000;    
+            --dark-gray: #1a1a1a;     
+            --text-light: #e0e0e0;   
+            --text-muted: #888888;   
+            --nav-bg: #0a0a0a;        
+            --border-orange-subtle: rgba(255, 140, 0, 0.8); 
+            --border-gray-subtle: rgba(224, 224, 224, 0.4); 
+            --border-orange-hover: rgba(255, 140, 0, 0.4); 
         }
 
-        /* Set Light Mode as default */
-        :root {
-            --color-bg: var(--color-bg-light);
-            --color-surface: var(--color-surface-light);
-            --color-text: var(--color-text-light);
-            --color-text-secondary: var(--color-text-secondary-light);
-            --color-accent: var(--color-accent-light-theme);
-            --color-accent-dark: var(--color-accent-light-bg);
-        }
-
-        /* Set Dark Mode when .dark-mode is on body */
-        body.dark-mode {
-            --color-bg: var(--color-bg-dark);
-            --color-surface: var(--color-surface-dark);
-            --color-text: var(--color-text-dark);
-            --color-text-secondary: var(--color-text-secondary-dark);
-            --color-accent: var(--color-accent-dark-theme);
-            --color-accent-dark: var(--color-accent-dark-bg);
-        }
-
-        /* --- Smooth Scrolling (Same) --- */
-        html {
-            scroll-behavior: smooth;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--color-bg);
-            color: var(--color-text);
-            transition: background-color 0.3s ease, color 0.3s ease;
-            line-height: 1.6;
-        }
-        .container { width: 90%; max-width: 1100px; margin: auto; padding: 3rem 0; }
-        h1, h2, h3 { color: var(--color-text); margin-bottom: 1rem; line-height: 1.2; }
-        h1 { font-size: 3rem; }
-        h2 { font-size: 2.2rem; border-bottom: 2px solid var(--color-accent-dark); padding-bottom: 0.5rem; }
-        h3 { font-size: 1.5rem; color: var(--color-accent); }
-        p { font-size: 1.1rem; color: var(--color-text-secondary); max-width: 60ch; }
-        
-        /* --- NEW: Section Description Style (Fixes Spacing) --- */
-        .section-description {
-            font-size: 1.1rem;
-            color: var(--color-text-secondary);
-            max-width: 60ch;
-            margin: -0.5rem auto 1.5rem auto; /* Fixes spacing issue */
-            text-align: center;
-        }
-
-        section { margin-bottom: 2rem; }
-        header { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            padding: 1rem 5%; 
-            background-color: var(--color-surface); 
-            border-bottom: 1px solid var(--color-accent-dark); 
-            position: sticky; 
-            top: 0; 
-            z-index: 100; 
-        }
-        .logo { font-size: 1.5rem; font-weight: bold; color: var(--color-text); }
-        .theme-toggle { font-size: 1.5rem; cursor: pointer; background: none; border: none; color: var(--color-text); }
-
-        /* --- INTERACTIVE SPLIT HERO STYLES --- */
-        .hero-split-container {
-            display: flex;
-            width: 100%;
-            height: 70vh;
-            min-height: 500px;
-            overflow: hidden;
-            background-color: var(--color-bg);
-        }
-        .hero-split-panel {
-            position: relative;
-            width: 50%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 2rem;
-            overflow: hidden;
-            transition: width 0.75s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-        .hero-split-content {
-            position: relative;
-            z-index: 3;
-            width: 100%;
-            max-width: 500px; 
-        }
-        .hero-split-panel h1 {
-            font-size: 2.8rem;
-            color: var(--color-text);
-            margin-bottom: 1rem;
-        }
-        .hero-split-panel p {
-            font-size: 1.1rem;
-            color: var(--color-text-secondary);
-            margin-bottom: 2rem;
-        }
-        .hero-split-panel .cta-button {
-             text-decoration: none; 
-             font-size: 1rem; 
-             font-weight: bold; 
-             padding: 12px 24px; 
-             border-radius: 4px; 
-             transition: all 0.3s ease;
-             display: inline-block;
-             transform: scale(0.9);
-             opacity: 0.7;
-        }
-        .hero-panel-left {
-            background-color: var(--color-surface);
-        }
-        .hero-panel-left .cta-button.primary {
-            background-color: var(--color-accent);
-            color: #ffffff;
-        }
-        .hero-panel-left .cta-button.primary:hover {
-            transform: translateY(-3px) scale(1);
-            box-shadow: 0 4px 20px rgba(0, 150, 136, 0.4);
-        }
-        .hero-panel-right {
-            background-color: var(--color-accent-dark); 
-        }
-        .dark-mode .hero-panel-right {
-             background-color: var(--color-surface-dark);
-        }
-        .hero-panel-right h1 {
-            color: var(--color-accent);
-        }
-        .dark-mode .hero-panel-right h1 {
-             color: var(--color-accent);
-        }
-        .hero-panel-right .cta-button.secondary {
-            background-color: transparent;
-            border: 2px solid var(--color-accent);
-            color: var(--color-accent);
-        }
-        .hero-panel-right .cta-button.secondary:hover {
-            background-color: var(--color-accent);
-            color: #ffffff;
-            transform: translateY(-3px) scale(1);
-        }
-        .hero-split-container:hover .hero-split-panel {
-            width: 40%;
-        }
-        .hero-split-container:hover .hero-split-panel:hover {
-            width: 60%;
-        }
-        .hero-split-container:hover .hero-split-panel .cta-button,
-        .hero-split-container:hover .hero-split-panel p {
-            opacity: 0.7;
-            transform: scale(0.9);
-        }
-        .hero-split-container:hover .hero-split-panel:hover .cta-button,
-        .hero-split-container:hover .hero-split-panel:hover p {
-            opacity: 1;
-            transform: scale(1);
-        }
-        .abstract-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
-            overflow: hidden;
-        }
-        .particle {
-            position: absolute;
-            background: var(--color-accent);
-            border-radius: 50%;
-            opacity: 0;
-            animation: float 20s infinite linear;
-            bottom: -20px; 
-            box-shadow: 0 0 8px var(--color-accent);
-        }
-        @keyframes float {
-            0% {
-                transform: translateY(0) translateX(0);
-                opacity: 0.6;
-            }
-            100% {
-                transform: translateY(-110vh) translateX(var(--float-x)); 
-                opacity: 0;
-            }
-        }
-        .hero-panel-right .particle {
-            background: var(--color-text-secondary);
-             box-shadow: 0 0 8px var(--color-text-secondary);
-        }
-        @media (max-width: 768px) {
-            .hero-split-container {
-                flex-direction: column;
-                height: auto;
-                min-height: 0;
-            }
-            .hero-split-panel {
-                width: 100% !important;
-                height: 50vh;
-                min-height: 350px;
-            }
-            .hero-split-container:hover .hero-split-panel {
-                width: 100% !important;
-            }
-            .hero-split-panel h1 {
-                font-size: 2.3rem;
-            }
-            .hero-split-panel .cta-button,
-            .hero-split-container:hover .hero-split-panel .cta-button,
-            .hero-split-container:hover .hero-split-panel p {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        /* --- "WHY US?" VALUE PROPS --- */
-        .value-props {
-            background-color: var(--color-surface);
-            border-radius: 8px;
-            padding: 2.5rem;
-            border: 1px solid var(--color-accent-dark);
-        }
-        .value-props-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            text-align: center;
-        }
-        .value-prop-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .value-prop-item .option-icon {
-            width: 48px;
-            height: 48px;
-            stroke: var(--color-accent);
-            stroke-width: 2;
-            fill: none;
-            margin-bottom: 1rem;
-        }
-        .value-prop-item h3 {
-            color: var(--color-text);
-            font-size: 1.25rem;
-            margin-bottom: 0.5rem;
-        }
-        .value-prop-item p {
-            font-size: 0.95rem;
-            max-width: 100%;
-        }
-
-        /* --- NEW: "FEATURED JOBS" (Attractive Gallery Design) --- */
-        .featured-jobs {
-            text-align: center;
-        }
-        .job-gallery-grid { 
-            display: grid; 
-            grid-template-columns: repeat(3, 1fr); 
-            gap: 1.5rem; 
-            margin-top: 2rem; 
-            text-align: left;
-        }
-        /* New Card Style */
-        .job-gallery-card {
-            background-color: var(--color-surface);
-            border: 1px solid var(--color-accent-dark);
-            border-radius: 8px;
-            padding: 2rem; /* More padding */
-            transition: all 0.3s ease;
-            transform-style: preserve-3d; /* For tilt.js */
-            display: flex;
-            flex-direction: column; /* To push button to bottom */
-        }
-        .job-gallery-card:hover {
-            border-color: var(--color-accent);
-            transform: translateY(-5px) translateZ(5px);
-            box-shadow: 0 4px 15px rgba(0, 150, 136, 0.1);
-        }
-        .job-gallery-card h3 {
-            color: var(--color-text);
-            font-size: 1.35rem; /* Bigger title */
-            margin-bottom: 0.5rem;
-        }
-        .job-gallery-card p {
-            font-size: 1rem;
-            color: var(--color-text-secondary);
-            margin-bottom: 1.5rem;
-            flex-grow: 1; /* Pushes button to bottom */
-        }
-        /* New Button Style */
-        .job-card-button {
-            display: block;
-            text-decoration: none;
-            text-align: center;
-            font-weight: bold;
-            padding: 12px 1rem;
-            border-radius: 4px;
-            background-color: var(--color-accent);
-            color: #ffffff;
-            transition: all 0.3s ease;
-        }
-        .job-card-button:hover {
-            background-color: var(--color-accent); /* Could darken this on hover */
-            color: #ffffff;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0, 150, 136, 0.3);
-        }
-        /* "Search All" button */
-        .featured-jobs .cta-button-container {
-            margin-top: 2.5rem; /* More space */
-        }
-        .featured-jobs .cta-button-container .cta-button {
-            text-decoration: none;
-            font-size: 1.1rem;
-            font-weight: bold;
-            padding: 12px 24px;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-            background-color: transparent;
-            border: 2px solid var(--color-accent);
-            color: var(--color-accent);
-        }
-        .featured-jobs .cta-button-container .cta-button:hover {
-            background-color: var(--color-accent);
-            color: #ffffff;
-            transform: translateY(-3px);
-        }
-
-        
-        /* --- "HOW IT WORKS" & "SPECIALTIES" (Tabbed Sections) --- */
-        .tabbed-section-container { 
-            background-color: var(--color-surface); 
-            border-radius: 8px; 
-            padding: 2rem; 
-            border: 1px solid var(--color-accent-dark); 
-        }
-        .tab-buttons { 
-            display: flex; 
-            border-bottom: 2px solid var(--color-accent-dark); 
-            margin-bottom: 1.5rem; 
-        }
-        .tab-button { 
-            background: none; 
-            border: none; 
-            color: var(--color-text-secondary); 
-            padding: 1rem 1.5rem; 
-            font-size: 1.1rem; 
-            font-weight: bold; 
-            cursor: pointer; 
-            transition: all 0.3s ease; 
-        }
-        .tab-button.active { 
-            color: var(--color-accent); 
-            border-bottom: 3px solid var(--color-accent); 
-        }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        .how-it-works-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            text-align: center;
-            margin-top: 2rem;
-        }
-        .how-it-works-step {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-         .how-it-works-step .step-number {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--color-accent);
-            border: 2px solid var(--color-accent);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1rem;
-        }
-        .how-it-works-step h4 {
-            color: var(--color-text);
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-        }
-        .how-it-works-step p {
-            font-size: 0.9rem;
-            max-width: 100%;
-        }
-        .service-list {
-            list-style: none;
-            margin-top: 1.5rem;
-            padding-left: 1.5rem;
-            columns: 2;
-        }
-        .service-list li {
-            font-size: 1.1rem;
-            color: var(--color-text-secondary);
-            position: relative;
-            margin-bottom: 0.75rem;
-            break-inside: avoid-column;
-        }
-        .service-list li::before {
-            content: '✓';
-            color: var(--color-accent);
-            font-weight: bold;
-            position: absolute;
-            left: -1.5rem;
-        }
-
-        /* --- "SUCCESS STORIES" (Testimonials) --- */
-        .success-stories-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-        }
-        .testimonial-card {
-            background-color: var(--color-surface);
-            border-radius: 8px;
-            padding: 2.5rem;
-            border: 1px solid var(--color-accent-dark);
-            display: flex;
-            flex-direction: column;
-        }
-        .testimonial-card-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-        .testimonial-card-header img {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            margin-right: 1rem;
-            object-fit: cover;
-        }
-        .testimonial-card-header .author-info {
-            line-height: 1.3;
-        }
-        .testimonial-card-header .author-info h4 {
-            color: var(--color-text);
+            font-family: 'Roboto', 'Helvetica Neue', sans-serif; 
+            background-color: var(--pure-black); 
+            color: var(--text-light);
             margin: 0;
-        }
-        .testimonial-card-header .author-info span {
-            color: var(--color-accent);
-            font-size: 0.9rem;
-            font-weight: bold;
-        }
-        .testimonial-card-quote {
-            font-size: 1.1rem;
-            font-style: italic;
-            color: var(--color-text-secondary);
-            flex-grow: 1;
+            line-height: 1.5; 
+            padding: 0;
+            overflow-x: hidden; 
         }
 
+        /* --- NAVIGATION & HERO (Unchanged) --- */
+        .top-nav {
+            position: fixed; width: 100%; background-color: var(--nav-bg); padding: 15px 50px;
+            display: flex; justify-content: space-between; align-items: center; z-index: 1000; 
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.8);
+        }
+        .logo { font-size: 1.3em; font-weight: 500; color: var(--brand-orange); letter-spacing: 2px; }
+        .nav-links a { color: var(--text-muted); margin-left: 25px; font-size: 0.85em; text-decoration: none; transition: color 0.3s; }
+        .hero-banner { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background-color: var(--pure-black); position: relative; overflow: hidden; padding: 0 50px; }
+        .shapes-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .shape { position: absolute; background: none; border-radius: 0; animation: moveShapes 15s infinite ease-in-out alternate; opacity: 1; filter: blur(0); }
+        @keyframes moveShapes { 0% { transform: translate(0, 0) scale(1) rotate(0deg); } 25% { transform: translate(20vw, 10vh) scale(1.1) rotate(15deg); } 50% { transform: translate(0, 20vh) scale(0.9) rotate(-15deg); } 75% { transform: translate(-20vw, 10vh) scale(1.2) rotate(30deg); } 100% { transform: translate(0, 0) scale(1) rotate(0deg); } }
+        .shape:nth-child(1) { width: 100px; height: 100px; left: 10%; top: 20%; border: 2px solid var(--border-orange-subtle); animation-duration: 18s; animation-delay: 0s; }
+        .shape:nth-child(2) { width: 150px; height: 80px; right: 15%; bottom: 10%; border: 2px solid var(--border-gray-subtle); animation-duration: 22s; animation-delay: 2s; }
+        .shape:nth-child(3) { width: 50px; height: 50px; left: 50%; top: 5%; border: 2px solid var(--border-orange-subtle); animation-duration: 16s; animation-delay: 4s; }
+        .shape:nth-child(4) { width: 120px; height: 120px; left: 5%; bottom: 40%; border: 2px solid var(--border-gray-subtle); animation-duration: 20s; animation-delay: 6s; }
+        .shape:nth-child(5) { width: 0; height: 0; right: 20%; top: 30%; border-left: 60px solid transparent; border-right: 60px solid transparent; border-bottom: 100px solid var(--border-orange-subtle); opacity: 0.8; animation-duration: 19s; animation-delay: 8s; filter: blur(0); }
+        .hero-content { z-index: 1; }
+        .dynamic-tagline { font-size: 1.2em; color: var(--text-light); font-weight: 300; letter-spacing: 4px; text-transform: uppercase; overflow: hidden; white-space: nowrap; margin: 0 auto; border-right: 2px solid var(--brand-orange); animation: typing 2s steps(28, end) forwards, blink-caret .75s step-end infinite; }
+        @keyframes typing { from { width: 0 } to { width: 100% } }
+        .hero-banner h1 { font-size: 3.5em; color: var(--text-light); margin-top: 30px; margin-bottom: 20px; font-weight: 400; letter-spacing: 0.5px; opacity: 1; }
+        .hero-cta { margin-top: 60px; padding: 10px 25px; background-color: var(--brand-orange); color: var(--pure-black); font-weight: 600; font-size: 0.85em; border-radius: 2px; opacity: 1; text-decoration: none; text-transform: uppercase; transition: background-color 0.3s, transform 0.3s; }
 
-        /* --- FINAL CTA (Same) --- */
-        .final-cta { 
-            background-color: var(--color-surface); 
-            background-image: linear-gradient(45deg, var(--color-accent-dark) 25%, transparent 25%), linear-gradient(-45deg, var(--color-accent-dark) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, var(--color-accent-dark) 75%), linear-gradient(-45deg, transparent 75%, var(--color-accent-dark) 75%); 
-            background-size: 20px 20px; 
-            border: 1px solid var(--color-accent-dark); 
-            border-radius: 8px; 
-            padding: 3rem; 
-            text-align: center; 
-        }
-        .dark-mode .final-cta {
-            background-image: linear-gradient(45deg, var(--color-surface-dark) 25%, transparent 25%), linear-gradient(-45deg, var(--color-surface-dark) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, var(--color-surface-dark) 75%), linear-gradient(-45deg, transparent 75%, var(--color-surface-dark) 75%); 
-        }
-        .final-cta h2 { font-size: 2.5rem; color: var(--color-text); border: none; }
-        .final-cta-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-        .final-cta-buttons .cta-button { 
-            text-decoration: none; 
-            font-size: 1.1rem; 
-            font-weight: bold; 
-            padding: 12px 24px; 
-            border-radius: 4px; 
-            transition: all 0.3s ease; 
-        }
-        .final-cta-buttons .cta-button.primary { 
-            background-color: var(--color-accent); 
-            color: #ffffff; 
-        }
-        .final-cta-buttons .cta-button.primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 20px rgba(0, 150, 136, 0.4);
-        }
-        .final-cta-buttons .cta-button.secondary {
-             background-color: transparent; 
-             border: 2px solid var(--color-accent); 
-             color: var(--color-accent);
-        }
-         .final-cta-buttons .cta-button.secondary:hover {
-            background-color: var(--color-accent);
-            color: #ffffff;
-            transform: translateY(-3px);
+        /* --- CORE SOLUTIONS SECTION --- */
+        .main-content { 
+            padding: 60px 0 0 0; 
+            background-color: var(--dark-gray); 
+            position: relative;
+            overflow: hidden;
         }
         
-        /* --- Scroll-Reveal Animation (Same) --- */
-        .reveal-on-scroll {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-            will-change: opacity, transform;
+        /* NEW WRAPPER TO TIGHTEN SECTION HEADER */
+        .section-header-wrapper {
+            max-width: 1000px; 
+            margin: 0 auto;
+            padding: 0 50px;
+            position: relative;
+            z-index: 2;
+            text-align: center;
         }
-        .reveal-on-scroll.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        /* --- Back to Top Button (Same) --- */
-        .back-to-top {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: var(--color-accent);
-            color: #ffffff; 
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-            text-decoration: none;
-            z-index: 100;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(20px);
-            transition: all 0.3s ease;
-        }
-        .back-to-top.visible {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-        .back-to-top:hover {
-            transform: translateY(-3px); 
-        }
+        .section-header h2 { color: var(--brand-orange); font-size: 1.8em; font-weight: 300; letter-spacing: 2px; margin-bottom: 5px; }
+        .section-header p { font-size: 0.9em; color: var(--text-muted); }
 
-        /* --- Responsive for Mobile --- */
-        @media (max-width: 768px) {
-            h1 { font-size: 2.3rem; } 
+        /* DYNAMIC ICONOGRAPHY FLOW (Slider) */
+        .services-grid-wrapper { 
+            max-width: 100%; margin: 0; padding: 20px 0; overflow-x: auto; white-space: nowrap; 
+            scrollbar-width: none; scroll-behavior: auto; -webkit-overflow-scrolling: touch; z-index: 1; position: relative;
+        }
+        .services-grid-wrapper::-webkit-scrollbar { display: none; }
+        .services-card-track { display: flex; padding: 0 50px; }
+
+        /* --- MICRO-PRECISION CARD STYLES --- */
+        .service-card {
+            width: 200px; height: 190px; margin-right: 15px; background-color: var(--pure-black);
+            padding: 20px; border-radius: 4px; border: 1px solid var(--dark-gray); 
+            transition: all 0.2s ease-out; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); 
+            vertical-align: top; text-align: center; white-space: normal; cursor: pointer; flex-shrink: 0; 
+        }
+        .service-card:last-child { margin-right: 50px; } 
+        .service-card:hover { transform: translateY(-3px); box-shadow: 0 0 10px rgba(255, 140, 0, 0.1), 0 5px 10px rgba(0, 0, 0, 0.7); border: 1px solid var(--border-orange-hover); }
+        .service-card.active-card { transform: translateY(0px); border: 2px solid var(--brand-orange); box-shadow: 0 0 0px transparent; background-color: var(--pure-black); }
+        
+        .service-icon { font-size: 2.5em; margin-bottom: 5px; color: var(--text-muted); transition: color 0.2s ease-out; display: block; line-height: 1; }
+        .service-card:hover .service-icon, .service-card.active-card .service-icon { color: var(--brand-orange); }
+        .service-card h3 { font-size: 1.1em; font-weight: 500; margin-top: 0; margin-bottom: 3px; padding-bottom: 0; }
+        .service-card p { font-size: 0.8em; color: var(--text-muted); line-height: 1.3; min-height: 2.5em; }
+        .service-card .accent-text { color: var(--brand-orange); font-weight: 500; font-size: 0.9em; display: block; margin-top: 5px; }
+
+        /* --- DEDICATED CONTENT AREA (Structured Reveal - DYNAMIC BACKGROUND) --- */
+        .service-detail-area {
+            max-width: 1200px; /* INCREASED WIDTH */
+            margin: 0 auto; 
+            padding: 20px 30px; /* Reduced vertical padding */
             
-            .value-props-grid { grid-template-columns: 1fr; }
-            .job-gallery-grid { grid-template-columns: 1fr; } /* Stack job cards */
-            .how-it-works-grid { grid-template-columns: 1fr; }
-            .service-list { columns: 1; }
-            .success-stories-grid { grid-template-columns: 1fr; }
-            .final-cta-buttons { flex-direction: column; }
-            .tab-buttons { flex-direction: column; }
+            background-color: transparent; /* KEY: Remove background color */
+            
+            border: 1px solid var(--dark-gray); /* NEW: Light, rounded border */
+            border-radius: 8px; 
+            
+            box-shadow: none; /* Removed inset shadow */
+            
+            min-height: 250px; z-index: 1; position: relative;
+            overflow: hidden; 
+
+            /* Dynamic pattern stays, now showing through from the dark-gray background */
+            background-image: repeating-linear-gradient(
+                45deg,
+                rgba(255, 140, 0, 0.02), rgba(255, 140, 0, 0.02) 1px,
+                transparent 1px, transparent 15px
+            );
+            background-size: 20px 20px;
+            animation: moveDetailPattern 60s linear infinite; 
         }
+
+        @keyframes moveDetailPattern {
+            from { background-position: 0 0; }
+            to { background-position: 1000px 1000px; } 
+        }
+        
+        /* FIX: Content Wrapper for Readability over transparent background */
+        .detail-content { 
+            display: none; opacity: 0; transform: translateY(10px); 
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out; 
+            z-index: 2; position: relative;
+            
+            
+            padding: 20px;
+            border-radius: 4px;
+        }
+        .detail-content.show { display: block; opacity: 1; transform: translateY(0); }
+
+        .detail-content h3 { 
+            color: var(--brand-orange); 
+            font-size: 1.5em; margin-bottom: 10px; border-bottom: 1px solid var(--dark-gray); padding-bottom: 8px; 
+        }
+        
+        .detail-content p { font-size: 0.9em; color: var(--text-light); margin-bottom: 10px; } 
+
+        /* Structured List Styles */
+        .detail-content ul { list-style: none; padding-left: 0; margin-top: 15px; }
+        .detail-content ul li {
+            font-size: 0.9em; color: var(--text-light); margin-bottom: 8px; padding-left: 1.5em; position: relative;
+        }
+        .detail-content ul li:before {
+            content: '•'; color: var(--brand-orange); font-weight: bold; display: inline-block; 
+            width: 1em; margin-left: -1.5em;
+        }
+        
+        /* --- Footer CTA --- */
+        .cta-footer { text-align: center; padding: 40px 0; background-color: var(--nav-bg); z-index: 1; position: relative; }
 
     </style>
 </head>
+<body>
 
-<body class="light-mode" id="top">
+    <nav class="top-nav">
+        <a href="#home" class="logo">Staffing Pro</a>
+        <div class="nav-links">
+            <a href="#services">Services</a>
+            <a href="#method">Methodology</a>
+            <a href="#about">About Us</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </nav>
+    
+    <header class="hero-banner">
+        <div class="shapes-container">
+            <div class="shape"></div> <div class="shape"></div> <div class="shape"></div> 
+            <div class="shape"></div> <div class="shape"></div> 
+        </div>
 
-    <header>
-        <a href="#" class="logo" style="text-decoration: none; color: inherit;">CygniHealth</a>
-        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+        <div class="hero-content">
+            <p class="dynamic-tagline">ENGINEERED FOR PRECISE PLACEMENT</p>
+            <h1>Strategic Human Capital. Delivered.</h1>
+            <a href="#services" class="hero-cta">View Solutions</a>
+        </div>
     </header>
 
-    <main>
-        <section class="hero-split-container" id="hero">
-            <div class="hero-split-panel hero-panel-left">
-                <div class="hero-split-content">
-                    <h1>Find Your Next Calling.</h1>
-                    <p>Explore thousands of roles at top-tier healthcare facilities.</p>
-                    <a href="#featured-jobs" class="cta-button primary">EXPLORE CAREERS</a>
+    <div class="main-content">
+        <div class="section-header-wrapper">
+            <div class="section-header">
+                <h2>Core Solutions</h2>
+                <p>A strategic framework for every personnel requirement. Click a card for a deep dive.</p>
+            </div>
+        </div>
+
+        <div class="services-grid-wrapper" id="services-grid">
+            <div class="services-card-track">
+                <div class="service-card" data-service-id="temp">
+                    <i class="service-icon fas fa-clock"></i> 
+                    <h3>Temporary Staffing</h3>
+                    <p>Rapid deployment for demands or gaps. **Zero downtime guaranteed.**</p>
+                    <span class="accent-text">Focused agility.</span>
                 </div>
-                <div class="abstract-bg" id="particle-container-left"></div>
+                <div class="service-card" data-service-id="perm">
+                    <i class="service-icon fas fa-handshake"></i> 
+                    <h3>Permanent Placement</h3>
+                    <p>Rigorous search for cultural and technical alignment. **98% retention rate.**</p>
+                    <span class="accent-text">Sustained growth.</span>
+                </div>
+                <div class="service-card" data-service-id="contract">
+                    <i class="service-icon fas fa-screwdriver-wrench"></i> 
+                    <h3>Contract Staffing</h3>
+                    <p>Access expertise for defined projects. **Scale resources on demand.**</p>
+                    <span class="accent-text">Specialized skills.</span>
+                </div>
+                <div class="service-card" data-service-id="temp-to-hire">
+                    <i class="service-icon fas fa-check-double"></i> 
+                    <h3>Temp-to-Hire Vetting</h3>
+                    <p>Evaluate fit and performance live. **Risk-free commitment.**</p>
+                    <span class="accent-text">Proven performance.</span>
+                </div>
+                <div class="service-card" data-service-id="exec-search">
+                    <i class="service-icon fas fa-user-tie"></i> 
+                    <h3>Executive Search</h3>
+                    <p>Confidential recruitment for leadership. **Strategic talent acquisition.**</p>
+                    <span class="accent-text">Elite placement.</span>
+                </div>
+                <div class="service-card" data-service-id="payrolling">
+                    <i class="service-icon fas fa-wallet"></i> 
+                    <h3>Payrolling Services</h3>
+                    <p>We handle payroll, benefits, and compliance for contractors. **Reduced HR burden.**</p>
+                    <span class="accent-text">Seamless compliance.</span>
+                </div>
+                <div class="service-card" data-service-id="global">
+                    <i class="service-icon fas fa-globe"></i> 
+                    <h3>Global Recruitment</h3>
+                    <p>Source specialized talent internationally. **Expand your reach.**</p>
+                    <span class="accent-text">Worldwide network.</span>
+                </div>
+                <div class="service-card" data-service-id="it-tech">
+                    <i class="service-icon fas fa-laptop-code"></i> 
+                    <h3>IT/Tech Consulting</h3>
+                    <p>Specialist hiring for tech roles. **Future-proof your team.**</p>
+                    <span class="accent-text">Digital focus.</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="service-detail-area">
+            <div class="detail-content show" data-detail-id="temp">
+                <h3>Temporary Staffing: Immediate Capacity, Zero Commitment</h3>
+                <p>Designed to handle unpredictable business cycles, short-term projects, and capacity gaps. We provide rapid placement from our vetted professional bench to ensure seamless business continuity.</p>
+                <ul>
+                    <li>**Guaranteed 24-hour turnaround** for urgent roles.</li>
+                    <li>**Coverage** for seasonal demands and unexpected absences.</li>
+                    <li>**Access to skilled labor** without increasing long-term overhead.</li>
+                </ul>
+            </div>
+
+            <div class="detail-content" data-detail-id="perm">
+                <h3>Permanent Placement: Precision Hiring for Core Growth</h3>
+                <p>We utilize a rigorous, retained search model focused on cultural fit and long-term viability. We identify career-minded professionals ready to invest in your company's future.</p>
+                <ul>
+                    <li>**98% retention rate** on placed talent, supported by comprehensive screening.</li>
+                    <li>**Reduced time-to-hire** using our deep network and sourcing technology.</li>
+                    <li>**Access to exclusive**, passive candidate pools unavailable through standard listings.</li>
+                </ul>
+            </div>
+
+            <div class="detail-content" data-detail-id="contract">
+                <h3>Contract Staffing: Specialized Expertise, Defined Term</h3>
+                <p>Ideal for bridging skill gaps in niche areas like advanced data science, engineering, or complex finance projects. You gain specific expertise for a fixed duration without increasing permanent headcount.</p>
+                <ul>
+                    <li>**Expert resources** scaled on demand for project spikes.</li>
+                    <li>**Compliance management** for contract workers, simplifying your HR load.</li>
+                    <li>**Unique access** to cutting-edge skills for specialized deliverables.</li>
+                </ul>
+            </div>
+
+            <div class="detail-content" data-detail-id="temp-to-hire">
+                <h3>Temp-to-Hire Vetting: De-Risking Your Full-Time Commitments</h3>
+                <p>This is the ultimate trial period. Candidates work on your team, allowing you to evaluate performance, cultural integration, and work ethic before offering a permanent role.</p>
+                <ul>
+                    <li>**Guaranteed fit**, minimizing the risk of a costly mis-hire.</li>
+                    <li>**Seamless transition** to permanent employment after the trial period.</li>
+                    <li>**Confidence** in the long-term investment based on proven performance.</li>
+                </ul>
+            </div>
+
+            <div class="detail-content" data-detail-id="exec-search">
+                <h3>Executive Search: Strategic Talent Acquisition for Leadership</h3>
+                <p>We handle highly confidential searches for C-suite and executive roles. Our network identifies and attracts top-tier, passive candidates who drive strategic direction and organizational change.</p>
+                <ul>
+                    <li>**Confidential recruitment** process ensuring discretion.</li>
+                    <li>**In-depth executive vetting** and background checks.</li>
+                    <li>**Delivery of candidates** capable of immediate, high-impact leadership.</li>
+                </ul>
+            </div>
+
+            <div class="detail-content" data-detail-id="payrolling">
+                <h3>Payrolling Services: Compliance & Administration for Your Contractors</h3>
+                <p>When you find the perfect contractor, we manage all administrative burdens: payroll processing, tax compliance, benefits, and insurance, ensuring full adherence to labor laws.</p>
+                <ul>
+                    <li>**Full compliance assurance** across all jurisdictional requirements.</li>
+                    <li>**Reduced administrative workload** on your internal HR team.</li>
+                    <li>**Seamless processing** for high volumes of pre-identified contractors.</li>
+                </ul>
             </div>
             
-            <div class="hero-split-panel hero-panel-right">
-                <div class="hero-split-content">
-                    <h1>Find Your Next All-Star.</h1>
-                    <p>Access the top 1% of pre-vetted, ready-to-work medical talent.</p>
-                    <a href="#how-it-works" class="cta-button secondary">HIRE TALENT</a>
-                </div>
-                <div class="abstract-bg" id="particle-container-right"></div>
+            <div class="detail-content" data-detail-id="global">
+                <h3>Global Recruitment: Expanding Your Reach for Niche Skills</h3>
+                <p>We specialize in sourcing and relocating highly skilled talent from international markets for specific domestic roles where expertise is scarce. We manage logistics and compliance across borders.</p>
+                <ul>
+                    <li>**Access to worldwide talent pools** to fill specialized roles.</li>
+                    <li>**Management of international compliance** and work visas.</li>
+                    <li>**Expansion of your organizational capability** through global sourcing.</li>
+                </ul>
             </div>
-        </section>
-
-        <div class="container">
-            <section class="value-props reveal-on-scroll">
-                <div style="text-align: center; max-width: 60ch; margin: 0 auto 2.5rem auto;">
-                    <h2 style="border-bottom: none;">The New Standard in Healthcare Staffing</h2>
-                    <p class="section-description">We built our platform on trust, transparency, and technology.</p>
-                </div>
-                <div class="value-props-grid">
-                    <div class="value-prop-item">
-                        <svg class="option-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
-                        <h3>Elite Vetting</h3>
-                        <p>For employers: We handle 100% of credentialing. Access the top 1% of pre-vetted, ready-to-work medical talent.</p>
-                    </div>
-                    <div class="value-prop-item">
-                        <svg class="option-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                        <h3>Career Growth</h3>
-                        <p>For candidates: We're your partner. Get access to premier facilities, competitive pay, and roles that match your career goals.</p>
-                    </div>
-                    <div class="value-prop-item">
-                        <svg class="option-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
-                        <h3>Seamless Tech</h3>
-                        <p>For everyone: Our platform makes it simple. Easily apply, post jobs, manage schedules, and handle timesheets all in one place.</p>
-                    </div>
-                </div>
-            </section>
+            
+            <div class="detail-content" data-detail-id="it-tech">
+                <h3>IT/Tech Consulting: Specialist Hiring for the Digital Age</h3>
+                <p>Our dedicated tech division focuses exclusively on sourcing roles in software development, cybersecurity, cloud architecture, and data analytics, ensuring you hire for future needs.</p>
+                <ul>
+                    <li>**Vetted technical experts** who meet stringent skill requirements.</li>
+                    <li>**Recruitment for future-proof roles** in rapidly changing industries.</li>
+                    <li>**Faster scaling** of your digital transformation and IT teams.</li>
+                </ul>
+            </div>
         </div>
-        
-        <div class="container">
-            <section class="featured-jobs reveal-on-scroll" id="featured-jobs">
-                <h2 style="border: none;">Featured Job Openings</h2>
-                <p class="section-description">See our most in-demand roles, updated live. Your next opportunity awaits.</p>
-                <div class="job-gallery-grid reveal-on-scroll" id="job-listings-grid"> 
-                    </div>
-                <div class="cta-button-container">
-                    <a href="#" class="cta-button">SEARCH ALL JOBS &rarr;</a>
-                </div>
-            </section>
-        </div>
-
-        <div class="container">
-             <section class="how-it-works-tabs reveal-on-scroll" id="how-it-works">
-                <h2 style="text-align: center;">Simple, Fast, & Transparent</h2>
-                <div class="tabbed-section-container">
-                    <div class="tab-buttons">
-                        <button class="tab-button active" data-tab="for-candidates">For Candidates</button>
-                        <button class="tab-button" data-tab="for-employers">For Employers</button>
-                    </div>
-                    <div id="for-candidates" class="tab-content active"> 
-                        <div class="how-it-works-grid">
-                            <div class="how-it-works-step">
-                                <span class="step-number">1</span>
-                                <h4>Create Your Profile</h4>
-                                <p>Build your professional profile in minutes and upload your credentials one time.</p>
-                            </div>
-                            <div class="how-it-works-step">
-                                <span class="step-number">2</span>
-                                <h4>Get Matched</h4>
-                                <p>Our platform matches you with jobs that fit your skills, schedule, and career goals.</p>
-                            </div>
-                             <div class="how-it-works-step">
-                                <span class="step-number">3</span>
-                                <h4>Apply & Get Hired</h4>
-                                <p>Apply with one click and get hired by top facilities, faster than ever before.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="for-employers" class="tab-content"> 
-                         <div class="how-it-works-grid">
-                            <div class="how-it-works-step">
-                                <span class="step-number">1</span>
-                                <h4>Post Your Needs</h4>
-                                <p>Tell us what you're looking for—per-diem, contract, or full-time. We'll handle the rest.</p>
-                            </div>
-                            <div class="how-it-works-step">
-                                <span class="step-number">2</span>
-                                <h4>Review Top Talent</h4>
-                                <p>Instantly access our pool of pre-vetted, credentialed, and available professionals.</p>
-                            </div>
-                             <div class="how-it-works-step">
-                                <span class="step-number">3</span>
-                                <h4>Onboard Seamlessly</h4>
-                                <p>Fill shifts in minutes, not weeks. Our platform handles scheduling and time-tracking.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-
-        <div class="container">
-            <section class="specialties-tabs reveal-on-scroll" id="specialties">
-                <h2 style="text-align: center;">Explore Top Specialties</h2>
-                <div class="tabbed-section-container">
-                    <div class="tab-buttons">
-                        <button class="tab-button active" data-tab="nursing">Nursing</button>
-                        <button class="tab-button" data-tab="allied-health">Allied Health</button>
-                        <button class="tab-button" data-tab="physicians">Physicians & Locums</button>
-                    </div>
-                    <div id="nursing" class="tab-content active"> 
-                        <h3>Find Your Next Nursing Role</h3> 
-                        <ul class="service-list">
-                            <li>Registered Nurse (RN)</li>
-                            <li>Licensed Practical Nurse (LPN)</li>
-                            <li>Certified Nursing Assistant (CNA)</li>
-                            <li>Nurse Practitioner (NP)</li>
-                            <li>ICU / ER / OR Nurses</li>
-                            <li>Travel Nursing</li>
-                        </ul>
-                    </div>
-                    <div id="allied-health" class="tab-content"> 
-                        <h3>Explore Allied Health Careers</h3> 
-                         <ul class="service-list">
-                            <li>Radiologic Technologist</li>
-                            <li>Physical Therapist (PT)</li>
-                            <li>Occupational Therapist (OT)</li>
-                            <li>Lab Technician</li>
-                            <li>Respiratory Therapist</li>
-                            <li>Surgical Tech</li>
-                        </ul>
-                    </div>
-                    <div id="physicians" class="tab-content"> 
-                        <h3>Locum Tenens & Permanent Placement</h3> 
-                        <ul class="service-list">
-                            <li>Hospitalist</li>
-                            <li>Family Medicine (MD/DO)</li>
-                            <li>Internal Medicine</li>
-                            <li>Psychiatrist</li>
-                            <li>Physician Assistant (PA)</li>
-                            <li>Anesthesiologist</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-        </div>
-        
-        <div class="container">
-            <section class="success-stories reveal-on-scroll" id="testimonials">
-                <h2 style="text-align: center;">Real Stories, Real Results</h2>
-                <div class="success-stories-grid">
-                    <div class="testimonial-card">
-                        <div class="testimonial-card-header">
-                            <img src="https://images.pexels.com/photos/5215024/pexels-photo-5215024.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Anna Smith, RN">
-                            <div class="author-info">
-                                <h4>Anna Smith, RN</h4>
-                                <span>Travel Nurse</span>
-                            </div>
-                        </div>
-                        <blockquote class="testimonial-card-quote">
-                            "CygniHealth's platform is a game-changer. I uploaded my credentials once, and now I get alerts for my dream assignments. I got placed at a top hospital in two days. This is the future of nursing."
-                        </blockquote>
-                    </div>
-                    <div class="testimonial-card">
-                        <div class="testimonial-card-header">
-                            <img src="https://images.pexels.com/photos/5699475/pexels-photo-5699475.jpeg?auto=compress&cs=tinysrgb&w=600" alt="David Lee, Hiring Manager">
-                            <div class="author-info">
-                                <h4>David Lee</h4>
-                                <span>Talent Director, City Medical Center</span>
-                            </div>
-                        </div>
-                        <blockquote class="testimonial-card-quote">
-                            "We had an urgent need for 10 ICU nurses. CygniHealth delivered a list of fully-credentialed candidates in under 24 hours. We filled all roles within the week. They are our go-to partner."
-                        </blockquote>
-                    </div>
-                </div>
-            </section>
-        </div>
-        
-        <div class="container">
-             <section class="final-cta reveal-on-scroll" id="contact">
-                   <h2>Get Started Today</h2>
-                   <p class="section-description" style="color: var(--color-text-secondary); margin-bottom: 2rem;">Whether you're looking for your next role or your next all-star, we're ready to help.</p>
-                   <div class="final-cta-buttons">
-                       <a href="#featured-jobs" class="cta-button primary">START APPLYING</a>
-                       <a href="#how-it-works" class="cta-button secondary">REQUEST TALENT</a>
-                   </div>
-             </section>
-        </div>
-    </main>
-
-    <a href="#top" class="back-to-top" id="back-to-top-btn" aria-label="Scroll back to top">
-        &uarr; 
-    </a>
-
+    </div>
+    
+    <div class="cta-footer">
+        <a href="#contact" class="hero-cta">Engage Our Expertise</a>
+    </div>
 
     <script>
-        // --- Theme Toggle (Updated for Light Mode Default) ---
-        const toggleButton = document.getElementById('theme-toggle');
-        toggleButton.addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            document.body.classList.toggle('light-mode');
-            const isDarkMode = document.body.classList.contains('dark-mode');
-            toggleButton.textContent = isDarkMode ? '☀️' : '🌙';
-            toggleButton.setAttribute('aria-label', isDarkMode ? 'Toggle light mode' : 'Toggle dark mode');
-        });
-        toggleButton.setAttribute('aria-label', 'Toggle dark mode');
-
-
-        // --- Tabbed Section Logic (REUSED) ---
-        const allTabButtons = document.querySelectorAll('.tab-button');
-        const allTabContents = document.querySelectorAll('.tab-content');
-        
-        allTabButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const tabContainer = button.closest('.tabbed-section-container');
-                const tabTarget = button.getAttribute('data-tab');
-
-                tabContainer.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-                tabContainer.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-                
-                button.classList.add('active');
-                tabContainer.querySelector(`#${tabTarget}`).classList.add('active');
-            });
-        });
-
-        // --- Run startup functions when page is loaded ---
         document.addEventListener('DOMContentLoaded', () => {
-            setupHeroAnimations();
-            loadJobPostings();
-            setupScrollAnimations();
-            setupBackToTopButton(); 
+            const grid = document.getElementById('services-grid');
+            const cards = document.querySelectorAll('.service-card');
+            const details = document.querySelectorAll('.detail-content');
+            let scrollInterval;
+            const scrollSpeed = 0.5; 
+            const scrollDelay = 15; 
 
-            // --- RE-ENABLED Vanilla-Tilt for the new job cards ---
-            VanillaTilt.init(document.querySelectorAll("[data-tilt]"), {
-                max: 10,  // Softer tilt
-                speed: 400, 
-                glare: true, 
-                "max-glare": 0.2 // Subtle glare
+            // --- 1. SLIDER FUNCTIONALITY (Continuous Scroll) ---
+            const startScroll = () => {
+                if (scrollInterval) clearInterval(scrollInterval);
+                scrollInterval = setInterval(() => {
+                    if (grid.scrollLeft + grid.clientWidth >= grid.scrollWidth - 5) {
+                        grid.scrollLeft = 0; 
+                    } else {
+                        grid.scrollLeft += scrollSpeed;
+                    }
+                }, scrollDelay);
+            };
+            startScroll();
+
+            // --- 2. CLICK-TO-DETAIL FUNCTIONALITY (FIXED) ---
+            const activateCard = (card) => {
+                // 1. Deactivate ALL cards and hide ALL details immediately
+                cards.forEach(c => c.classList.remove('active-card'));
+                details.forEach(d => {
+                    d.classList.remove('show');
+                    d.style.transform = 'translateY(10px)'; // Prepare for fade out
+                    d.style.display = 'none'; // Ensure it doesn't overlap
+                });
+
+                // 2. Identify the target content
+                const detailId = card.getAttribute('data-service-id');
+                const detailContent = document.querySelector(`.detail-content[data-detail-id="${detailId}"]`);
+
+                if (detailContent) {
+                    // 3. Activate the new card
+                    card.classList.add('active-card');
+                    
+                    // 4. Reset display and force reflow (crucial for CSS animation reset)
+                    detailContent.style.display = 'block';
+                    void detailContent.offsetHeight; 
+                    
+                    // 5. Trigger the fade-in and transform
+                    detailContent.classList.add('show');
+                }
+            };
+            
+            // Set initial active state (first card)
+            if (cards.length > 0) {
+                activateCard(cards[0]);
+            }
+
+            // Add click listeners to all cards
+            cards.forEach(card => {
+                card.addEventListener('click', () => {
+                    activateCard(card);
+                    // Manually snap the clicked card into view when clicked
+                    card.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+                });
             });
         });
-
-        // --- Hero Animation Logic (NEW Interactive Split) ---
-        function setupHeroAnimations() {
-            // 1. Setup Particle Effect for LEFT Panel
-            const leftContainer = document.getElementById('particle-container-left');
-            if (leftContainer) {
-                createParticles(leftContainer, 30); // 30 particles
-            }
-            
-            // 2. Setup Particle Effect for RIGHT Panel
-            const rightContainer = document.getElementById('particle-container-right');
-            if (rightContainer) {
-                createParticles(rightContainer, 30); // 30 particles
-            }
-        }
-        
-        // Helper function to create particles
-        function createParticles(container, particleCount) {
-             for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('particle');
-                
-                const size = Math.random() * 3 + 1; 
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                particle.style.left = `${Math.random() * 100}%`; 
-                
-                const animationDelay = Math.random() * 20; 
-                particle.style.animationDelay = `${animationDelay}s`;
-                
-                const xDrift = (Math.random() - 0.5) * 200; 
-                particle.style.setProperty('--float-x', `${xDrift}px`);
-                
-                container.appendChild(particle);
-            }
-        }
-        
-        // --- UPDATED: "Featured Jobs" Logic (for new Attractive Cards) ---
-        function loadJobPostings() {
-            const jobData = [
-                { title: 'Registered Nurse (RN) - ICU', location: 'New York, NY', type: 'Travel Contract' },
-                { title: 'Physical Therapist (PT)', location: 'Remote (USA)', type: 'Full-Time Telehealth' },
-                { title: 'Medical Lab Technician', location: 'Boston, MA', type: 'Per-Diem' }
-            ];
-            // This is the new ID for the grid
-            const listingsGrid = document.getElementById('job-listings-grid'); 
-            if (!listingsGrid) return;
-            listingsGrid.innerHTML = ''; 
-            
-            jobData.forEach(job => {
-                // This is the new HTML for the attractive card
-                listingsGrid.innerHTML += `
-                    <div class="job-gallery-card" data-tilt>
-                        <h3>${job.title}</h3>
-                        <p>${job.location} • ${job.type}</p>
-                        <a href="#" class="job-card-button">Apply Now</a>
-                    </div>
-                `;
-            });
-
-            // We must re-init VanillaTilt *after* adding the new data-tilt elements
-            VanillaTilt.init(document.querySelectorAll("[data-tilt]"), {
-                max: 10,
-                speed: 400, 
-                glare: true, 
-                "max-glare": 0.2
-            });
-        }
-
-        // --- Scroll-Reveal Animation Logic (Same) ---
-        function setupScrollAnimations() {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, {
-                threshold: 0.05 
-            });
-
-            const elementsToReveal = document.querySelectorAll('.reveal-on-scroll');
-            elementsToReveal.forEach(el => observer.observe(el));
-        }
-
-        // --- Back to Top Button Logic (Same) ---
-        function setupBackToTopButton() {
-            const btn = document.getElementById('back-to-top-btn');
-            if (!btn) return;
-
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 400) {
-                    btn.classList.add('visible');
-                } else {
-                    btn.classList.remove('visible');
-                }
-            });
-        }
-
     </script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
 
 </body>
 </html>
