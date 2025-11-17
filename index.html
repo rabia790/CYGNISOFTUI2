@@ -178,14 +178,26 @@
 
 	/* --- IMPACT VISUALIZER (NEW PROGRESS BARS) --- */
 	.progress-list {
-		max-width: 700px;
-		margin: 40px auto;
+		/* REMOVED max-width and margin: auto to allow full left-alignment */
+		margin-top: 40px; 
+		margin-bottom: 40px;
 	}
 	.progress-item {
+		/* ADDED STYLES for the lift effect */
 		margin-bottom: 25px;
-		padding: 15px 0;
-		border-bottom: 1px solid var(--bg-secondary);
+		padding: 15px 20px;
+		border-radius: 8px;
+		background: var(--bg-primary);
+		box-shadow: 0 2px 5px var(--shadow-color);
+		transition: transform 0.3s, box-shadow 0.3s;
+		border-bottom: none; /* Replaced the simple border with a styled card */
 	}
+	/* NEW: Hover effect for 'lift' */
+	.progress-item:hover {
+		transform: translateY(-4px); /* Moves up slightly */
+		box-shadow: 0 8px 20px var(--shadow-color); /* Enhanced shadow */
+	}
+
 	.progress-header {
 		display: flex;
 		justify-content: space-between;
@@ -289,7 +301,7 @@
 	<!-- Impact Visualizer (NEW PROGRESS BARS) -->
 	<section class="section-padding">
 		<h2>We turn raw potential into real-world business outcomes.</h2>
-		<p style="text-align:center;">Our integrated approach has powered significant growth and innovation across these key performance indicators.</p>
+		<p>Our integrated approach has powered significant growth and innovation across these key performance indicators.</p>
 
 		<div class="progress-list">
 			
