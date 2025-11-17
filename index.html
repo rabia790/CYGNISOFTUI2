@@ -165,10 +165,8 @@
 		transition: background 0.4s;
 	}
 	
-	/* --- FIX APPLIED HERE: Removed border-right from .col-left --- */
 	.col-left { 
 		background: var(--bg-secondary); 
-		/* border-right:1px solid var(--text-secondary); <-- REMOVED */
 	} 
 	.col-right { background: var(--bg-primary); }
 	
@@ -178,45 +176,45 @@
 		.col-left { border-right:none; border-bottom:1px solid var(--text-secondary);} 
 	}
 
-	/* --- PIE CHART VISUALIZER --- */
-	.chart-container {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		gap: 50px;
-		max-width: 800px;
+	/* --- IMPACT VISUALIZER (NEW PROGRESS BARS) --- */
+	.progress-list {
+		max-width: 700px;
 		margin: 40px auto;
-		flex-wrap: wrap;
 	}
-	.pie-chart {
-		--chart-size: 200px;
-		--color-1: var(--accent-secondary);
-		--color-2: var(--accent-primary);
-		--progress: 82.35; /* default progress, can be overridden in HTML data-progress */
-		width: var(--chart-size);
-		height: var(--chart-size);
-		border-radius: 50%;
-		background: conic-gradient(
-			var(--color-1) 0%,
-			var(--color-1) calc(var(--progress) * 1%),
-			var(--color-2) calc(var(--progress) * 1%),
-			var(--color-2) 100%
-		);
-		box-shadow: 0 5px 15px var(--shadow-color);
-		transition: 0.5s;
+	.progress-item {
+		margin-bottom: 25px;
+		padding: 15px 0;
+		border-bottom: 1px solid var(--bg-secondary);
 	}
-	.pie-chart[data-progress] { --progress: attr(data-progress number); }
-
-	.chart-legend {
+	.progress-header {
 		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		gap: 10px;
-		font-size: 0.9em;
-		text-align: left;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 8px;
+		font-weight: 600;
 	}
-	.legend-item { display: flex; align-items: center; color: var(--text-primary); }
-	.legend-dot { width: 12px; height: 12px; border-radius: 3px; margin-right: 8px; display: inline-block; border: 1px solid var(--text-secondary); }
+	.progress-label {
+		color: var(--text-primary);
+		font-size: 1em;
+	}
+	.progress-value {
+		color: var(--accent-primary);
+		font-size: 1.2em;
+	}
+	.progress-bar {
+		width: 100%;
+		height: 8px;
+		background-color: var(--bg-secondary);
+		border-radius: 4px;
+		overflow: hidden;
+	}
+	.bar-fill {
+		height: 100%;
+		background: var(--accent-primary);
+		width: 0; /* Initial width for animation */
+		transition: width 1s ease-out; /* Animation effect */
+	}
+
 
 	/* --- CTA BUTTON --- */
 	.cta-button { display:inline-block; padding:10px 25px; background: var(--accent-primary); color: var(--bg-primary); border-radius:8px; font-weight:bold; text-decoration:none; margin-top:15px; transition:0.3s; }
@@ -288,16 +286,53 @@
 		</div>
 	</section>
 
-	<!-- Pie Chart Visualizer -->
-	<section id="impact-visualizer" class="section-padding">
+	<!-- Impact Visualizer (NEW PROGRESS BARS) -->
+	<section class="section-padding">
 		<h2>We turn raw potential into real-world business outcomes.</h2>
-		<p>Since 2014, our integrated approach has powered innovation globally.</p>
+		<p style="text-align:center;">Our integrated approach has powered significant growth and innovation across these key performance indicators.</p>
 
-		<div class="chart-container">
-			<div class="pie-chart" data-progress="82.35"></div>
-			<div class="chart-legend">
-				<div class="legend-item"><span class="legend-dot" style="background: var(--accent-secondary);"></span>82% Candidates Placed</div>
-				<div class="legend-item"><span class="legend-dot" style="background: var(--accent-primary);"></span>18% Software Projects</div>
+		<div class="progress-list">
+			
+			<div class="progress-item">
+				<div class="progress-header">
+					<span class="progress-label">Client Retention Rate</span>
+					<span class="progress-value">95%</span>
+				</div>
+				<div class="progress-bar" data-width="95%">
+					<div class="bar-fill"></div>
+				</div>
+			</div>
+
+			<div class="progress-item">
+				<div class="progress-header">
+					<span class="progress-label">Successful Candidate Placements</span>
+					<span class="progress-value">10,000+</span>
+				</div>
+				<!-- Using 100% fill for a major scaling metric -->
+				<div class="progress-bar" data-width="100%">
+					<div class="bar-fill"></div>
+				</div>
+			</div>
+
+			<div class="progress-item">
+				<div class="progress-header">
+					<span class="progress-label">Average Project Success Score</span>
+					<span class="progress-value">88%</span>
+				</div>
+				<div class="progress-bar" data-width="88%">
+					<div class="bar-fill"></div>
+				</div>
+			</div>
+
+			<div class="progress-item">
+				<div class="progress-header">
+					<span class="progress-label">Global Presence (Countries Served)</span>
+					<span class="progress-value">10+</span>
+				</div>
+				<!-- Using 80% to represent broad scope -->
+				<div class="progress-bar" data-width="80%">
+					<div class="bar-fill"></div>
+				</div>
 			</div>
 		</div>
 	</section>
@@ -349,6 +384,38 @@ document.addEventListener('DOMContentLoaded', () => {
 			card.style.setProperty('--mouse-y',`${e.clientY-rect.top}px`);
 		});
 	});
+
+	// --- NEW PROGRESS BAR ANIMATION LOGIC ---
+
+	// Function to check if an element is in the viewport
+	function isElementInViewport(el) {
+		const rect = el.getBoundingClientRect();
+		return (
+			rect.top >= 0 &&
+			rect.left >= 0 &&
+			// Check if the bottom of the element is above the bottom of the viewport (or slightly below)
+			rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) + 100 &&
+			rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+		);
+	}
+
+	// Function to animate the progress bars on scroll/load
+	function animateProgressBars() {
+		document.querySelectorAll('.progress-bar').forEach(bar => {
+			if (isElementInViewport(bar) && !bar.dataset.animated) {
+				const fill = bar.querySelector('.bar-fill');
+				const width = bar.getAttribute('data-width');
+				fill.style.width = width;
+				bar.dataset.animated = 'true';
+			}
+		});
+	}
+
+	// Attach to scroll and load events
+	window.addEventListener('scroll', animateProgressBars);
+	window.addEventListener('load', animateProgressBars);
+	// Call once on load to catch elements already in view
+	animateProgressBars();
 });
 </script>
 
