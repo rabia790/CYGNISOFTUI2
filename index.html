@@ -3,391 +3,578 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cygnisoft | Strategy & Solutions</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <title>Cygnisoft | Engineered Workforce Strategy</title>
+    <!-- Load Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Custom Tailwind configuration to define the new brand color
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-primary': '#f7941e', // The new primary color
+                        'brand-dark': '#e07a0d',    // Darker shade for hover/backgrounds
+                    },
+                    // We'll use slate-950 (deepest dark) for the main body/hero
+                    // and slate-900/800 for contrast sections.
+                },
+            }
+        }
+    </script>
+    <!-- Load Lucide Icons for modern, clean look -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* --- 1. CSS VARIABLES & THEMING --- */
+        /* Custom Tailwind Configuration and Base Styles */
         :root {
-            /* --- LIGHT MODE (Default: Orange & White) --- */
-            --bg-body: #ffffff;
-            --bg-section: #f8fafc;
-            --bg-card: #ffffff;
-            --text-primary: #0f172a;
-            --text-secondary: #334155;
-            --accent-orange: #f97316;
-            --accent-orange-hover: #ea580c;
-            --border-color: #e2e8f0;
-            --shadow: rgba(0, 0, 0, 0.1);
-            --hero-bg: var(--bg-section); 
-            --hero-text: var(--text-primary); 
-            --cta-bg: var(--accent-orange); 
+            /* Updated CSS variables using the new color for custom animations/elements */
+            --color-primary: #f7941e; 
+            --color-primary-dark: #e07a0d;
+            --color-light-card: #ffffff;
         }
 
-        /* --- DARK MODE OVERRIDES (Orange & Black) --- */
-        body.dark-mode {
-            --bg-body: #0f0f10;
-            --bg-section: #18181b;
-            --bg-card: #27272a;
-            --text-primary: #ffffff;
-            --text-secondary: #a1a1aa;
-            --accent-orange: #fb923c;
-            --accent-orange-hover: #f97316;
-            --border-color: #3f3f46;
-            --shadow: rgba(0, 0, 0, 0.5);
-            --hero-bg: #18181b; 
-            --hero-text: var(--text-primary); 
-            --cta-bg: #18181b;
+        /* --- 1. BASE & FONT SETUP --- */
+        html {
+            scroll-behavior: smooth;
         }
-
-        /* --- RESET & BASE STYLES --- */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-secondary);
-            line-height: 1.6;
-            transition: background-color 0.3s, color 0.3s;
+            font-family: "Inter", sans-serif;
+            transition: background-color 0.5s, color 0.5s;
         }
-        h1, h2, h3 { color: var(--text-primary); }
-
-        /* --- UTILITIES --- */
-        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
-        .btn { padding: 12px 24px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s; text-decoration: none; }
-        .btn-primary { background-color: var(--accent-orange); color: white; }
-        .btn-primary:hover { background-color: var(--accent-orange-hover); }
-
-        .btn-outline-orange { border: 2px solid var(--accent-orange); color: var(--accent-orange); background: transparent; }
-        .btn-outline-orange:hover { background: rgba(249, 115, 22, 0.05); }
-
-        .btn-white { background: white; color: var(--accent-orange); padding: 15px 30px; border-radius: 5px; text-decoration: none; font-weight: bold; display: inline-block; transition: 0.3s; }
-        body.dark-mode .btn-white { background: var(--accent-orange); color: white; }
-        .btn-white:hover { transform: translateY(-2px); box-shadow: 0 5px 15px var(--shadow); }
-
-
-        /* --- HEADER (UNCHANGED) --- */
-        header { background: var(--bg-body); box-shadow: 0 2px 10px var(--shadow); padding: 20px 0; position: sticky; top: 0; z-index: 100; transition: background-color 0.3s; }
-        nav { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 1.5rem; font-weight: 800; color: var(--text-primary); }
-        .logo span { color: var(--accent-orange); }
-        .theme-toggle { background: none; border: none; color: var(--text-primary); font-size: 1.2rem; cursor: pointer; margin-right: 20px; padding: 5px; }
-        .nav-actions { display: flex; align-items: center; }
-
-        /* ----------------------------------------------------- */
-        /* --- NEW DYNAMIC LAYOUT STYLES --- */
-        /* ----------------------------------------------------- */
-
-        /* Angled Top: Skews the top edge */
-        .angled-top {
-            clip-path: polygon(0 40px, 100% 0, 100% 100%, 0% 100%);
-            padding-top: 100px !important; /* Adjust padding to make room for the clip */
-            margin-top: -40px; /* Pulls the section up to interlock */
-            position: relative;
-            z-index: 1;
+        
+        /* --- 2. DYNAMIC BACKGROUND ANIMATION (Full Page Blobs - FIXED FOR LIGHT MODE) --- */
+        .dynamic-bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+            
+            /* FIX: Default opacity set to 0 (invisible) in light mode */
+            opacity: 0;
+            transition: opacity 0.5s;
         }
 
-        /* Angled Bottom: Skews the bottom edge */
-        .angled-bottom {
-            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 40px), 0% 100%);
-            padding-bottom: 100px !important; /* Adjust padding to make room for the clip */
-            margin-bottom: -40px; /* Pulls the section up to interlock */
-            position: relative;
-            z-index: 1;
+        .dark .dynamic-bg-container {
+            /* Only visible in dark mode */
+            opacity: 0.1;
+        }
+        
+        .dynamic-bg-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            animation: moveBlob 25s infinite alternate ease-in-out;
         }
 
-        /* --- COMPACT HERO (NEW STRATEGIC HEADLINE) --- */
-        .compact-hero { 
-            padding: 80px 0 60px; 
-            text-align: center; 
-            background: var(--hero-bg);
-            transition: background-color 0.3s;
-        }
-        .compact-hero h1 { 
-            color: var(--hero-text); 
-            font-size: 3rem; 
-            margin-bottom: 20px; 
-            line-height: 1.1;
-        }
-        .compact-hero p { 
-            color: var(--text-secondary); 
-            font-size: 1.2rem; 
-            max-width: 800px; 
-            margin: 0 auto 30px; 
+        /* Blob 1: Large, primary color (Uses CSS Variable) */
+        .blob-1 {
+            width: 400px;
+            height: 400px;
+            background-color: var(--color-primary);
+            top: -50px;
+            left: -50px;
+            animation-delay: 0s;
         }
 
-        /* --- PILLARS (TRUST-FIRST SECTION) --- */
-        .pillars { 
-            padding: 80px 0; /* Adjusted padding */
-            background: var(--bg-body);
-            transition: background-color 0.3s; 
+        /* Blob 2: Medium, secondary color */
+        .blob-2 {
+            width: 300px;
+            height: 300px;
+            background-color: #f0f4f7; 
+            bottom: -80px;
+            right: -80px;
+            animation-delay: 5s;
         }
-        .card-grid { display: flex; gap: 30px; flex-wrap: wrap; }
-        .card {
-            flex: 1;
-            min-width: 300px;
-            padding: 40px;
-            background: var(--bg-card);
-            border-bottom: 4px solid var(--accent-orange);
-            box-shadow: 0 10px 30px var(--shadow);
-            border-radius: 12px;
-            transition: transform 0.3s, background-color 0.3s, box-shadow 0.3s;
+        
+        /* Dark Mode colors for the blobs when they are visible */
+        .dark .blob-1 {
+            background-color: #fcd34d; /* Amber-300 */
         }
-        .card:hover { transform: translateY(-7px); }
-        .card i { font-size: 3rem; color: var(--accent-orange); margin-bottom: 25px; display: block; }
-        .card h3 { margin-bottom: 15px; font-size: 1.4rem; }
+        .dark .blob-2 {
+            background-color: #38bdf8; /* Sky-400 (Blue for contrast in dark mode) */
+        }
 
-        /* --- INTERACTIVE SECTOR TOGGLE --- */
-        .sector-section { 
-            background: var(--bg-section); 
-            padding: 100px 0; 
-            transition: background-color 0.3s;
-            z-index: 2; /* Ensure it overlaps the CTA if necessary */
+        @keyframes moveBlob {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+            33% {
+                transform: translate(30vw, 20vh) scale(1.1);
+            }
+            66% {
+                transform: translate(-10vw, -15vh) scale(0.9);
+            }
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
         }
-        .section-title { text-align: center; margin-bottom: 50px; }
-        .toggle-container { display: flex; justify-content: center; gap: 20px; margin-bottom: 40px; }
+        
+        /* --- 3. SECTOR TOGGLE STYLES (Interactive Focus) --- */
+        .sector-button-container {
+            display: flex;
+            background: rgba(255, 255, 255, 0.7); /* Light Mode Button Group BG */
+            backdrop-filter: blur(10px);
+            border-radius: 9999px;
+            padding: 4px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark .sector-button-container {
+            background: rgba(30, 41, 59, 0.7); /* Dark Mode Button Group BG (Slate-800) */
+        }
         
         .sector-btn {
-            background: transparent;
-            border: 2px solid var(--accent-orange);
-            color: var(--text-primary);
-            padding: 15px 30px;
-            font-size: 1.1rem;
-            border-radius: 30px;
-            transition: 0.3s;
+            flex: 1;
+            padding: 10px 20px;
+            border-radius: 9999px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #334155; /* slate-700 */
+            background-color: transparent;
+        }
+        .dark .sector-btn {
+            color: #d1d5db; /* gray-300 */
+        }
+
+        .sector-btn.active {
+            color: white;
+            background-color: var(--color-primary); /* Uses CSS Variable */
+            box-shadow: 0 2px 8px rgba(247, 148, 30, 0.5); /* Updated Shadow using new hex */
+            transform: scale(1.02);
+        }
+
+        /* --- 4. KINETIC STRATEGY MESH (HERO SECTION RIGHT COLUMN) --- */
+        .kinetic-mesh {
+            position: relative;
+            width: 100%; 
+            height: 100%; 
+            aspect-ratio: 1 / 1;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* Removed color property as image background/text defines color */
+            transform-style: preserve-3d; 
         }
         
-        .sector-btn.active {
-            background: var(--accent-orange);
-            color: white;
-            box-shadow: 0 4px 15px var(--shadow);
+        .kinetic-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 1; /* Increased from 0.15 to 1 for full clarity */
+            transition: color 0.5s;
+            /* Adding a professional blue shadow */
+            filter: drop-shadow(0 8px 15px rgba(59, 130, 246, 0.5)); 
+        }
+        
+        /* Animation Definitions - USING WIDTH/HEIGHT FOR IMAGES TO MAKE THEM HUGE (Frames) */
+
+        /* Slow, steady background spin (Network) */
+        .kinetic-icon.spin-1 {
+            width: 550px; /* MASSIVE width for full banner visual (REDUCED SIZE) */
+            height: 550px; /* MASSIVE height for full banner visual (REDUCED SIZE) */
+            opacity: 0.5; /* Increased from 0.08 to 0.5 for clearer background element */
+            animation: slowSpin 30s linear infinite; 
         }
 
-        .sector-content { display: none; animation: fadeIn 0.5s; }
-        .sector-content.active { display: flex; gap: 50px; align-items: center; flex-wrap: wrap; }
-
-        .content-text { flex: 1; min-width: 300px; }
-        .content-text h3 { font-size: 2rem; margin-bottom: 20px; }
-        .content-text ul { list-style: none; margin-top: 20px; }
-        .content-text ul li { margin-bottom: 15px; padding-left: 30px; position: relative; }
-        .content-text ul li::before { content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900; color: var(--accent-orange); position: absolute; left: 0; top: 2px; }
-
-        .content-visual { 
-            flex: 1; 
-            min-width: 300px; 
-            background: var(--bg-body); 
-            height: 350px; 
-            border-radius: 15px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            border: 2px dashed var(--border-color);
-            transition: background-color 0.3s, border-color 0.3s;
+        /* Complex Tumble 1: CPU, slower */
+        .kinetic-icon.cpu-image { 
+            width: 450px; /* HUGE (REDUCED SIZE) */
+            height: 450px;
+            animation: tumble 40s linear infinite; 
         }
-        .content-visual i { font-size: 6rem; color: var(--accent-orange); opacity: 0.5; }
-
-        /* --- CTA (UNCHANGED) --- */
-        .cta-banner { 
-            background: var(--cta-bg); 
-            color: white; 
-            text-align: center; 
-            padding: 80px 0; 
-            transition: background-color 0.3s;
-            z-index: 0; /* Lower z-index so the section above can overlap */
+        
+        /* Complex Tumble 2: Briefcase, faster and reversed direction */
+        .kinetic-icon.briefcase-image { 
+            width: 350px; /* VERY LARGE (REDUCED SIZE) */
+            height: 350px;
+            opacity: 1; /* Increased from 0.8 to 1 for full clarity */
+            animation: tumble 30s reverse linear infinite; 
+            animation-delay: 5s; 
         }
-        .cta-banner h2 { color: white; margin-bottom: 20px; font-size: 2.5rem; }
-        body.dark-mode .cta-banner h2 { color: var(--accent-orange); }
-        .cta-banner p { color: rgba(255,255,255,0.9); font-size: 1.2rem; margin-bottom: 40px; }
-
-        /* --- FOOTER (UNCHANGED) --- */
-        footer { 
-            background: var(--bg-body); 
-            padding: 40px 0; 
-            text-align: center; 
-            color: var(--text-secondary); 
-            border-top: 1px solid var(--border-color); 
-            transition: background-color 0.3s; 
+        
+        /* Center element with pulse/translation (Trending Up) */
+        .kinetic-icon.pulse-image { 
+            opacity: 1;
+            width: 300px; /* LARGE (REDUCED SIZE) */
+            height: 300px;
+            animation: pulse 4s ease-in-out infinite alternate; 
+        }
+        
+        /* New Tumble Animation for complex movement */
+        @keyframes tumble {
+            0% { transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg); }
+            25% { transform: translate3d(50px, -50px, 100px) rotateX(90deg) rotateY(45deg); }
+            50% { transform: translate3d(-50px, 50px, -50px) rotateX(180deg) rotateY(180deg); }
+            75% { transform: translate3d(20px, 0, 50px) rotateX(270deg) rotateY(225deg); }
+            100% { transform: translate3d(0, 0, 0) rotateX(360deg) rotateY(360deg); }
         }
 
-        /* --- MEDIA QUERIES --- */
-        @media(max-width: 768px) {
-            .compact-hero h1 { font-size: 2rem; }
-            .card-grid, .sector-content.active { flex-direction: column; }
-            .toggle-container { flex-direction: column; }
-            .sector-btn { width: 100%; }
-            /* Reduce angular effect on small screens for better readability */
-            .angled-top, .angled-bottom {
-                clip-path: none;
-                padding-top: 40px !important;
-                padding-bottom: 40px !important;
-                margin-top: 0;
-                margin-bottom: 0;
+        @keyframes slowSpin {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            from { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+            to { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+        }
+
+        /* Responsive adjustments for the Hero section */
+        @media (max-width: 768px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .hero-content {
+                order: 2; /* Move content below the visual on mobile */
+                margin-top: 40px;
+            }
+            .hero-visual {
+                order: 1;
+            }
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            .kinetic-mesh {
+                width: 350px; /* Larger on mobile */
+                height: 350px; /* Larger on mobile */
             }
         }
+
     </style>
 </head>
-<body>
 
-    <header>
-        <div class="container">
-            <nav>
-                <div class="logo">Cygnisoft<span>.</span></div>
-                <div class="nav-actions">
-                    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle Dark Mode">
-                        <i class="fas fa-moon"></i>
+<body class="min-h-screen bg-white dark:bg-slate-950">
+    <!-- Dynamic Background Container (Full Page Blobs) -->
+    <div class="dynamic-bg-container pointer-events-none">
+        <div class="dynamic-bg-blob blob-1"></div>
+        <div class="dynamic-bg-blob blob-2"></div>
+    </div>
+    
+    <!-- Main Content Wrapper (z-index 10 to overlap dynamic background) -->
+    <div class="relative z-10">
+
+        <!-- Header: White/90 in Light Mode, Slate-950/90 in Dark Mode -->
+        <header class="sticky top-0 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md shadow-lg z-50 transition-colors duration-500">
+            <div class="container mx-auto px-4 sm:px-8 py-4 flex justify-between items-center">
+                <div class="text-2xl font-extrabold text-slate-900 dark:text-white">
+                    Cygnisoft<span class="text-brand-primary">.</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-gray-300 transition">
+                        <i data-lucide="sun-moon" class="w-6 h-6"></i>
                     </button>
-                    <a href="#contact" class="btn btn-primary">Contact Us</a>
-                </div>
-            </nav>
-        </div>
-    </header>
-
-    <section id="pillars" class="pillars angled-bottom">
-        <div class="container">
-            <div class="section-title">
-                <h2>Why Clients Choose Us: The 3 Pillars of Speed and Reliability</h2>
-            </div>
-            <div class="card-grid">
-                <div class="card">
-                    <i class="fas fa-shield-alt"></i>
-                    <h3>Zero-Risk Vetting</h3>
-                    <p>Precision is our process. Whether checking a Nurse's credentials or a Dev's security protocol, we use a 7-point "Universal Quality Framework" to eliminate risk.</p>
-                </div>
-                <div class="card">
-                    <i class="fas fa-stopwatch"></i>
-                    <h3>The Ready-Now Ecosystem</h3>
-                    <p>Agility through preparation. We maintain a warm bench of pre-vetted talent, allowing us to deploy teams in 24 hours, not 24 days.</p>
-                </div>
-                <div class="card">
-                    <i class="fas fa-handshake"></i>
-                    <h3>Embedded Partnership</h3>
-                    <p>We don't just fill orders; we analyze your workflow. We help you forecast staffing gaps before they become emergencies.</p>
+                    <a href="#contact" class="px-5 py-2 text-sm font-semibold rounded-full bg-brand-primary hover:bg-brand-dark text-white transition duration-300 shadow-md shadow-brand-primary/50">
+                        Get Started
+                    </a>
                 </div>
             </div>
-        </div>
-    </section>
+        </header>
 
-    <section class="compact-hero">
-        <div class="container">
-            <h1>Beyond Staffing: Engineered Workforce Strategy.</h1>
-            <p>Don't just react to gaps—predict and dominate them. We embed long-term strategic support into your operations, ensuring sustained **talent security and seamless rapid scaling**.</p>
-            <div style="margin-top: 30px;">
-                 <a href="#contact" class="btn btn-primary" style="margin-right: 10px;">Build a Future-Proof Team</a>
-                 <a href="#sectors" class="btn btn-outline-orange">See Our Solutions</a>
-            </div>
-        </div>
-    </section>
+        <!-- Dynamic Hero Section: Two Columns with Kinetic Element -->
+        <section class="relative pt-5 pb-28 overflow-hidden bg-white dark:bg-slate-950 transition-colors duration-500">
+            
+            <div class="container mx-auto px-4 sm:px-8 relative z-20">
+                <!-- Grid Container for Two Columns (hero-grid for media query target) -->
+                <div class="hero-grid grid md:grid-cols-2 gap-12 items-center">
+                    
+                    <!-- Left Column: Content -->
+                    <div class="hero-content text-left">
+                        <h1 class="text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-6 leading-tight transition-colors duration-500 md:text-5xl lg:text-6xl">
+                            Engineered Workforce Strategy.
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-red-500 block mt-2">
+                                Talent Security, Rapid Scaling.
+                            </span>
+                        </h1>
+                        <p class="text-xl text-slate-600 dark:text-slate-400 mb-4 transition-colors duration-500">
+                            Don't just react to gaps—predict and dominate them. We embed long-term strategic support into your operations for sustained success.
+                        </p>
+                        <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                            <a href="#sectors" class="px-8 py-3 text-lg font-bold rounded-lg bg-brand-primary hover:bg-brand-dark text-white transition duration-300 transform hover:scale-105 shadow-xl shadow-brand-primary/40">
+                                Explore Solutions
+                            </a>
+                            <a href="#pillars" class="px-8 py-3 text-lg font-bold rounded-lg border-2 border-brand-primary text-brand-primary hover:bg-brand-primary/10 transition duration-300 transform hover:scale-105">
+                                Our Pillars
+                            </a>
+                        </div>
+                    </div>
 
+                    <!-- Right Column: Kinetic Visual - Now using Placeholder Images/Frames with Blue Labels -->
+                    <div class="hero-visual flex justify-center py-10 md:min-h-[700px]">
+                        <div class="kinetic-mesh">
+                            <!-- Outer, slow rotating image (Network) - Dark Blue Frame with Bright Blue Label -->
+                            <!-- Background color #1e293b is slate-900 equivalent, Text color #3b82f6 is blue-500 equivalent -->
+                            <img src="https://placehold.co/800x800/1e293b/3b82f6?text=SCHEMA" 
+                                 class="kinetic-icon spin-1" 
+                                 alt="Network Schema Placeholder"
+                                 onerror="this.style.display='none'">
+                            
+                            <!-- Complex Tumble 1: CPU, slower - Dark Blue Frame with Bright Blue Label -->
+                            <img src="https://placehold.co/600x600/1e293b/3b82f6?text=VETTING" 
+                                 class="kinetic-icon cpu-image" 
+                                 alt="CPU Chip Placeholder"
+                                 onerror="this.style.display='none'">
+                            
+                            <!-- Complex Tumble 2: Briefcase, faster and reversed direction - Dark Blue Frame with Bright Blue Label -->
+                            <img src="https://placehold.co/500x500/1e293b/3b82f6?text=TALENT" 
+                                 class="kinetic-icon briefcase-image" 
+                                 alt="Talent Briefcase Placeholder"
+                                 onerror="this.style.display='none'">
+                            
+                            <!-- Center element with pulse/translation (Trending Up) - Dynamic Label -->
+                            <img src="https://placehold.co/400x400/1e293b/3b82f6?text=SCALING" 
+                                 class="kinetic-icon pulse-image" 
+                                 id="dynamic-pulse-image"
+                                 alt="Dynamic Strategic Placeholder"
+                                 onerror="this.style.display='none'">
+                        </div>
+                    </div>
 
-    <section id="sectors" class="sector-section angled-top angled-bottom">
-        <div class="container">
-            <div class="section-title">
-                <h2>Our Dual Expertise: Specialized Strategies</h2>
-                <p>Click to explore how the "Reliability at Speed" framework is applied to your sector.</p>
-            </div>
-
-            <div class="toggle-container">
-                <button class="btn sector-btn active" data-target="it-content">IT & Projects</button>
-                <button class="btn sector-btn" data-target="health-content">Healthcare Staffing</button>
-            </div>
-
-            <div id="it-content" class="sector-content active">
-                <div class="content-text">
-                    <h3>IT Staffing & Development</h3>
-                    <p>We don't just find resumes; we build teams. Our internal development background allows us to technically vet candidates better than any generalist agency.</p>
-                    <ul>
-                        <li>**Project Services:** Full-cycle development (Dynamics 365, Mobile Apps).</li>
-                        <li>**Technical Vetting:** Code reviews done by senior devs.</li>
-                        <li>**Agile Deployment:** Teams capable of integrating into your Sprints immediately.</li>
-                    </ul>
                 </div>
-                <div class="content-visual">
-                    <i class="fas fa-laptop-code"></i>
+            </div>
+        </section>
+
+        <!-- Pillars Section: Pure White (bg-white) in Light Mode, Slate-800 Dark Mode. All cards are also bg-white in light mode. -->
+        <section id="pillars" class="py-20 bg-white dark:bg-slate-800 transition-colors duration-500">
+            <div class="container mx-auto px-4 sm:px-8">
+                <h2 class="text-4xl font-bold text-center text-slate-900 dark:text-white mb-16">
+                    The 3 Pillars of Speed and Reliability
+                </h2>
+                
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Card 1: Pure White Card -->
+                    <div class="p-8 bg-white dark:bg-slate-900 rounded-xl shadow-2xl border-b-4 border-brand-primary hover:shadow-brand-primary/20 transform hover:-translate-y-2 transition duration-300">
+                        <i data-lucide="shield-check" class="w-10 h-10 text-brand-primary mb-4"></i>
+                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-3">Zero-Risk Vetting</h3>
+                        <p class="text-slate-600 dark:text-slate-400">Precision is our process. We use a 7-point "Universal Quality Framework" to eliminate risk and ensure every deployment is battle-tested.</p>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="p-8 bg-white dark:bg-slate-900 rounded-xl shadow-2xl border-b-4 border-brand-primary hover:shadow-brand-primary/20 transform hover:-translate-y-2 transition duration-300">
+                        <i data-lucide="zap" class="w-10 h-10 text-brand-primary mb-4"></i>
+                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-3">Ready-Now Ecosystem</h3>
+                        <p class="text-slate-600 dark:text-slate-400">Agility through preparation. We maintain a warm bench of pre-vetted talent, deploying teams in 24 hours, not 24 days.</p>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="p-8 bg-white dark:bg-slate-900 rounded-xl shadow-2xl border-b-4 border-brand-primary hover:shadow-brand-primary/20 transform hover:-translate-y-2 transition duration-300">
+                        <i data-lucide="users-2" class="w-10 h-10 text-brand-primary mb-4"></i>
+                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-3">Embedded Partnership</h3>
+                        <p class="text-slate-600 dark:text-slate-400">We don't just fill orders; we analyze your workflow to help you forecast staffing gaps before they become critical emergencies.</p>
+                    </div>
                 </div>
             </div>
+        </section>
 
-            <div id="health-content" class="sector-content">
-                <div class="content-text">
-                    <h3>Healthcare Staffing</h3>
-                    <p>Compassion meets Compliance. We understand that in healthcare, a placement isn't just a worker; it's a caregiver. We prioritize safety and empathy.</p>
-                    <ul>
-                        <li>**Clinical Staffing:** RNs, RPNs, and PSWs ready for dispatch.</li>
-                        <li>**Compliance Shield:** Rigorous credential checks and immunization verification.</li>
-                        <li>**Continuity of Care:** Ensuring staff integrate smoothly into your ward's culture.</li>
-                    </ul>
+        <!-- Interactive Sector Section: Pure White in Light Mode, Slate-900 Dark Mode -->
+        <section id="sectors" class="py-24 bg-white dark:bg-slate-900 transition-colors duration-500">
+            <div class="container mx-auto px-4 sm:px-8">
+                <h2 class="text-4xl font-bold text-center text-slate-900 dark:text-white mb-12">
+                    Our Dual Expertise: Specialized Strategies
+                </h2>
+                
+                <!-- Toggle Buttons -->
+                <div class="flex justify-center mb-10">
+                    <div class="sector-button-container">
+                        <button class="sector-btn active" data-target="it-content">
+                            IT & Project Services
+                        </button>
+                        <button class="sector-btn" data-target="health-content">
+                            Healthcare Staffing
+                        </button>
+                    </div>
                 </div>
-                <div class="content-visual">
-                    <i class="fas fa-user-nurse"></i>
+                
+                <!-- Content Area: Pure White Content Box in Light Mode, Slate-950 Dark Mode -->
+                <div class="bg-white dark:bg-slate-950 p-8 md:p-12 rounded-2xl shadow-2xl shadow-slate-300/50 dark:shadow-slate-950/70">
+                    <!-- IT Content -->
+                    <div id="it-content" class="sector-content grid md:grid-cols-2 gap-10 active">
+                        <div class="content-text">
+                            <h3 class="text-3xl font-bold text-slate-900 dark:text-white mb-4">
+                                Strategic IT Staffing & Development
+                            </h3>
+                            <p class="text-lg text-slate-600 dark:text-slate-400 mb-6">
+                                We're developers first, recruiters second. Our internal expertise allows us to technically vet candidates deeper than any generalist agency, ensuring code-ready talent.
+                            </p>
+                            <ul class="space-y-4">
+                                <li class="flex items-start">
+                                    <i data-lucide="check-circle" class="w-5 h-5 text-brand-primary mt-1 mr-3 flex-shrink-0"></i>
+                                    <span class="text-slate-700 dark:text-slate-300">
+                                        **Project Services:** Full-cycle development for complex platforms (Dynamics 365, Mobile, Cloud).
+                                    </span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i data-lucide="check-circle" class="w-5 h-5 text-brand-primary mt-1 mr-3 flex-shrink-0"></i>
+                                    <span class="text-slate-700 dark:text-slate-300">
+                                        **Expert Technical Vetting:** Senior engineers perform code reviews and architecture assessments, not HR.
+                                    </span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i data-lucide="check-circle" class="w-5 h-5 text-brand-primary mt-1 mr-3 flex-shrink-0"></i>
+                                    <span class="text-slate-700 dark:text-slate-300">
+                                        **Agile Deployment:** Teams capable of integrating into your existing CI/CD pipelines and Sprint cycles immediately.
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Inner Visual Box: Pure White for visual separation in light mode -->
+                        <div class="flex items-center justify-center bg-white dark:bg-slate-800 rounded-xl p-6">
+                            <i data-lucide="laptop-2" class="w-24 h-24 text-brand-primary opacity-70"></i>
+                        </div>
+                    </div>
+
+                    <!-- Healthcare Content -->
+                    <div id="health-content" class="sector-content grid md:grid-cols-2 gap-10">
+                        <div class="content-text">
+                            <h3 class="text-3xl font-bold text-slate-900 dark:text-white mb-4">
+                                Compassionate Healthcare Staffing
+                            </h3>
+                            <p class="text-lg text-slate-600 dark:text-slate-400 mb-6">
+                                Quality care requires quality people. We prioritize empathy, safety, and strict compliance when placing clinical staff across your organization.
+                            </p>
+                            <ul class="space-y-4">
+                                <li class="flex items-start">
+                                    <i data-lucide="check-circle" class="w-5 h-5 text-brand-primary mt-1 mr-3 flex-shrink-0"></i>
+                                    <span class="text-slate-700 dark:text-slate-300">
+                                        **Clinical Staffing:** Immediate dispatch of pre-vetted RNs, RPNs, PSWs, and specialized support staff.
+                                    </span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i data-lucide="check-circle" class="w-5 h-5 text-brand-primary mt-1 mr-3 flex-shrink-0"></i>
+                                    <span class="text-slate-700 dark:text-slate-300">
+                                        **Full Compliance Shield:** Rigorous credentialing, background checks, and immunization verification handled 100%.
+                                    </span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i data-lucide="check-circle" class="w-5 h-5 text-brand-primary mt-1 mr-3 flex-shrink-0"></i>
+                                    <span class="text-slate-700 dark:text-slate-300">
+                                        **Continuity of Care:** Focusing on staff that quickly integrate into your ward's culture for seamless patient support.
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Inner Visual Box: Pure White for visual separation in light mode -->
+                        <div class="flex items-center justify-center bg-white dark:bg-slate-800 rounded-xl p-6">
+                            <i data-lucide="nurse" class="w-24 h-24 text-brand-primary opacity-70"></i>
+                        </div>
+                    </div>
                 </div>
+
             </div>
+        </section>
 
-        </div>
-    </section>
+        <!-- CTA Banner: Pure White (bg-white) in Light Mode, Slate-800 Dark Mode -->
+        <section id="contact" class="py-20 bg-white dark:bg-slate-800 transition-colors duration-500">
+            <div class="container mx-auto px-4 sm:px-8 text-center">
+                <h2 class="text-4xl font-bold text-slate-900 dark:text-white mb-4">
+                    Ready to scale with confidence?
+                </h2>
+                <p class="text-xl text-slate-600 dark:text-slate-300 mb-8">
+                    Tell us your gap – We’ll find the engineered fit.
+                </p>
+                <a href="#" class="px-10 py-4 text-lg font-extrabold rounded-full bg-brand-primary text-white dark:bg-brand-primary dark:text-white hover:bg-brand-dark transition duration-300 transform hover:scale-105 shadow-2xl shadow-brand-primary/40">
+                    Schedule Your Strategic Consultation
+                </a>
+            </div>
+        </section>
 
-    <section id="contact" class="cta-banner">
-        <div class="container">
-            <h2>Ready to optimize your workforce?</h2>
-            <p>Tell us your gap – We’ll find the fit.</p>
-            <a href="#" class="btn-white">Schedule Consultation</a>
-        </div>
-    </section>
+        <!-- Footer: Pure White in Light Mode, Slate-950 Dark Mode -->
+        <footer class="py-8 bg-white dark:bg-slate-950 transition-colors duration-500">
+            <div class="container mx-auto px-4 sm:px-8 text-center text-sm text-slate-500 dark:text-slate-400">
+                <p>&copy; 2025 Cygnisoft Inc. All rights reserved. | Workforce Strategy Redefined.</p>
+            </div>
+        </footer>
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 Cygnisoft Inc. All rights reserved.</p>
-        </div>
-    </footer>
+    </div> <!-- End Main Content Wrapper -->
 
     <script>
-        $(document).ready(function(){
-            // --- 1. Theme Toggle Logic ---
-            const themeToggleBtn = $('#theme-toggle');
-            const themeIcon = themeToggleBtn.find('i');
-            const body = $('body');
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- 1. Theme Toggle Logic (Fixed and Cleaned up) ---
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const htmlElement = document.documentElement;
 
-            // Check for saved user preference on load
-            const currentTheme = localStorage.getItem('theme');
-            if (currentTheme === 'dark') {
-                body.addClass('dark-mode');
-                themeIcon.removeClass('fa-moon').addClass('fa-sun');
+            // Function to apply theme and re-render icons
+            function applyTheme(theme) {
+                if (theme === 'dark') {
+                    htmlElement.classList.add('dark');
+                    localStorage.theme = 'dark';
+                } else {
+                    htmlElement.classList.remove('dark');
+                    localStorage.theme = 'light';
+                }
+                // Re-render lucide icons to pick up new colors based on the theme
+                lucide.createIcons(); 
             }
 
+            // Check for saved user preference or system preference on load
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const initialTheme = localStorage.theme === 'dark' || (!('theme' in localStorage) && prefersDark) ? 'dark' : 'light';
+            
+            applyTheme(initialTheme); // Apply initial theme & render icons
+
             // Handle button click
-            themeToggleBtn.on('click', function() {
-                body.toggleClass('dark-mode');
+            themeToggleBtn.addEventListener('click', function() {
+                const currentTheme = htmlElement.classList.contains('dark') ? 'dark' : 'light';
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                applyTheme(newTheme);
+            });
+
+
+            // --- 2. Sector Toggle Logic (Vanilla JS for speed) ---
+            const sectorButtons = document.querySelectorAll('.sector-btn');
+            const sectorContents = document.querySelectorAll('.sector-content');
+
+            // Initial setup for sector content visibility
+            // Hide all initially
+            sectorContents.forEach(content => content.style.display = 'none');
+            // Show the default active one
+            const activeContent = document.querySelector('.sector-content.active');
+            if (activeContent) {
+                activeContent.style.display = 'grid';
+            }
+            
+            sectorButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+
+                    // Deactivate all buttons and hide all content
+                    sectorButtons.forEach(btn => btn.classList.remove('active'));
+                    sectorContents.forEach(content => {
+                        content.classList.remove('active');
+                        content.style.display = 'none';
+                    });
+
+                    // Activate clicked button and show target content
+                    this.classList.add('active');
+                    const targetContent = document.getElementById(targetId);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                        targetContent.style.display = 'grid'; // Ensure it uses the grid layout
+                    }
+                });
+            });
+
+            // --- 3. Dynamic Text Rotation for Pulse Image ---
+            const dynamicLabels = ["SCHEMA", "VETTING", "TALENT", "SCALING"];
+            let currentLabelIndex = 0;
+            const pulseImage = document.getElementById('dynamic-pulse-image');
+            const baseUrl = "https://placehold.co/400x400/1e293b/3b82f6?text=";
+
+            function updatePulseText() {
+                // Cycle to the next label
+                currentLabelIndex = (currentLabelIndex + 1) % dynamicLabels.length;
+                const newText = dynamicLabels[currentLabelIndex];
                 
-                // Switch Icon & Save Preference
-                if (body.hasClass('dark-mode')) {
-                    themeIcon.removeClass('fa-moon').addClass('fa-sun');
-                    localStorage.setItem('theme', 'dark');
-                } else {
-                    themeIcon.removeClass('fa-sun').addClass('fa-moon');
-                    localStorage.setItem('theme', 'light');
-                }
-            });
+                // Update the image source
+                pulseImage.src = baseUrl + newText;
+            }
 
-
-            // --- 2. Sector Toggle Logic (Functionality is unchanged) ---
-            $('.sector-btn').click(function(){
-                $('.sector-btn').removeClass('active');
-                $(this).addClass('active');
-                var targetId = $(this).data('target');
-                $('.sector-content').removeClass('active').hide();
-                $('#' + targetId).addClass('active').fadeIn(400);
-            });
-
-            // Smooth Scroll (Existing Code)
-            $('a[href^="#"]').on('click', function(event) {
-                var target = $(this.getAttribute('href'));
-                if( target.length ) {
-                    event.preventDefault();
-                    $('html, body').stop().animate({
-                        scrollTop: target.offset().top - 80
-                    }, 800);
-                }
-            });
+            // Start the rotation every 3 seconds
+            setInterval(updatePulseText, 3000);
         });
     </script>
-
 </body>
 </html>
