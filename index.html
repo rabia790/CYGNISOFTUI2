@@ -1,579 +1,506 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cygnisoft | Engineered Workforce Strategy</title>
-    <!-- Load Tailwind CSS via CDN -->
+    <title>CygniSoft Resume Parser - Free Online Tool</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        // Custom Tailwind configuration to define the new brand color
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: {
-                        'brand-primary': '#f7941e', // The new primary color
-                        'brand-dark': '#e07a0d',    // Darker shade for hover/backgrounds
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
                     },
-                    // We'll use slate-950 (deepest dark) for the main body/hero
-                    // and slate-900/800 for contrast sections.
-                },
+                    colors: {
+                        brand: {
+                            orange: '#f7941e',
+                            dark: '#0f172a', // Slate 900
+                            light: '#f8fafc', // Slate 50
+                            gray: '#334155', // Slate 700
+                        }
+                    },
+                    animation: {
+                        'blob': 'blob 7s infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'scan': 'scan 3s linear infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        scan: {
+                            '0%': { top: '0%' },
+                            '50%': { top: '100%' },
+                            '100%': { top: '0%' },
+                        }
+                    }
+                }
             }
         }
     </script>
-    <!-- Load Lucide Icons for modern, clean look -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+
     <style>
-        /* Custom Tailwind Configuration and Base Styles */
-        :root {
-            /* Updated CSS variables using the new color for custom animations/elements */
-            --color-primary: #f7941e; 
-            --color-primary-dark: #e07a0d;
-            --color-light-card: #ffffff;
+        /* Custom Utilities */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
         }
 
-        /* --- 1. BASE & FONT SETUP --- */
-        html {
-            scroll-behavior: smooth;
-        }
-        body {
-            font-family: "Inter", sans-serif;
-            transition: background-color 0.5s, color 0.5s;
-        }
-        
-        /* --- 2. DYNAMIC BACKGROUND ANIMATION (Full Page Blobs - FIXED FOR LIGHT MODE) --- */
-        .dynamic-bg-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: 0;
-            
-            /* FIX: Default opacity set to 0 (invisible) in light mode */
+        /* Scroll Animation Setup */
+        .reveal {
             opacity: 0;
-            transition: opacity 0.5s;
-        }
-
-        .dark .dynamic-bg-container {
-            /* Only visible in dark mode */
-            opacity: 0.1;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
         }
         
-        .dynamic-bg-blob {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            animation: moveBlob 25s infinite alternate ease-in-out;
-        }
-
-        /* Blob 1: Large, primary color (Uses CSS Variable) */
-        .blob-1 {
-            width: 400px;
-            height: 400px;
-            background-color: var(--color-primary);
-            top: -50px;
-            left: -50px;
-            animation-delay: 0s;
-        }
-
-        /* Blob 2: Medium, secondary color */
-        .blob-2 {
-            width: 300px;
-            height: 300px;
-            background-color: #f0f4f7; 
-            bottom: -80px;
-            right: -80px;
-            animation-delay: 5s;
-        }
-        
-        /* Dark Mode colors for the blobs when they are visible */
-        .dark .blob-1 {
-            background-color: #fcd34d; /* Amber-300 */
-        }
-        .dark .blob-2 {
-            background-color: #38bdf8; /* Sky-400 (Blue for contrast in dark mode) */
-        }
-
-        @keyframes moveBlob {
-            0% {
-                transform: translate(0, 0) scale(1);
-            }
-            33% {
-                transform: translate(30vw, 20vh) scale(1.1);
-            }
-            66% {
-                transform: translate(-10vw, -15vh) scale(0.9);
-            }
-            100% {
-                transform: translate(0, 0) scale(1);
-            }
-        }
-        
-        /* --- 3. SECTOR TOGGLE STYLES (Interactive Focus) --- */
-        .sector-button-container {
-            display: flex;
-            background: rgba(255, 255, 255, 0.7); /* Light Mode Button Group BG */
-            backdrop-filter: blur(10px);
-            border-radius: 9999px;
-            padding: 4px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .dark .sector-button-container {
-            background: rgba(30, 41, 59, 0.7); /* Dark Mode Button Group BG (Slate-800) */
-        }
-        
-        .sector-btn {
-            flex: 1;
-            padding: 10px 20px;
-            border-radius: 9999px;
-            font-weight: 600;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            color: #334155; /* slate-700 */
-            background-color: transparent;
-        }
-        .dark .sector-btn {
-            color: #d1d5db; /* gray-300 */
-        }
-
-        .sector-btn.active {
-            color: white;
-            background-color: var(--color-primary); /* Uses CSS Variable */
-            box-shadow: 0 2px 8px rgba(247, 148, 30, 0.5); /* Updated Shadow using new hex */
-            transform: scale(1.02);
-        }
-
-        /* --- 4. KINETIC STRATEGY MESH (HERO SECTION RIGHT COLUMN) --- */
-        .kinetic-mesh {
-            position: relative;
-            width: 100%; 
-            height: 100%; 
-            aspect-ratio: 1 / 1;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            /* Removed color property as image background/text defines color */
-            transform-style: preserve-3d; 
-        }
-        
-        .kinetic-icon {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            opacity: 1; /* Increased from 0.15 to 1 for full clarity */
-            transition: color 0.5s;
-            /* Adding a professional blue shadow */
-            filter: drop-shadow(0 8px 15px rgba(59, 130, 246, 0.5)); 
-        }
-        
-        /* Animation Definitions - USING WIDTH/HEIGHT FOR IMAGES TO MAKE THEM HUGE (Frames) */
-
-        /* Slow, steady background spin (Network) */
-        .kinetic-icon.spin-1 {
-            width: 550px; /* MASSIVE width for full banner visual (REDUCED SIZE) */
-            height: 550px; /* MASSIVE height for full banner visual (REDUCED SIZE) */
-            opacity: 0.5; /* Increased from 0.08 to 0.5 for clearer background element */
-            animation: slowSpin 30s linear infinite; 
-        }
-
-        /* Complex Tumble 1: CPU, slower */
-        .kinetic-icon.cpu-image { 
-            width: 450px; /* HUGE (REDUCED SIZE) */
-            height: 450px;
-            animation: tumble 40s linear infinite; 
-        }
-        
-        /* Complex Tumble 2: Briefcase, faster and reversed direction */
-        .kinetic-icon.briefcase-image { 
-            width: 350px; /* VERY LARGE (REDUCED SIZE) */
-            height: 350px;
-            opacity: 1; /* Increased from 0.8 to 1 for full clarity */
-            animation: tumble 30s reverse linear infinite; 
-            animation-delay: 5s; 
-        }
-        
-        /* Center element with pulse/translation (Trending Up) */
-        .kinetic-icon.pulse-image { 
+        .reveal.active {
             opacity: 1;
-            width: 300px; /* LARGE (REDUCED SIZE) */
-            height: 300px;
-            animation: pulse 4s ease-in-out infinite alternate; 
+            transform: translateY(0);
+        }
+
+        /* Gradient Text */
+        .text-gradient {
+            background: linear-gradient(to right, #f7941e, #ffbd69);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         
-        /* New Tumble Animation for complex movement */
-        @keyframes tumble {
-            0% { transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg); }
-            25% { transform: translate3d(50px, -50px, 100px) rotateX(90deg) rotateY(45deg); }
-            50% { transform: translate3d(-50px, 50px, -50px) rotateX(180deg) rotateY(180deg); }
-            75% { transform: translate3d(20px, 0, 50px) rotateX(270deg) rotateY(225deg); }
-            100% { transform: translate3d(0, 0, 0) rotateX(360deg) rotateY(360deg); }
+        /* Step Connector Line */
+        .step-line::before {
+            content: '';
+            position: absolute;
+            top: 2rem;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: #e2e8f0;
+            z-index: 0;
+            transform: translateX(50%);
+        }
+        
+        .step-line:last-child::before {
+            display: none;
         }
 
-        @keyframes slowSpin {
-            from { transform: translate(-50%, -50%) rotate(0deg); }
-            to { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-
-        @keyframes pulse {
-            from { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
-            to { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
-        }
-
-        /* Responsive adjustments for the Hero section */
-        @media (max-width: 768px) {
-            .hero-grid {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-            .hero-content {
-                order: 2; /* Move content below the visual on mobile */
-                margin-top: 40px;
-            }
-            .hero-visual {
-                order: 1;
-            }
-            .hero-content h1 {
-                font-size: 2.5rem;
-            }
-            .kinetic-mesh {
-                width: 350px; /* Larger on mobile */
-                height: 350px; /* Larger on mobile */
+        @media (max-width: 1024px) {
+            .step-line::before {
+                display: none;
             }
         }
-
     </style>
 </head>
+<body class="font-sans text-slate-800 bg-brand-light overflow-x-hidden">
 
-<body class="min-h-screen bg-white dark:bg-slate-950">
-    <!-- Dynamic Background Container (Full Page Blobs) -->
-    <div class="dynamic-bg-container pointer-events-none">
-        <div class="dynamic-bg-blob blob-1"></div>
-        <div class="dynamic-bg-blob blob-2"></div>
-    </div>
-    
-    <!-- Main Content Wrapper (z-index 10 to overlap dynamic background) -->
-    <div class="relative z-10">
-
-        <!-- Header: White/90 in Light Mode, Slate-950/90 in Dark Mode -->
-        <header class="sticky top-0 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md shadow-lg z-50 transition-colors duration-500">
-            <div class="container mx-auto px-4 sm:px-8 py-4 flex justify-between items-center">
-                <div class="text-2xl font-extrabold text-slate-900 dark:text-white">
-                    Cygnisoft<span class="text-brand-primary">.</span>
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 transition-all duration-300 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-3 cursor-pointer">
+                    <!-- CygniSoft Style Logo Placeholder -->
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-brand-orange to-orange-400 flex items-center justify-center text-white shadow-lg shadow-orange-500/20">
+                        <i class="ph ph-file-text text-2xl"></i>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-bold text-xl tracking-tight text-slate-900 leading-none">CygniSoft</span>
+                        <span class="text-xs text-brand-orange font-medium uppercase tracking-wide">Resume Parser</span>
+                    </div>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-gray-300 transition">
-                        <i data-lucide="sun-moon" class="w-6 h-6"></i>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#features" class="text-slate-600 hover:text-brand-orange transition-colors font-medium">Features</a>
+                    <a href="#how-it-works" class="text-slate-600 hover:text-brand-orange transition-colors font-medium">How It Works</a>
+                    <a href="#why-use-it" class="text-slate-600 hover:text-brand-orange transition-colors font-medium">Why Use It</a>
+                    <a href="#" class="px-6 py-2.5 rounded-full text-white bg-brand-orange hover:bg-orange-600 transition-all shadow-md hover:shadow-lg font-bold">Upload Resume</a>
+                </div>
+
+                <!-- Mobile Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-slate-600 hover:text-brand-orange focus:outline-none">
+                        <i class="ph ph-list text-3xl"></i>
                     </button>
-                    <a href="#contact" class="px-5 py-2 text-sm font-semibold rounded-full bg-brand-primary hover:bg-brand-dark text-white transition duration-300 shadow-md shadow-brand-primary/50">
-                        Get Started
-                    </a>
                 </div>
             </div>
-        </header>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 absolute w-full shadow-xl">
+            <div class="px-4 pt-2 pb-6 space-y-2">
+                <a href="#features" class="block px-3 py-3 text-base font-medium text-slate-700 hover:text-brand-orange hover:bg-orange-50 rounded-md">Features</a>
+                <a href="#how-it-works" class="block px-3 py-3 text-base font-medium text-slate-700 hover:text-brand-orange hover:bg-orange-50 rounded-md">How It Works</a>
+                <a href="#why-use-it" class="block px-3 py-3 text-base font-medium text-slate-700 hover:text-brand-orange hover:bg-orange-50 rounded-md">Why Use It</a>
+                <a href="#" class="block px-3 py-3 text-base font-medium text-white bg-brand-orange rounded-md mt-4 text-center font-bold">Upload Resume</a>
+            </div>
+        </div>
+    </nav>
 
-        <!-- Dynamic Hero Section: Two Columns with Kinetic Element -->
-        <section class="relative pt-5 pb-28 overflow-hidden bg-white dark:bg-slate-950 transition-colors duration-500">
-            
-            <div class="container mx-auto px-4 sm:px-8 relative z-20">
-                <!-- Grid Container for Two Columns (hero-grid for media query target) -->
-                <div class="hero-grid grid md:grid-cols-2 gap-12 items-center">
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-slate-900 text-white">
+        <!-- Background Blobs -->
+        <div class="absolute top-0 left-0 -ml-20 -mt-20 w-[500px] h-[500px] bg-brand-orange opacity-20 rounded-full mix-blend-screen filter blur-[80px] animate-blob"></div>
+        <div class="absolute bottom-0 right-0 -mr-20 -mb-20 w-[400px] h-[400px] bg-orange-600 opacity-20 rounded-full mix-blend-screen filter blur-[80px] animate-blob animation-delay-2000"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
+                <!-- Left Content -->
+                <div class="mb-12 lg:mb-0 text-center lg:text-left reveal active">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-800/50 border border-slate-700 text-brand-orange text-sm font-medium mb-6 backdrop-blur-sm">
+                        <i class="ph ph-star-fill text-yellow-400"></i> A Free Tool by CygniSoft
+                    </div>
                     
-                    <!-- Left Column: Content -->
-                    <div class="hero-content text-left">
-                        <h1 class="text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-6 leading-tight transition-colors duration-500 md:text-5xl lg:text-6xl">
-                            Engineered Workforce Strategy.
-                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-red-500 block mt-2">
-                                Talent Security, Rapid Scaling.
-                            </span>
-                        </h1>
-                        <p class="text-xl text-slate-600 dark:text-slate-400 mb-4 transition-colors duration-500">
-                            Don't just react to gaps—predict and dominate them. We embed long-term strategic support into your operations for sustained success.
-                        </p>
-                        <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-                            <a href="#sectors" class="px-8 py-3 text-lg font-bold rounded-lg bg-brand-primary hover:bg-brand-dark text-white transition duration-300 transform hover:scale-105 shadow-xl shadow-brand-primary/40">
-                                Explore Solutions
-                            </a>
-                            <a href="#pillars" class="px-8 py-3 text-lg font-bold rounded-lg border-2 border-brand-primary text-brand-primary hover:bg-brand-primary/10 transition duration-300 transform hover:scale-105">
-                                Our Pillars
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Right Column: Kinetic Visual - Now using Placeholder Images/Frames with Blue Labels -->
-                    <div class="hero-visual flex justify-center py-10 md:min-h-[700px]">
-                        <div class="kinetic-mesh">
-                            <!-- Outer, slow rotating image (Network) - Dark Blue Frame with Bright Blue Label -->
-                            <!-- Background color #1e293b is slate-900 equivalent, Text color #3b82f6 is blue-500 equivalent -->
-                            <img src="https://placehold.co/800x800/1e293b/3b82f6?text=SCHEMA" 
-                                 class="kinetic-icon spin-1" 
-                                 alt="Network Schema Placeholder"
-                                 onerror="this.style.display='none'">
-                            
-                            <!-- Complex Tumble 1: CPU, slower - Dark Blue Frame with Bright Blue Label -->
-                            <img src="https://placehold.co/600x600/1e293b/3b82f6?text=VETTING" 
-                                 class="kinetic-icon cpu-image" 
-                                 alt="CPU Chip Placeholder"
-                                 onerror="this.style.display='none'">
-                            
-                            <!-- Complex Tumble 2: Briefcase, faster and reversed direction - Dark Blue Frame with Bright Blue Label -->
-                            <img src="https://placehold.co/500x500/1e293b/3b82f6?text=TALENT" 
-                                 class="kinetic-icon briefcase-image" 
-                                 alt="Talent Briefcase Placeholder"
-                                 onerror="this.style.display='none'">
-                            
-                            <!-- Center element with pulse/translation (Trending Up) - Dynamic Label -->
-                            <img src="https://placehold.co/400x400/1e293b/3b82f6?text=SCALING" 
-                                 class="kinetic-icon pulse-image" 
-                                 id="dynamic-pulse-image"
-                                 alt="Dynamic Strategic Placeholder"
-                                 onerror="this.style.display='none'">
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <!-- Pillars Section: Pure White (bg-white) in Light Mode, Slate-800 Dark Mode. All cards are also bg-white in light mode. -->
-        <section id="pillars" class="py-20 bg-white dark:bg-slate-800 transition-colors duration-500">
-            <div class="container mx-auto px-4 sm:px-8">
-                <h2 class="text-4xl font-bold text-center text-slate-900 dark:text-white mb-16">
-                    The 3 Pillars of Speed and Reliability
-                </h2>
-                
-                <div class="grid md:grid-cols-3 gap-8">
-                    <!-- Card 1: Pure White Card -->
-                    <div class="p-8 bg-white dark:bg-slate-900 rounded-xl shadow-2xl border-b-4 border-brand-primary hover:shadow-brand-primary/20 transform hover:-translate-y-2 transition duration-300">
-                        <i data-lucide="shield-check" class="w-10 h-10 text-brand-primary mb-4"></i>
-                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-3">Zero-Risk Vetting</h3>
-                        <p class="text-slate-600 dark:text-slate-400">Precision is our process. We use a 7-point "Universal Quality Framework" to eliminate risk and ensure every deployment is battle-tested.</p>
-                    </div>
-                    <!-- Card 2 -->
-                    <div class="p-8 bg-white dark:bg-slate-900 rounded-xl shadow-2xl border-b-4 border-brand-primary hover:shadow-brand-primary/20 transform hover:-translate-y-2 transition duration-300">
-                        <i data-lucide="zap" class="w-10 h-10 text-brand-primary mb-4"></i>
-                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-3">Ready-Now Ecosystem</h3>
-                        <p class="text-slate-600 dark:text-slate-400">Agility through preparation. We maintain a warm bench of pre-vetted talent, deploying teams in 24 hours, not 24 days.</p>
-                    </div>
-                    <!-- Card 3 -->
-                    <div class="p-8 bg-white dark:bg-slate-900 rounded-xl shadow-2xl border-b-4 border-brand-primary hover:shadow-brand-primary/20 transform hover:-translate-y-2 transition duration-300">
-                        <i data-lucide="users-2" class="w-10 h-10 text-brand-primary mb-4"></i>
-                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-3">Embedded Partnership</h3>
-                        <p class="text-slate-600 dark:text-slate-400">We don't just fill orders; we analyze your workflow to help you forecast staffing gaps before they become critical emergencies.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Interactive Sector Section: Pure White in Light Mode, Slate-900 Dark Mode -->
-        <section id="sectors" class="py-24 bg-white dark:bg-slate-900 transition-colors duration-500">
-            <div class="container mx-auto px-4 sm:px-8">
-                <h2 class="text-4xl font-bold text-center text-slate-900 dark:text-white mb-12">
-                    Our Dual Expertise: Specialized Strategies
-                </h2>
-                
-                <!-- Toggle Buttons -->
-                <div class="flex justify-center mb-10">
-                    <div class="sector-button-container">
-                        <button class="sector-btn active" data-target="it-content">
-                            IT & Project Services
-                        </button>
-                        <button class="sector-btn" data-target="health-content">
-                            Healthcare Staffing
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+                        CygniSoft Resume Parser <br>
+                        <span class="text-gradient">Extract Details Instantly</span>
+                    </h1>
+                    
+                    <p class="text-lg text-slate-300 mb-8 max-w-2xl mx-auto lg:mx-0 font-light">
+                        An easy and free tool to convert messy resumes into structured information in seconds. No signup required.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                        <button class="px-8 py-4 rounded-full bg-brand-orange text-white font-bold text-lg hover:bg-orange-600 transition-all shadow-lg hover:shadow-orange-500/30 flex items-center justify-center gap-2 transform hover:-translate-y-1">
+                            <i class="ph ph-upload-simple text-xl"></i> Upload Resume
                         </button>
                     </div>
                 </div>
-                
-                <!-- Content Area: Pure White Content Box in Light Mode, Slate-950 Dark Mode -->
-                <div class="bg-white dark:bg-slate-950 p-8 md:p-12 rounded-2xl shadow-2xl shadow-slate-300/50 dark:shadow-slate-950/70">
-                    <!-- IT Content -->
-                    <div id="it-content" class="sector-content grid md:grid-cols-2 gap-10 active">
-                        <div class="content-text">
-                            <h3 class="text-3xl font-bold text-slate-900 dark:text-white mb-4">
-                                Strategic IT Staffing & Development
-                            </h3>
-                            <p class="text-lg text-slate-600 dark:text-slate-400 mb-6">
-                                We're developers first, recruiters second. Our internal expertise allows us to technically vet candidates deeper than any generalist agency, ensuring code-ready talent.
-                            </p>
-                            <ul class="space-y-4">
-                                <li class="flex items-start">
-                                    <i data-lucide="check-circle" class="w-5 h-5 text-brand-primary mt-1 mr-3 flex-shrink-0"></i>
-                                    <span class="text-slate-700 dark:text-slate-300">
-                                        **Project Services:** Full-cycle development for complex platforms (Dynamics 365, Mobile, Cloud).
-                                    </span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i data-lucide="check-circle" class="w-5 h-5 text-brand-primary mt-1 mr-3 flex-shrink-0"></i>
-                                    <span class="text-slate-700 dark:text-slate-300">
-                                        **Expert Technical Vetting:** Senior engineers perform code reviews and architecture assessments, not HR.
-                                    </span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i data-lucide="check-circle" class="w-5 h-5 text-brand-primary mt-1 mr-3 flex-shrink-0"></i>
-                                    <span class="text-slate-700 dark:text-slate-300">
-                                        **Agile Deployment:** Teams capable of integrating into your existing CI/CD pipelines and Sprint cycles immediately.
-                                    </span>
-                                </li>
-                            </ul>
+
+                <!-- Right Visual (Dynamic Abstract Resume) -->
+                <div class="relative h-[450px] flex items-center justify-center reveal">
+                    <!-- Rotating Rings -->
+                    <div class="absolute w-[350px] h-[350px] rounded-full border border-slate-700/30 animate-[spin_20s_linear_infinite]"></div>
+                    <div class="absolute w-[450px] h-[450px] rounded-full border border-slate-800/30 animate-[spin_25s_linear_infinite_reverse]"></div>
+
+                    <!-- Main Document Card -->
+                    <div class="relative w-72 h-96 bg-white rounded-xl shadow-2xl overflow-hidden animate-float z-20">
+                        <!-- Header Mockup -->
+                        <div class="h-24 bg-slate-100 border-b border-slate-200 p-6 flex items-center gap-4">
+                            <div class="w-12 h-12 bg-slate-300 rounded-full shrink-0"></div>
+                            <div class="space-y-2 w-full">
+                                <div class="h-3 bg-slate-400 rounded w-2/3"></div>
+                                <div class="h-2 bg-slate-300 rounded w-1/2"></div>
+                            </div>
                         </div>
-                        <!-- Inner Visual Box: Pure White for visual separation in light mode -->
-                        <div class="flex items-center justify-center bg-white dark:bg-slate-800 rounded-xl p-6">
-                            <i data-lucide="laptop-2" class="w-24 h-24 text-brand-primary opacity-70"></i>
+                        <!-- Content Mockup -->
+                        <div class="p-6 space-y-4">
+                            <div class="h-2 bg-slate-200 rounded w-full"></div>
+                            <div class="h-2 bg-slate-200 rounded w-full"></div>
+                            <div class="h-2 bg-slate-200 rounded w-5/6"></div>
+                            <div class="mt-4 flex gap-2">
+                                <div class="h-6 w-16 bg-orange-100 rounded-full"></div>
+                                <div class="h-6 w-20 bg-orange-100 rounded-full"></div>
+                            </div>
+                            <div class="mt-4 h-24 bg-slate-50 rounded border border-slate-100"></div>
                         </div>
+                        
+                        <!-- Scanning Effect -->
+                        <div class="absolute top-0 left-0 w-full h-1 bg-brand-orange shadow-[0_0_25px_4px_#f7941e] animate-scan z-30 opacity-80"></div>
                     </div>
 
-                    <!-- Healthcare Content -->
-                    <div id="health-content" class="sector-content grid md:grid-cols-2 gap-10">
-                        <div class="content-text">
-                            <h3 class="text-3xl font-bold text-slate-900 dark:text-white mb-4">
-                                Compassionate Healthcare Staffing
-                            </h3>
-                            <p class="text-lg text-slate-600 dark:text-slate-400 mb-6">
-                                Quality care requires quality people. We prioritize empathy, safety, and strict compliance when placing clinical staff across your organization.
-                            </p>
-                            <ul class="space-y-4">
-                                <li class="flex items-start">
-                                    <i data-lucide="check-circle" class="w-5 h-5 text-brand-primary mt-1 mr-3 flex-shrink-0"></i>
-                                    <span class="text-slate-700 dark:text-slate-300">
-                                        **Clinical Staffing:** Immediate dispatch of pre-vetted RNs, RPNs, PSWs, and specialized support staff.
-                                    </span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i data-lucide="check-circle" class="w-5 h-5 text-brand-primary mt-1 mr-3 flex-shrink-0"></i>
-                                    <span class="text-slate-700 dark:text-slate-300">
-                                        **Full Compliance Shield:** Rigorous credentialing, background checks, and immunization verification handled 100%.
-                                    </span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i data-lucide="check-circle" class="w-5 h-5 text-brand-primary mt-1 mr-3 flex-shrink-0"></i>
-                                    <span class="text-slate-700 dark:text-slate-300">
-                                        **Continuity of Care:** Focusing on staff that quickly integrate into your ward's culture for seamless patient support.
-                                    </span>
-                                </li>
-                            </ul>
+                    <!-- Floating Bubbles (Extracted Data) -->
+                    <div class="absolute -right-4 top-24 bg-slate-800/90 backdrop-blur-md p-3 rounded-lg flex items-center gap-3 animate-bounce shadow-xl z-30 border-l-4 border-brand-orange" style="animation-duration: 3s;">
+                        <div class="bg-orange-500/20 p-1.5 rounded text-brand-orange"><i class="ph ph-envelope-simple text-xl"></i></div>
+                        <div>
+                            <div class="text-[10px] text-slate-400 uppercase tracking-wider">Email Extracted</div>
+                            <div class="text-sm font-bold text-white">alex@example.com</div>
                         </div>
-                        <!-- Inner Visual Box: Pure White for visual separation in light mode -->
-                        <div class="flex items-center justify-center bg-white dark:bg-slate-800 rounded-xl p-6">
-                            <i data-lucide="nurse" class="w-24 h-24 text-brand-primary opacity-70"></i>
+                    </div>
+                    
+                    <div class="absolute -left-4 bottom-32 bg-slate-800/90 backdrop-blur-md p-3 rounded-lg flex items-center gap-3 animate-bounce shadow-xl z-30 border-l-4 border-brand-orange" style="animation-duration: 4s; animation-delay: 1s;">
+                        <div class="bg-orange-500/20 p-1.5 rounded text-brand-orange"><i class="ph ph-briefcase text-xl"></i></div>
+                        <div>
+                            <div class="text-[10px] text-slate-400 uppercase tracking-wider">Skills Found</div>
+                            <div class="text-sm font-bold text-white">Project Management</div>
                         </div>
                     </div>
                 </div>
-
             </div>
-        </section>
+        </div>
+        
+        <!-- Bottom Curve -->
+        <div class="absolute bottom-0 w-full overflow-hidden leading-none">
+            <svg class="relative block w-full h-[60px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,2.92V120H0V95.8C57.63,89.5,115.19,77.53,171,67.33,219.79,58.42,269.41,50.32,321.39,56.44Z" class="fill-brand-light"></path>
+            </svg>
+        </div>
+    </section>
 
-        <!-- CTA Banner: Pure White (bg-white) in Light Mode, Slate-800 Dark Mode -->
-        <section id="contact" class="py-20 bg-white dark:bg-slate-800 transition-colors duration-500">
-            <div class="container mx-auto px-4 sm:px-8 text-center">
-                <h2 class="text-4xl font-bold text-slate-900 dark:text-white mb-4">
-                    Ready to scale with confidence?
-                </h2>
-                <p class="text-xl text-slate-600 dark:text-slate-300 mb-8">
-                    Tell us your gap – We’ll find the engineered fit.
-                </p>
-                <a href="#" class="px-10 py-4 text-lg font-extrabold rounded-full bg-brand-primary text-white dark:bg-brand-primary dark:text-white hover:bg-brand-dark transition duration-300 transform hover:scale-105 shadow-2xl shadow-brand-primary/40">
-                    Schedule Your Strategic Consultation
-                </a>
+    <!-- What It Does Section -->
+    <section id="features" class="py-24 bg-brand-light relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+                <h2 class="text-brand-orange font-bold uppercase tracking-wider text-sm mb-2">Capabilities</h2>
+                <h3 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">What This Tool Does</h3>
+                <p class="text-slate-600 text-lg">We simplify the resume reading process by automatically organizing key information.</p>
             </div>
-        </section>
 
-        <!-- Footer: Pure White in Light Mode, Slate-950 Dark Mode -->
-        <footer class="py-8 bg-white dark:bg-slate-950 transition-colors duration-500">
-            <div class="container mx-auto px-4 sm:px-8 text-center text-sm text-slate-500 dark:text-slate-400">
-                <p>&copy; 2025 Cygnisoft Inc. All rights reserved. | Workforce Strategy Redefined.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Card 1 -->
+                <div class="group p-8 rounded-2xl bg-white border border-slate-100 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 reveal">
+                    <div class="w-14 h-14 bg-orange-50 rounded-xl flex items-center justify-center text-brand-orange mb-6 group-hover:bg-brand-orange group-hover:text-white transition-colors">
+                        <i class="ph ph-identification-card text-3xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-900 mb-2">Contact Details</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">Instantly extracts name, email, phone number, and LinkedIn URLs.</p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="group p-8 rounded-2xl bg-white border border-slate-100 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 reveal" style="transition-delay: 100ms;">
+                    <div class="w-14 h-14 bg-orange-50 rounded-xl flex items-center justify-center text-brand-orange mb-6 group-hover:bg-brand-orange group-hover:text-white transition-colors">
+                        <i class="ph ph-graduation-cap text-3xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-900 mb-2">Skills & History</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">Identifies work experience, education, and technical skill sets automatically.</p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="group p-8 rounded-2xl bg-white border border-slate-100 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 reveal" style="transition-delay: 200ms;">
+                    <div class="w-14 h-14 bg-orange-50 rounded-xl flex items-center justify-center text-brand-orange mb-6 group-hover:bg-brand-orange group-hover:text-white transition-colors">
+                        <i class="ph ph-user-list text-3xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-900 mb-2">Profile Summary</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">Generates a concise summary of the candidate's professional profile.</p>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="group p-8 rounded-2xl bg-white border border-slate-100 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 reveal" style="transition-delay: 300ms;">
+                    <div class="w-14 h-14 bg-orange-50 rounded-xl flex items-center justify-center text-brand-orange mb-6 group-hover:bg-brand-orange group-hover:text-white transition-colors">
+                        <i class="ph ph-lightning text-3xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-900 mb-2">Instant Results</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">Get accurate, structured data in seconds. No waiting, no hassle.</p>
+                </div>
             </div>
-        </footer>
+        </div>
+    </section>
 
-    </div> <!-- End Main Content Wrapper -->
+    <!-- Why Use It Section -->
+    <section id="why-use-it" class="py-20 bg-white">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-slate-900 rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden reveal">
+                <!-- Background decoration -->
+                <div class="absolute top-0 right-0 w-64 h-64 bg-brand-orange opacity-10 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
+                
+                <div class="md:grid md:grid-cols-2 gap-12 items-center relative z-10">
+                    <div>
+                        <h3 class="text-3xl font-bold text-white mb-6">Why use our free tool?</h3>
+                        <p class="text-slate-400 mb-8">Save hours of manual data entry and review. Perfect for recruiters, hiring managers, or anyone needing to digitize resumes quickly.</p>
+                        <button class="px-6 py-3 bg-white text-slate-900 rounded-full font-bold hover:bg-orange-50 transition-colors">
+                            Try It Now
+                        </button>
+                    </div>
+                    <div class="space-y-4 mt-8 md:mt-0">
+                        <!-- Bullet 1 -->
+                        <div class="flex items-center gap-4 p-4 rounded-xl bg-slate-800/50 border border-slate-700">
+                            <div class="w-8 h-8 rounded-full bg-brand-orange/20 flex items-center justify-center text-brand-orange">
+                                <i class="ph ph-check-bold"></i>
+                            </div>
+                            <span class="text-white font-medium">Fast and completely free</span>
+                        </div>
+                        <!-- Bullet 2 -->
+                        <div class="flex items-center gap-4 p-4 rounded-xl bg-slate-800/50 border border-slate-700">
+                            <div class="w-8 h-8 rounded-full bg-brand-orange/20 flex items-center justify-center text-brand-orange">
+                                <i class="ph ph-user-minus"></i>
+                            </div>
+                            <span class="text-white font-medium">No signup or login required</span>
+                        </div>
+                        <!-- Bullet 3 -->
+                        <div class="flex items-center gap-4 p-4 rounded-xl bg-slate-800/50 border border-slate-700">
+                            <div class="w-8 h-8 rounded-full bg-brand-orange/20 flex items-center justify-center text-brand-orange">
+                                <i class="ph ph-table"></i>
+                            </div>
+                            <span class="text-white font-medium">Clean, structured output</span>
+                        </div>
+                        <!-- Bullet 4 -->
+                        <div class="flex items-center gap-4 p-4 rounded-xl bg-slate-800/50 border border-slate-700">
+                            <div class="w-8 h-8 rounded-full bg-brand-orange/20 flex items-center justify-center text-brand-orange">
+                                <i class="ph ph-clock"></i>
+                            </div>
+                            <span class="text-white font-medium">Save time reviewing resumes</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-24 bg-brand-light relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20 reveal">
+                <h2 class="text-brand-orange font-bold uppercase tracking-wider text-sm mb-2">Process</h2>
+                <h3 class="text-3xl md:text-4xl font-extrabold text-slate-900">How It Works</h3>
+            </div>
+
+            <div class="relative">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-6">
+                    <!-- Step 1 -->
+                    <div class="relative flex flex-col items-center text-center reveal step-line lg:pr-4">
+                        <div class="w-16 h-16 rounded-full bg-white border-2 border-brand-orange shadow-lg flex items-center justify-center z-10 mb-6 text-brand-orange">
+                            <i class="ph ph-upload-simple text-3xl"></i>
+                        </div>
+                        <h5 class="text-lg font-bold text-slate-900 mb-2">1. Upload Resume</h5>
+                        <p class="text-slate-600 text-sm px-4">Simply drag and drop a PDF or DOCX file into the tool.</p>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="relative flex flex-col items-center text-center reveal step-line lg:pr-4" style="transition-delay: 150ms;">
+                        <div class="w-16 h-16 rounded-full bg-white border-2 border-slate-200 shadow-lg flex items-center justify-center z-10 mb-6 text-slate-400">
+                            <i class="ph ph-cpu text-3xl"></i>
+                        </div>
+                        <h5 class="text-lg font-bold text-slate-900 mb-2">2. AI Processing</h5>
+                        <p class="text-slate-600 text-sm px-4">Our intelligent engine scans and extracts key details instantly.</p>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="relative flex flex-col items-center text-center reveal step-line lg:pr-4" style="transition-delay: 300ms;">
+                        <div class="w-16 h-16 rounded-full bg-white border-2 border-slate-200 shadow-lg flex items-center justify-center z-10 mb-6 text-slate-400">
+                            <i class="ph ph-eye text-3xl"></i>
+                        </div>
+                        <h5 class="text-lg font-bold text-slate-900 mb-2">3. View Results</h5>
+                        <p class="text-slate-600 text-sm px-4">See the structured information organized clearly on screen.</p>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="relative flex flex-col items-center text-center reveal" style="transition-delay: 450ms;">
+                        <div class="w-16 h-16 rounded-full bg-white border-2 border-slate-200 shadow-lg flex items-center justify-center z-10 mb-6 text-slate-400">
+                            <i class="ph ph-download-simple text-3xl"></i>
+                        </div>
+                        <h5 class="text-lg font-bold text-slate-900 mb-2">4. Download / Copy</h5>
+                        <p class="text-slate-600 text-sm px-4">Copy the text or download the structured data for your use.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-24 bg-white border-t border-slate-100">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <i class="ph ph-quotes-fill text-6xl text-brand-orange/20 mb-6 inline-block"></i>
+            <h3 class="text-2xl font-bold text-slate-900 mb-12">See what users are saying</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Quote 1 -->
+                <div class="p-8 rounded-2xl bg-slate-50 border border-slate-100 reveal">
+                    <p class="text-slate-700 italic mb-4 text-lg">"Makes resume review so much easier! I can just drop a file and get the info I need without reading through formatting messes."</p>
+                    <div class="font-bold text-slate-900">– Alex M.</div>
+                </div>
+
+                <!-- Quote 2 -->
+                <div class="p-8 rounded-2xl bg-slate-50 border border-slate-100 reveal" style="transition-delay: 100ms;">
+                    <p class="text-slate-700 italic mb-4 text-lg">"Quick and accurate parsing tool. It's exactly what I needed for a small hiring project. Highly recommended!"</p>
+                    <div class="font-bold text-slate-900">– Jamie L.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA Banner -->
+    <section class="py-20 relative overflow-hidden bg-gradient-to-br from-brand-orange to-orange-600">
+        <!-- Abstract Shapes -->
+        <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
+             <div class="absolute top-10 right-10 w-64 h-64 bg-white opacity-10 rounded-full blur-2xl"></div>
+             <div class="absolute bottom-10 left-10 w-96 h-96 bg-white opacity-10 rounded-full blur-3xl"></div>
+        </div>
+
+        <div class="max-w-4xl mx-auto px-4 relative z-10 text-center text-white reveal">
+            <h2 class="text-3xl md:text-5xl font-extrabold mb-6">Try the CygniSoft Resume Parser</h2>
+            <p class="text-xl opacity-90 mb-10 font-light">It’s completely free. Start converting resumes today.</p>
+            <button class="px-10 py-4 bg-white text-brand-orange rounded-full font-bold text-lg hover:bg-slate-50 transition-all shadow-xl hover:scale-105 hover:shadow-2xl">
+                Upload Resume
+            </button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded bg-brand-orange flex items-center justify-center text-white">
+                        <i class="ph ph-file-text text-lg"></i>
+                    </div>
+                    <div>
+                        <span class="font-bold text-lg text-white block leading-none">CygniSoft</span>
+                        <span class="text-xs text-brand-orange">A Free Tool</span>
+                    </div>
+                </div>
+                
+                <div class="flex gap-8 text-sm font-medium">
+                    <a href="#" class="hover:text-white transition-colors">Contact Support</a>
+                    <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-white transition-colors">Terms of Use</a>
+                </div>
+                
+                <div class="text-xs text-slate-600">
+                    &copy; 2023 CygniSoft. All rights reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            
-            // --- 1. Theme Toggle Logic (Fixed and Cleaned up) ---
-            const themeToggleBtn = document.getElementById('theme-toggle');
-            const htmlElement = document.documentElement;
+        // Mobile Menu Toggle
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        const navbar = document.getElementById('navbar');
 
-            // Function to apply theme and re-render icons
-            function applyTheme(theme) {
-                if (theme === 'dark') {
-                    htmlElement.classList.add('dark');
-                    localStorage.theme = 'dark';
-                } else {
-                    htmlElement.classList.remove('dark');
-                    localStorage.theme = 'light';
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        // Sticky Navbar effect
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 10) {
+                navbar.classList.add('shadow-md');
+                navbar.classList.add('bg-white/95');
+            } else {
+                navbar.classList.remove('shadow-md');
+                navbar.classList.remove('bg-white/95');
+            }
+        });
+
+        // Intersection Observer for Reveal on Scroll
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
                 }
-                // Re-render lucide icons to pick up new colors based on the theme
-                lucide.createIcons(); 
-            }
-
-            // Check for saved user preference or system preference on load
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            const initialTheme = localStorage.theme === 'dark' || (!('theme' in localStorage) && prefersDark) ? 'dark' : 'light';
-            
-            applyTheme(initialTheme); // Apply initial theme & render icons
-
-            // Handle button click
-            themeToggleBtn.addEventListener('click', function() {
-                const currentTheme = htmlElement.classList.contains('dark') ? 'dark' : 'light';
-                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-                applyTheme(newTheme);
             });
+        }, observerOptions);
 
-
-            // --- 2. Sector Toggle Logic (Vanilla JS for speed) ---
-            const sectorButtons = document.querySelectorAll('.sector-btn');
-            const sectorContents = document.querySelectorAll('.sector-content');
-
-            // Initial setup for sector content visibility
-            // Hide all initially
-            sectorContents.forEach(content => content.style.display = 'none');
-            // Show the default active one
-            const activeContent = document.querySelector('.sector-content.active');
-            if (activeContent) {
-                activeContent.style.display = 'grid';
-            }
-            
-            sectorButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const targetId = this.getAttribute('data-target');
-
-                    // Deactivate all buttons and hide all content
-                    sectorButtons.forEach(btn => btn.classList.remove('active'));
-                    sectorContents.forEach(content => {
-                        content.classList.remove('active');
-                        content.style.display = 'none';
-                    });
-
-                    // Activate clicked button and show target content
-                    this.classList.add('active');
-                    const targetContent = document.getElementById(targetId);
-                    if (targetContent) {
-                        targetContent.classList.add('active');
-                        targetContent.style.display = 'grid'; // Ensure it uses the grid layout
-                    }
-                });
-            });
-
-            // --- 3. Dynamic Text Rotation for Pulse Image ---
-            const dynamicLabels = ["SCHEMA", "VETTING", "TALENT", "SCALING"];
-            let currentLabelIndex = 0;
-            const pulseImage = document.getElementById('dynamic-pulse-image');
-            const baseUrl = "https://placehold.co/400x400/1e293b/3b82f6?text=";
-
-            function updatePulseText() {
-                // Cycle to the next label
-                currentLabelIndex = (currentLabelIndex + 1) % dynamicLabels.length;
-                const newText = dynamicLabels[currentLabelIndex];
-                
-                // Update the image source
-                pulseImage.src = baseUrl + newText;
-            }
-
-            // Start the rotation every 3 seconds
-            setInterval(updatePulseText, 3000);
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
         });
     </script>
 </body>
