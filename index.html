@@ -1,506 +1,607 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CygniSoft Resume Parser - Free Online Tool</title>
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Phosphor Icons -->
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        brand: {
-                            orange: '#f7941e',
-                            dark: '#0f172a', // Slate 900
-                            light: '#f8fafc', // Slate 50
-                            gray: '#334155', // Slate 700
-                        }
-                    },
-                    animation: {
-                        'blob': 'blob 7s infinite',
-                        'float': 'float 6s ease-in-out infinite',
-                        'scan': 'scan 3s linear infinite',
-                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                    },
-                    keyframes: {
-                        blob: {
-                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
-                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
-                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
-                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
-                        },
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-20px)' },
-                        },
-                        scan: {
-                            '0%': { top: '0%' },
-                            '50%': { top: '100%' },
-                            '100%': { top: '0%' },
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-
+    <title>CygniSoft Candidate Training & Placement</title>
     <style>
-        /* Custom Utilities */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+        /* --- Reset & Base Styles --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        /* Scroll Animation Setup */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #e0e0e0; /* Light text for dark background */
+            line-height: 1.6;
+            background-color: var(--bg-dark);
+            overflow-x: hidden; /* Prevent horizontal scroll from animations */
+        }
+
+        /* --- Color Variables (Orange & Black Theme) --- */
+        :root {
+            --primary-orange: #ff6b00; /* Vibrant Orange */
+            --primary-dark-orange: #e65100; /* Darker Orange for hover */
+            --bg-dark: #121212; /* Main background - almost black */
+            --bg-card: #1e1e1e; /* Card background - dark grey */
+            --bg-light-dark: #252525; /* Secondary section background */
+            --text-light: #f5f5f5;
+            --text-gray: #a0a0a0;
+            --white: #ffffff;
+        }
+
+        /* --- Layout Utilities --- */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section-pad {
+            padding: 80px 0;
+        }
+
+        .bg-offset {
+            background-color: var(--bg-light-dark);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            opacity: 0; /* Hidden initially for animation */
+            transform: translateY(20px);
             transition: all 0.8s ease-out;
         }
-        
-        .reveal.active {
+
+        .section-title.visible {
             opacity: 1;
             transform: translateY(0);
         }
 
-        /* Gradient Text */
-        .text-gradient {
-            background: linear-gradient(to right, #f7941e, #ffbd69);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        /* Step Connector Line */
-        .step-line::before {
-            content: '';
-            position: absolute;
-            top: 2rem;
-            left: 50%;
-            width: 100%;
-            height: 2px;
-            background: #e2e8f0;
-            z-index: 0;
-            transform: translateX(50%);
-        }
-        
-        .step-line:last-child::before {
-            display: none;
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary-orange);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        @media (max-width: 1024px) {
-            .step-line::before {
-                display: none;
+        .underline {
+            width: 80px;
+            height: 4px;
+            background-color: var(--white);
+            margin: 0 auto;
+            border-radius: 2px;
+        }
+
+        /* --- Buttons --- */
+        .btn {
+            display: inline-block;
+            padding: 14px 35px;
+            font-size: 1rem;
+            text-decoration: none;
+            border-radius: 50px; /* Rounded pill shape */
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-weight: 700;
+            border: 2px solid transparent;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-orange);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(255, 107, 0, 0.4);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark-orange);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 0, 0.6);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary-orange);
+            color: var(--primary-orange);
+            margin-top: 15px;
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-orange);
+            color: var(--white);
+        }
+
+        .btn-block {
+            display: block;
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        /* --- Hero Section (Dynamic Background) --- */
+        .hero-section {
+            /* Animated Gradient Background */
+            background: linear-gradient(-45deg, #000000, #1a1a1a, #2c1500, #ff6b00);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--white);
+            padding: 140px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .hero-content .highlight {
+            color: var(--primary-orange);
+            text-shadow: 0 0 10px rgba(255, 107, 0, 0.5);
+        }
+
+        .hero-sub {
+            font-size: 1.35rem;
+            margin-bottom: 40px;
+            max-width: 750px;
+            margin-left: auto;
+            margin-right: auto;
+            color: #dcdcdc;
+        }
+
+        /* --- Training Programs (Cards) --- */
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            padding: 35px;
+            border-radius: 12px;
+            border: 1px solid #333;
+            text-align: center;
+            transition: all 0.4s ease;
+            border-top: 5px solid var(--primary-orange);
+            
+            /* Scroll Animation Init State */
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+            border-color: var(--primary-orange);
+        }
+
+        .card-icon {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            /* Simple float animation */
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .card h3 {
+            margin-bottom: 15px;
+            color: var(--white);
+            font-size: 1.5rem;
+        }
+        
+        .card p {
+            color: var(--text-gray);
+        }
+
+        /* --- Why Choose Us --- */
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            background: var(--bg-card);
+            padding: 25px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-orange);
+            transition: transform 0.3s;
+            
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+
+        .benefit-item.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .benefit-item:hover {
+            transform: translateX(10px);
+            background: #252525;
+        }
+
+        .check-mark {
+            color: var(--primary-orange);
+            font-weight: bold;
+            font-size: 1.5rem;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+
+        /* --- How It Works --- */
+        .steps-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .step {
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+            position: relative;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.6s ease;
+        }
+
+        .step.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background-color: var(--bg-card);
+            color: var(--primary-orange);
+            border: 2px solid var(--primary-orange);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 0 auto 25px auto;
+            transition: all 0.3s;
+            box-shadow: 0 0 15px rgba(255, 107, 0, 0.2);
+        }
+
+        .step:hover .step-number {
+            background-color: var(--primary-orange);
+            color: var(--white);
+            transform: rotate(360deg);
+        }
+
+        .step h3 {
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+            color: var(--white);
+        }
+
+        .step p {
+            font-size: 1rem;
+            color: var(--text-gray);
+        }
+
+        /* --- Form Section --- */
+        .form-wrapper {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            padding: 50px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid #333;
+            
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s ease;
+        }
+
+        .form-wrapper.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--primary-orange);
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 14px;
+            background-color: #121212;
+            border: 1px solid #444;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: inherit;
+            color: var(--white);
+            transition: border 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+            box-shadow: 0 0 8px rgba(255, 107, 0, 0.3);
+        }
+
+        /* --- Utility Animations --- */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* --- Responsive Media Queries --- */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.2rem;
+            }
+            
+            .steps-container {
+                flex-direction: column;
+            }
+            
+            .step {
+                margin-bottom: 40px;
+            }
+
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-wrapper {
+                padding: 30px;
             }
         }
     </style>
 </head>
-<body class="font-sans text-slate-800 bg-brand-light overflow-x-hidden">
+<body>
 
-    <!-- Navbar -->
-    <nav class="fixed w-full z-50 transition-all duration-300 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm" id="navbar">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <!-- Logo -->
-                <div class="flex-shrink-0 flex items-center gap-3 cursor-pointer">
-                    <!-- CygniSoft Style Logo Placeholder -->
-                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-brand-orange to-orange-400 flex items-center justify-center text-white shadow-lg shadow-orange-500/20">
-                        <i class="ph ph-file-text text-2xl"></i>
-                    </div>
-                    <div class="flex flex-col">
-                        <span class="font-bold text-xl tracking-tight text-slate-900 leading-none">CygniSoft</span>
-                        <span class="text-xs text-brand-orange font-medium uppercase tracking-wide">Resume Parser</span>
-                    </div>
-                </div>
+    <!-- Main Container -->
+    <main class="landing-wrapper">
 
-                <!-- Desktop Menu -->
-                <div class="hidden md:flex space-x-8 items-center">
-                    <a href="#features" class="text-slate-600 hover:text-brand-orange transition-colors font-medium">Features</a>
-                    <a href="#how-it-works" class="text-slate-600 hover:text-brand-orange transition-colors font-medium">How It Works</a>
-                    <a href="#why-use-it" class="text-slate-600 hover:text-brand-orange transition-colors font-medium">Why Use It</a>
-                    <a href="#" class="px-6 py-2.5 rounded-full text-white bg-brand-orange hover:bg-orange-600 transition-all shadow-md hover:shadow-lg font-bold">Upload Resume</a>
-                </div>
-
-                <!-- Mobile Button -->
-                <div class="md:hidden flex items-center">
-                    <button id="mobile-menu-btn" class="text-slate-600 hover:text-brand-orange focus:outline-none">
-                        <i class="ph ph-list text-3xl"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 absolute w-full shadow-xl">
-            <div class="px-4 pt-2 pb-6 space-y-2">
-                <a href="#features" class="block px-3 py-3 text-base font-medium text-slate-700 hover:text-brand-orange hover:bg-orange-50 rounded-md">Features</a>
-                <a href="#how-it-works" class="block px-3 py-3 text-base font-medium text-slate-700 hover:text-brand-orange hover:bg-orange-50 rounded-md">How It Works</a>
-                <a href="#why-use-it" class="block px-3 py-3 text-base font-medium text-slate-700 hover:text-brand-orange hover:bg-orange-50 rounded-md">Why Use It</a>
-                <a href="#" class="block px-3 py-3 text-base font-medium text-white bg-brand-orange rounded-md mt-4 text-center font-bold">Upload Resume</a>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-slate-900 text-white">
-        <!-- Background Blobs -->
-        <div class="absolute top-0 left-0 -ml-20 -mt-20 w-[500px] h-[500px] bg-brand-orange opacity-20 rounded-full mix-blend-screen filter blur-[80px] animate-blob"></div>
-        <div class="absolute bottom-0 right-0 -mr-20 -mb-20 w-[400px] h-[400px] bg-orange-600 opacity-20 rounded-full mix-blend-screen filter blur-[80px] animate-blob animation-delay-2000"></div>
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
-                <!-- Left Content -->
-                <div class="mb-12 lg:mb-0 text-center lg:text-left reveal active">
-                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-800/50 border border-slate-700 text-brand-orange text-sm font-medium mb-6 backdrop-blur-sm">
-                        <i class="ph ph-star-fill text-yellow-400"></i> A Free Tool by CygniSoft
-                    </div>
-                    
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-                        CygniSoft Resume Parser <br>
-                        <span class="text-gradient">Extract Details Instantly</span>
-                    </h1>
-                    
-                    <p class="text-lg text-slate-300 mb-8 max-w-2xl mx-auto lg:mx-0 font-light">
-                        An easy and free tool to convert messy resumes into structured information in seconds. No signup required.
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Upskill. Certify. <span class="highlight">Get Placed.</span></h1>
+                    <p class="hero-sub">
+                        Accelerate your career with CygniSoft. We provide expert-led technical and healthcare training combined with dedicated placement support to help you land your dream job.
                     </p>
-                    
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                        <button class="px-8 py-4 rounded-full bg-brand-orange text-white font-bold text-lg hover:bg-orange-600 transition-all shadow-lg hover:shadow-orange-500/30 flex items-center justify-center gap-2 transform hover:-translate-y-1">
-                            <i class="ph ph-upload-simple text-xl"></i> Upload Resume
-                        </button>
+                    <a href="#contact" class="btn btn-primary">Start Your Journey</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Training Programs Section -->
+        <section class="section-pad bg-offset" id="programs">
+            <div class="container">
+                <div class="section-title anim-on-scroll">
+                    <h2>Our Training Programs</h2>
+                    <div class="underline"></div>
+                </div>
+                <div class="grid-3">
+                    <!-- Card 1 -->
+                    <div class="card anim-on-scroll" style="transition-delay: 0.1s;">
+                        <div class="card-icon">💻</div>
+                        <h3>Technical Training</h3>
+                        <p>Master the latest technologies including Java, .NET, Python, and Data Science. Our curriculum is designed by industry experts to meet current market demands.</p>
+                        <a href="#contact" class="btn btn-outline">Learn More</a>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="card anim-on-scroll" style="transition-delay: 0.2s;">
+                        <div class="card-icon">🏥</div>
+                        <h3>Healthcare Training</h3>
+                        <p>Specialized training for healthcare roles including Medical Billing, Coding, and Administration. Get certified and enter the fast-growing healthcare sector.</p>
+                        <a href="#contact" class="btn btn-outline">Learn More</a>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="card anim-on-scroll" style="transition-delay: 0.3s;">
+                        <div class="card-icon">🚀</div>
+                        <h3>Placement Support</h3>
+                        <p>We don't just train; we place. Benefit from resume building, mock interviews, and direct connections to our network of top-tier hiring partners.</p>
+                        <a href="#contact" class="btn btn-outline">Get Support</a>
                     </div>
                 </div>
+            </div>
+        </section>
 
-                <!-- Right Visual (Dynamic Abstract Resume) -->
-                <div class="relative h-[450px] flex items-center justify-center reveal">
-                    <!-- Rotating Rings -->
-                    <div class="absolute w-[350px] h-[350px] rounded-full border border-slate-700/30 animate-[spin_20s_linear_infinite]"></div>
-                    <div class="absolute w-[450px] h-[450px] rounded-full border border-slate-800/30 animate-[spin_25s_linear_infinite_reverse]"></div>
-
-                    <!-- Main Document Card -->
-                    <div class="relative w-72 h-96 bg-white rounded-xl shadow-2xl overflow-hidden animate-float z-20">
-                        <!-- Header Mockup -->
-                        <div class="h-24 bg-slate-100 border-b border-slate-200 p-6 flex items-center gap-4">
-                            <div class="w-12 h-12 bg-slate-300 rounded-full shrink-0"></div>
-                            <div class="space-y-2 w-full">
-                                <div class="h-3 bg-slate-400 rounded w-2/3"></div>
-                                <div class="h-2 bg-slate-300 rounded w-1/2"></div>
-                            </div>
-                        </div>
-                        <!-- Content Mockup -->
-                        <div class="p-6 space-y-4">
-                            <div class="h-2 bg-slate-200 rounded w-full"></div>
-                            <div class="h-2 bg-slate-200 rounded w-full"></div>
-                            <div class="h-2 bg-slate-200 rounded w-5/6"></div>
-                            <div class="mt-4 flex gap-2">
-                                <div class="h-6 w-16 bg-orange-100 rounded-full"></div>
-                                <div class="h-6 w-20 bg-orange-100 rounded-full"></div>
-                            </div>
-                            <div class="mt-4 h-24 bg-slate-50 rounded border border-slate-100"></div>
-                        </div>
-                        
-                        <!-- Scanning Effect -->
-                        <div class="absolute top-0 left-0 w-full h-1 bg-brand-orange shadow-[0_0_25px_4px_#f7941e] animate-scan z-30 opacity-80"></div>
-                    </div>
-
-                    <!-- Floating Bubbles (Extracted Data) -->
-                    <div class="absolute -right-4 top-24 bg-slate-800/90 backdrop-blur-md p-3 rounded-lg flex items-center gap-3 animate-bounce shadow-xl z-30 border-l-4 border-brand-orange" style="animation-duration: 3s;">
-                        <div class="bg-orange-500/20 p-1.5 rounded text-brand-orange"><i class="ph ph-envelope-simple text-xl"></i></div>
-                        <div>
-                            <div class="text-[10px] text-slate-400 uppercase tracking-wider">Email Extracted</div>
-                            <div class="text-sm font-bold text-white">alex@example.com</div>
+        <!-- Why Choose Us Section -->
+        <section class="section-pad" id="why-us">
+            <div class="container">
+                <div class="section-title anim-on-scroll">
+                    <h2>Why Choose CygniSoft?</h2>
+                    <div class="underline"></div>
+                </div>
+                <div class="benefits-grid">
+                    <div class="benefit-item anim-on-scroll" style="transition-delay: 0.1s;">
+                        <span class="check-mark">✓</span>
+                        <div class="benefit-text">
+                            <strong style="color:var(--white);">Expert Trainers:</strong> Learn from professionals with years of real-world industry experience.
                         </div>
                     </div>
-                    
-                    <div class="absolute -left-4 bottom-32 bg-slate-800/90 backdrop-blur-md p-3 rounded-lg flex items-center gap-3 animate-bounce shadow-xl z-30 border-l-4 border-brand-orange" style="animation-duration: 4s; animation-delay: 1s;">
-                        <div class="bg-orange-500/20 p-1.5 rounded text-brand-orange"><i class="ph ph-briefcase text-xl"></i></div>
-                        <div>
-                            <div class="text-[10px] text-slate-400 uppercase tracking-wider">Skills Found</div>
-                            <div class="text-sm font-bold text-white">Project Management</div>
+                    <div class="benefit-item anim-on-scroll" style="transition-delay: 0.2s;">
+                        <span class="check-mark">✓</span>
+                        <div class="benefit-text">
+                            <strong style="color:var(--white);">Flexible Scheduling:</strong> Weekend and evening batches available to suit working professionals.
+                        </div>
+                    </div>
+                    <div class="benefit-item anim-on-scroll" style="transition-delay: 0.3s;">
+                        <span class="check-mark">✓</span>
+                        <div class="benefit-text">
+                            <strong style="color:var(--white);">Certification Support:</strong> Comprehensive preparation for industry-recognized certifications.
+                        </div>
+                    </div>
+                    <div class="benefit-item anim-on-scroll" style="transition-delay: 0.4s;">
+                        <span class="check-mark">✓</span>
+                        <div class="benefit-text">
+                            <strong style="color:var(--white);">100% Placement Assist:</strong> Dedicated HR team working to get your profile in front of employers.
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <!-- Bottom Curve -->
-        <div class="absolute bottom-0 w-full overflow-hidden leading-none">
-            <svg class="relative block w-full h-[60px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,2.92V120H0V95.8C57.63,89.5,115.19,77.53,171,67.33,219.79,58.42,269.41,50.32,321.39,56.44Z" class="fill-brand-light"></path>
-            </svg>
-        </div>
-    </section>
+        </section>
 
-    <!-- What It Does Section -->
-    <section id="features" class="py-24 bg-brand-light relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
-                <h2 class="text-brand-orange font-bold uppercase tracking-wider text-sm mb-2">Capabilities</h2>
-                <h3 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">What This Tool Does</h3>
-                <p class="text-slate-600 text-lg">We simplify the resume reading process by automatically organizing key information.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Card 1 -->
-                <div class="group p-8 rounded-2xl bg-white border border-slate-100 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 reveal">
-                    <div class="w-14 h-14 bg-orange-50 rounded-xl flex items-center justify-center text-brand-orange mb-6 group-hover:bg-brand-orange group-hover:text-white transition-colors">
-                        <i class="ph ph-identification-card text-3xl"></i>
-                    </div>
-                    <h4 class="text-xl font-bold text-slate-900 mb-2">Contact Details</h4>
-                    <p class="text-slate-600 text-sm leading-relaxed">Instantly extracts name, email, phone number, and LinkedIn URLs.</p>
+        <!-- How It Works Section -->
+        <section class="section-pad bg-offset" id="how-it-works">
+            <div class="container">
+                <div class="section-title anim-on-scroll">
+                    <h2>How It Works</h2>
+                    <div class="underline"></div>
                 </div>
-
-                <!-- Card 2 -->
-                <div class="group p-8 rounded-2xl bg-white border border-slate-100 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 reveal" style="transition-delay: 100ms;">
-                    <div class="w-14 h-14 bg-orange-50 rounded-xl flex items-center justify-center text-brand-orange mb-6 group-hover:bg-brand-orange group-hover:text-white transition-colors">
-                        <i class="ph ph-graduation-cap text-3xl"></i>
+                <div class="steps-container">
+                    <div class="step anim-on-scroll" style="transition-delay: 0.1s;">
+                        <div class="step-number">1</div>
+                        <h3>Register</h3>
+                        <p>Fill out the form below to express interest in your preferred track.</p>
                     </div>
-                    <h4 class="text-xl font-bold text-slate-900 mb-2">Skills & History</h4>
-                    <p class="text-slate-600 text-sm leading-relaxed">Identifies work experience, education, and technical skill sets automatically.</p>
-                </div>
-
-                <!-- Card 3 -->
-                <div class="group p-8 rounded-2xl bg-white border border-slate-100 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 reveal" style="transition-delay: 200ms;">
-                    <div class="w-14 h-14 bg-orange-50 rounded-xl flex items-center justify-center text-brand-orange mb-6 group-hover:bg-brand-orange group-hover:text-white transition-colors">
-                        <i class="ph ph-user-list text-3xl"></i>
+                    <div class="step anim-on-scroll" style="transition-delay: 0.2s;">
+                        <div class="step-number">2</div>
+                        <h3>Attend Training</h3>
+                        <p>Join our interactive sessions and complete hands-on projects.</p>
                     </div>
-                    <h4 class="text-xl font-bold text-slate-900 mb-2">Profile Summary</h4>
-                    <p class="text-slate-600 text-sm leading-relaxed">Generates a concise summary of the candidate's professional profile.</p>
-                </div>
-
-                <!-- Card 4 -->
-                <div class="group p-8 rounded-2xl bg-white border border-slate-100 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 reveal" style="transition-delay: 300ms;">
-                    <div class="w-14 h-14 bg-orange-50 rounded-xl flex items-center justify-center text-brand-orange mb-6 group-hover:bg-brand-orange group-hover:text-white transition-colors">
-                        <i class="ph ph-lightning text-3xl"></i>
+                    <div class="step anim-on-scroll" style="transition-delay: 0.3s;">
+                        <div class="step-number">3</div>
+                        <h3>Get Certified</h3>
+                        <p>Pass your assessments and earn industry-recognized credentials.</p>
                     </div>
-                    <h4 class="text-xl font-bold text-slate-900 mb-2">Instant Results</h4>
-                    <p class="text-slate-600 text-sm leading-relaxed">Get accurate, structured data in seconds. No waiting, no hassle.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Why Use It Section -->
-    <section id="why-use-it" class="py-20 bg-white">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-slate-900 rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden reveal">
-                <!-- Background decoration -->
-                <div class="absolute top-0 right-0 w-64 h-64 bg-brand-orange opacity-10 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
-                
-                <div class="md:grid md:grid-cols-2 gap-12 items-center relative z-10">
-                    <div>
-                        <h3 class="text-3xl font-bold text-white mb-6">Why use our free tool?</h3>
-                        <p class="text-slate-400 mb-8">Save hours of manual data entry and review. Perfect for recruiters, hiring managers, or anyone needing to digitize resumes quickly.</p>
-                        <button class="px-6 py-3 bg-white text-slate-900 rounded-full font-bold hover:bg-orange-50 transition-colors">
-                            Try It Now
-                        </button>
-                    </div>
-                    <div class="space-y-4 mt-8 md:mt-0">
-                        <!-- Bullet 1 -->
-                        <div class="flex items-center gap-4 p-4 rounded-xl bg-slate-800/50 border border-slate-700">
-                            <div class="w-8 h-8 rounded-full bg-brand-orange/20 flex items-center justify-center text-brand-orange">
-                                <i class="ph ph-check-bold"></i>
-                            </div>
-                            <span class="text-white font-medium">Fast and completely free</span>
-                        </div>
-                        <!-- Bullet 2 -->
-                        <div class="flex items-center gap-4 p-4 rounded-xl bg-slate-800/50 border border-slate-700">
-                            <div class="w-8 h-8 rounded-full bg-brand-orange/20 flex items-center justify-center text-brand-orange">
-                                <i class="ph ph-user-minus"></i>
-                            </div>
-                            <span class="text-white font-medium">No signup or login required</span>
-                        </div>
-                        <!-- Bullet 3 -->
-                        <div class="flex items-center gap-4 p-4 rounded-xl bg-slate-800/50 border border-slate-700">
-                            <div class="w-8 h-8 rounded-full bg-brand-orange/20 flex items-center justify-center text-brand-orange">
-                                <i class="ph ph-table"></i>
-                            </div>
-                            <span class="text-white font-medium">Clean, structured output</span>
-                        </div>
-                        <!-- Bullet 4 -->
-                        <div class="flex items-center gap-4 p-4 rounded-xl bg-slate-800/50 border border-slate-700">
-                            <div class="w-8 h-8 rounded-full bg-brand-orange/20 flex items-center justify-center text-brand-orange">
-                                <i class="ph ph-clock"></i>
-                            </div>
-                            <span class="text-white font-medium">Save time reviewing resumes</span>
-                        </div>
+                    <div class="step anim-on-scroll" style="transition-delay: 0.4s;">
+                        <div class="step-number">4</div>
+                        <h3>Placement</h3>
+                        <p>Work with our recruitment team to secure your new role.</p>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- How It Works Section -->
-    <section id="how-it-works" class="py-24 bg-brand-light relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-20 reveal">
-                <h2 class="text-brand-orange font-bold uppercase tracking-wider text-sm mb-2">Process</h2>
-                <h3 class="text-3xl md:text-4xl font-extrabold text-slate-900">How It Works</h3>
-            </div>
-
-            <div class="relative">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-6">
-                    <!-- Step 1 -->
-                    <div class="relative flex flex-col items-center text-center reveal step-line lg:pr-4">
-                        <div class="w-16 h-16 rounded-full bg-white border-2 border-brand-orange shadow-lg flex items-center justify-center z-10 mb-6 text-brand-orange">
-                            <i class="ph ph-upload-simple text-3xl"></i>
-                        </div>
-                        <h5 class="text-lg font-bold text-slate-900 mb-2">1. Upload Resume</h5>
-                        <p class="text-slate-600 text-sm px-4">Simply drag and drop a PDF or DOCX file into the tool.</p>
+        <!-- Contact Form Section -->
+        <section class="section-pad" id="contact">
+            <div class="container">
+                <div class="form-wrapper anim-on-scroll">
+                    <div class="section-title">
+                        <h2>Register Now</h2>
+                        <p style="color: var(--text-gray);">Take the next step in your career.</p>
                     </div>
-
-                    <!-- Step 2 -->
-                    <div class="relative flex flex-col items-center text-center reveal step-line lg:pr-4" style="transition-delay: 150ms;">
-                        <div class="w-16 h-16 rounded-full bg-white border-2 border-slate-200 shadow-lg flex items-center justify-center z-10 mb-6 text-slate-400">
-                            <i class="ph ph-cpu text-3xl"></i>
+                    <form id="trainingForm">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" placeholder="Enter your full name" required>
                         </div>
-                        <h5 class="text-lg font-bold text-slate-900 mb-2">2. AI Processing</h5>
-                        <p class="text-slate-600 text-sm px-4">Our intelligent engine scans and extracts key details instantly.</p>
-                    </div>
-
-                    <!-- Step 3 -->
-                    <div class="relative flex flex-col items-center text-center reveal step-line lg:pr-4" style="transition-delay: 300ms;">
-                        <div class="w-16 h-16 rounded-full bg-white border-2 border-slate-200 shadow-lg flex items-center justify-center z-10 mb-6 text-slate-400">
-                            <i class="ph ph-eye text-3xl"></i>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" placeholder="Enter your email" required>
                         </div>
-                        <h5 class="text-lg font-bold text-slate-900 mb-2">3. View Results</h5>
-                        <p class="text-slate-600 text-sm px-4">See the structured information organized clearly on screen.</p>
-                    </div>
-
-                    <!-- Step 4 -->
-                    <div class="relative flex flex-col items-center text-center reveal" style="transition-delay: 450ms;">
-                        <div class="w-16 h-16 rounded-full bg-white border-2 border-slate-200 shadow-lg flex items-center justify-center z-10 mb-6 text-slate-400">
-                            <i class="ph ph-download-simple text-3xl"></i>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" placeholder="(123) 456-7890">
                         </div>
-                        <h5 class="text-lg font-bold text-slate-900 mb-2">4. Download / Copy</h5>
-                        <p class="text-slate-600 text-sm px-4">Copy the text or download the structured data for your use.</p>
-                    </div>
+                        <div class="form-group">
+                            <label for="interest">Training Interest</label>
+                            <select id="interest" required>
+                                <option value="" disabled selected>Select an option</option>
+                                <option value="Technical">Technical Training (IT/Software)</option>
+                                <option value="Healthcare">Healthcare Training</option>
+                                <option value="Placement">Placement Support Only</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Submit Application</button>
+                    </form>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Testimonials Section -->
-    <section class="py-24 bg-white border-t border-slate-100">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <i class="ph ph-quotes-fill text-6xl text-brand-orange/20 mb-6 inline-block"></i>
-            <h3 class="text-2xl font-bold text-slate-900 mb-12">See what users are saying</h3>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Quote 1 -->
-                <div class="p-8 rounded-2xl bg-slate-50 border border-slate-100 reveal">
-                    <p class="text-slate-700 italic mb-4 text-lg">"Makes resume review so much easier! I can just drop a file and get the info I need without reading through formatting messes."</p>
-                    <div class="font-bold text-slate-900">– Alex M.</div>
-                </div>
+    </main>
 
-                <!-- Quote 2 -->
-                <div class="p-8 rounded-2xl bg-slate-50 border border-slate-100 reveal" style="transition-delay: 100ms;">
-                    <p class="text-slate-700 italic mb-4 text-lg">"Quick and accurate parsing tool. It's exactly what I needed for a small hiring project. Highly recommended!"</p>
-                    <div class="font-bold text-slate-900">– Jamie L.</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Final CTA Banner -->
-    <section class="py-20 relative overflow-hidden bg-gradient-to-br from-brand-orange to-orange-600">
-        <!-- Abstract Shapes -->
-        <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
-             <div class="absolute top-10 right-10 w-64 h-64 bg-white opacity-10 rounded-full blur-2xl"></div>
-             <div class="absolute bottom-10 left-10 w-96 h-96 bg-white opacity-10 rounded-full blur-3xl"></div>
-        </div>
-
-        <div class="max-w-4xl mx-auto px-4 relative z-10 text-center text-white reveal">
-            <h2 class="text-3xl md:text-5xl font-extrabold mb-6">Try the CygniSoft Resume Parser</h2>
-            <p class="text-xl opacity-90 mb-10 font-light">It’s completely free. Start converting resumes today.</p>
-            <button class="px-10 py-4 bg-white text-brand-orange rounded-full font-bold text-lg hover:bg-slate-50 transition-all shadow-xl hover:scale-105 hover:shadow-2xl">
-                Upload Resume
-            </button>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-slate-900 text-slate-400 py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
-                <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded bg-brand-orange flex items-center justify-center text-white">
-                        <i class="ph ph-file-text text-lg"></i>
-                    </div>
-                    <div>
-                        <span class="font-bold text-lg text-white block leading-none">CygniSoft</span>
-                        <span class="text-xs text-brand-orange">A Free Tool</span>
-                    </div>
-                </div>
-                
-                <div class="flex gap-8 text-sm font-medium">
-                    <a href="#" class="hover:text-white transition-colors">Contact Support</a>
-                    <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
-                    <a href="#" class="hover:text-white transition-colors">Terms of Use</a>
-                </div>
-                
-                <div class="text-xs text-slate-600">
-                    &copy; 2023 CygniSoft. All rights reserved.
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Scripts -->
     <script>
-        // Mobile Menu Toggle
-        const btn = document.getElementById('mobile-menu-btn');
-        const menu = document.getElementById('mobile-menu');
-        const navbar = document.getElementById('navbar');
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Form Logic ---
+            const trainingForm = document.getElementById('trainingForm');
+            if (trainingForm) {
+                trainingForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    const nameInput = document.getElementById('name');
+                    const emailInput = document.getElementById('email');
+                    const interestSelect = document.getElementById('interest');
+                    const nameValue = nameInput.value.trim();
+                    const emailValue = emailInput.value.trim();
+                    const interestValue = interestSelect.value;
+                    
+                    if (nameValue === "") { alert("Please enter your full name."); nameInput.focus(); return; }
+                    if (emailValue === "" || !emailValue.includes('@')) { alert("Please enter a valid email address."); emailInput.focus(); return; }
+                    if (interestValue === "") { alert("Please select a training interest."); interestSelect.focus(); return; }
 
-        btn.addEventListener('click', () => {
-            menu.classList.toggle('hidden');
-        });
-
-        // Sticky Navbar effect
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 10) {
-                navbar.classList.add('shadow-md');
-                navbar.classList.add('bg-white/95');
-            } else {
-                navbar.classList.remove('shadow-md');
-                navbar.classList.remove('bg-white/95');
+                    alert(`Thank you, ${nameValue}! We have received your request for ${interestValue} assistance. We will contact you at ${emailValue} soon.`);
+                    trainingForm.reset();
+                });
             }
-        });
 
-        // Intersection Observer for Reveal on Scroll
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.1
-        };
+            // --- Scroll Animations (The "Wow" Factor) ---
+            const observerOptions = {
+                threshold: 0.15 // Trigger when 15% of element is visible
+            };
 
-        const observer = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target); // Only animate once
+                    }
+                });
+            }, observerOptions);
 
-        document.querySelectorAll('.reveal').forEach(el => {
-            observer.observe(el);
+            const animatedElements = document.querySelectorAll('.anim-on-scroll, .card, .benefit-item, .step');
+            animatedElements.forEach(el => observer.observe(el));
         });
     </script>
 </body>
