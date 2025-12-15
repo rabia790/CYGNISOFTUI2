@@ -3,605 +3,297 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CygniSoft Candidate Training & Placement</title>
+    <title>Snow & Mow | On-Demand Yard Services</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons for aesthetic appeal -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* --- Reset & Base Styles --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #e0e0e0; /* Light text for dark background */
-            line-height: 1.6;
-            background-color: var(--bg-dark);
-            overflow-x: hidden; /* Prevent horizontal scroll from animations */
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Light Gray Background */
         }
-
-        /* --- Color Variables (Orange & Black Theme) --- */
-        :root {
-            --primary-orange: #ff6b00; /* Vibrant Orange */
-            --primary-dark-orange: #e65100; /* Darker Orange for hover */
-            --bg-dark: #121212; /* Main background - almost black */
-            --bg-card: #1e1e1e; /* Card background - dark grey */
-            --bg-light-dark: #252525; /* Secondary section background */
-            --text-light: #f5f5f5;
-            --text-gray: #a0a0a0;
-            --white: #ffffff;
+        .hero-bg {
+            background-color: #0f172a; /* Slate 900 */
+            background-image: url('https://placehold.co/1920x800/0f172a/0f172a?text=');
+            background-size: cover;
+            background-position: center;
         }
-
-        /* --- Layout Utilities --- */
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 20px;
+        .text-gradient {
+            background-image: linear-gradient(to right, #3b82f6, #10b981); /* Blue to Green */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-
-        .section-pad {
-            padding: 80px 0;
-        }
-
-        .bg-offset {
-            background-color: var(--bg-light-dark);
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 50px;
-            opacity: 0; /* Hidden initially for animation */
-            transform: translateY(20px);
-            transition: all 0.8s ease-out;
-        }
-
-        .section-title.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .section-title h2 {
-            font-size: 2.5rem;
-            color: var(--primary-orange);
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .underline {
-            width: 80px;
-            height: 4px;
-            background-color: var(--white);
-            margin: 0 auto;
-            border-radius: 2px;
-        }
-
-        /* --- Buttons --- */
-        .btn {
-            display: inline-block;
-            padding: 14px 35px;
-            font-size: 1rem;
-            text-decoration: none;
-            border-radius: 50px; /* Rounded pill shape */
-            transition: all 0.3s ease;
-            cursor: pointer;
-            font-weight: 700;
-            border: 2px solid transparent;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-        }
-
-        .btn-primary {
-            background-color: var(--primary-orange);
-            color: var(--white);
-            box-shadow: 0 4px 15px rgba(255, 107, 0, 0.4);
-        }
-
-        .btn-primary:hover {
-            background-color: var(--primary-dark-orange);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 107, 0, 0.6);
-        }
-
-        .btn-outline {
-            background-color: transparent;
-            border: 2px solid var(--primary-orange);
-            color: var(--primary-orange);
-            margin-top: 15px;
-        }
-
-        .btn-outline:hover {
-            background-color: var(--primary-orange);
-            color: var(--white);
-        }
-
-        .btn-block {
-            display: block;
-            width: 100%;
-            border-radius: 8px;
-        }
-
-        /* --- Hero Section (Dynamic Background) --- */
-        .hero-section {
-            /* Animated Gradient Background */
-            background: linear-gradient(-45deg, #000000, #1a1a1a, #2c1500, #ff6b00);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            color: var(--white);
-            padding: 140px 0;
-            text-align: center;
-            position: relative;
-        }
-
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            animation: fadeInDown 1s ease-out;
-        }
-
-        .hero-content h1 {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
-            font-weight: 800;
-            line-height: 1.2;
-        }
-
-        .hero-content .highlight {
-            color: var(--primary-orange);
-            text-shadow: 0 0 10px rgba(255, 107, 0, 0.5);
-        }
-
-        .hero-sub {
-            font-size: 1.35rem;
-            margin-bottom: 40px;
-            max-width: 750px;
-            margin-left: auto;
-            margin-right: auto;
-            color: #dcdcdc;
-        }
-
-        /* --- Training Programs (Cards) --- */
-        .grid-3 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        .card {
-            background: var(--bg-card);
-            padding: 35px;
-            border-radius: 12px;
-            border: 1px solid #333;
-            text-align: center;
-            transition: all 0.4s ease;
-            border-top: 5px solid var(--primary-orange);
-            
-            /* Scroll Animation Init State */
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        .card.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
-            border-color: var(--primary-orange);
-        }
-
-        .card-icon {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
-            /* Simple float animation */
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-        }
-
-        .card h3 {
-            margin-bottom: 15px;
-            color: var(--white);
-            font-size: 1.5rem;
-        }
-        
-        .card p {
-            color: var(--text-gray);
-        }
-
-        /* --- Why Choose Us --- */
-        .benefits-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 25px;
-        }
-
-        .benefit-item {
-            display: flex;
-            align-items: center;
-            background: var(--bg-card);
-            padding: 25px;
-            border-radius: 8px;
-            border-left: 4px solid var(--primary-orange);
-            transition: transform 0.3s;
-            
-            opacity: 0;
-            transform: translateX(-30px);
-        }
-
-        .benefit-item.visible {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .benefit-item:hover {
-            transform: translateX(10px);
-            background: #252525;
-        }
-
-        .check-mark {
-            color: var(--primary-orange);
-            font-weight: bold;
-            font-size: 1.5rem;
-            margin-right: 20px;
-            flex-shrink: 0;
-        }
-
-        /* --- How It Works --- */
-        .steps-container {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .step {
-            flex: 1;
-            min-width: 200px;
-            text-align: center;
-            position: relative;
-            opacity: 0;
-            transform: scale(0.9);
-            transition: all 0.6s ease;
-        }
-
-        .step.visible {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        .step-number {
-            width: 60px;
-            height: 60px;
-            background-color: var(--bg-card);
-            color: var(--primary-orange);
-            border: 2px solid var(--primary-orange);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            font-weight: bold;
-            margin: 0 auto 25px auto;
-            transition: all 0.3s;
-            box-shadow: 0 0 15px rgba(255, 107, 0, 0.2);
-        }
-
-        .step:hover .step-number {
-            background-color: var(--primary-orange);
-            color: var(--white);
-            transform: rotate(360deg);
-        }
-
-        .step h3 {
-            margin-bottom: 10px;
-            font-size: 1.3rem;
-            color: var(--white);
-        }
-
-        .step p {
-            font-size: 1rem;
-            color: var(--text-gray);
-        }
-
-        /* --- Form Section --- */
-        .form-wrapper {
-            max-width: 600px;
-            margin: 0 auto;
-            background: var(--bg-card);
-            padding: 50px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            border: 1px solid #333;
-            
-            opacity: 0;
-            transform: translateY(40px);
-            transition: all 0.8s ease;
-        }
-
-        .form-wrapper.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: 600;
-            color: var(--primary-orange);
-        }
-
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 14px;
-            background-color: #121212;
-            border: 1px solid #444;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-family: inherit;
-            color: var(--white);
-            transition: border 0.3s;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--primary-orange);
-            box-shadow: 0 0 8px rgba(255, 107, 0, 0.3);
-        }
-
-        /* --- Utility Animations --- */
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* --- Responsive Media Queries --- */
-        @media (max-width: 768px) {
-            .hero-content h1 {
-                font-size: 2.2rem;
-            }
-            
-            .steps-container {
-                flex-direction: column;
-            }
-            
-            .step {
-                margin-bottom: 40px;
-            }
-
-            .benefits-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .form-wrapper {
-                padding: 30px;
-            }
+        .nav-link:hover {
+            color: #3b82f6; /* Blue 500 */
         }
     </style>
 </head>
 <body>
 
-    <!-- Main Container -->
-    <main class="landing-wrapper">
+    <!-- Navigation Bar -->
+    <nav class="sticky top-0 z-50 bg-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <a href="#" class="flex items-center space-x-2">
+                    <i data-lucide="snowflake" class="w-6 h-6 text-blue-600"></i>
+                    <i data-lucide="sun" class="w-6 h-6 text-green-600"></i>
+                    <span class="text-xl font-extrabold text-slate-900">Snow & Mow</span>
+                </a>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-6 items-center">
+                    <a href="#how-it-works" class="nav-link text-slate-600 font-medium transition-colors">How It Works</a>
+                    <a href="#provider-pitch" class="nav-link text-slate-600 font-medium transition-colors">For Providers</a>
+                    <a href="#contact" class="nav-link text-slate-600 font-medium transition-colors">Contact</a>
+                    
+                    <!-- CTA Buttons -->
+                    <a href="/client-signup" class="px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 transition-all">
+                        Book Service
+                    </a>
+                </div>
 
-        <!-- Hero Section -->
-        <section class="hero-section">
-            <div class="container">
-                <div class="hero-content">
-                    <h1>Upskill. Certify. <span class="highlight">Get Placed.</span></h1>
-                    <p class="hero-sub">
-                        Accelerate your career with CygniSoft. We provide expert-led technical and healthcare training combined with dedicated placement support to help you land your dream job.
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-button" class="md:hidden text-slate-600 hover:text-blue-600">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu" class="hidden md:hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 text-center">
+                <a href="#how-it-works" class="block py-2 text-base font-medium text-slate-700 hover:bg-slate-50 rounded-lg">How It Works</a>
+                <a href="#provider-pitch" class="block py-2 text-base font-medium text-slate-700 hover:bg-slate-50 rounded-lg">For Providers</a>
+                <a href="#contact" class="block py-2 text-base font-medium text-slate-700 hover:bg-slate-50 rounded-lg">Contact</a>
+                <a href="/client-signup" class="block w-full py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 transition-all mt-4">
+                    Start Service Now
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 1. HERO SECTION -->
+    <header class="hero-bg py-24 sm:py-32 lg:py-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight mb-6">
+                <span class="block text-white">Your Yard Service,</span>
+                <span class="text-gradient block">Instant & On Demand.</span>
+            </h1>
+            <p class="text-xl text-slate-300 max-w-3xl mx-auto mb-10">
+                Book local, vetted Pros for immediate snow removal or lawn care. Simple requests, transparent, upfront pricing, and zero hassle.
+            </p>
+
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <!-- Primary CTA (Client) -->
+                <a href="/client-signup" class="px-8 py-3 text-lg font-bold text-white bg-green-600 rounded-xl shadow-xl hover:bg-green-700 transition-all transform hover:scale-[1.02]">
+                    Start Service Now
+                </a>
+                <!-- Secondary CTA (Provider) -->
+                <a href="#provider-pitch" class="px-8 py-3 text-lg font-bold text-white bg-blue-600 rounded-xl border-2 border-blue-600 hover:bg-blue-700 transition-all shadow-md">
+                    Start Earning Today
+                </a>
+            </div>
+
+            <!-- Trust Bar / Quick Stat -->
+            <div class="mt-16 text-slate-400 text-sm flex justify-center items-center gap-4">
+                <i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i>
+                <span>Trusted by thousands of local users for seasonal work.</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- 2. VALUE PROPOSITION SECTION -->
+    <section class="py-16 sm:py-24 bg-white" id="value-prop">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-extrabold text-slate-900 text-center mb-12">
+                Snow & Mow: Service, Solved.
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Card 1: Fast -->
+                <div class="bg-slate-50 p-8 rounded-xl shadow-lg border border-slate-100 text-center transform hover:scale-[1.02] transition-all">
+                    <i data-lucide="zap" class="w-10 h-10 mx-auto text-blue-600 mb-4"></i>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Instant Dispatch</h3>
+                    <p class="text-slate-600">Book a service in under 60 seconds. Providers accept and start work immediately, perfect for surprise snowfalls.</p>
+                </div>
+                <!-- Card 2: Reliable -->
+                <div class="bg-slate-50 p-8 rounded-xl shadow-lg border border-slate-100 text-center transform hover:scale-[1.02] transition-all">
+                    <i data-lucide="shield-check" class="w-10 h-10 mx-auto text-green-600 mb-4"></i>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Vetted Professionals</h3>
+                    <p class="text-slate-600">All providers are background-checked, insured, and highly rated. Get quality service, every single time.</p>
+                </div>
+                <!-- Card 3: Transparent -->
+                <div class="bg-slate-50 p-8 rounded-xl shadow-lg border border-slate-100 text-center transform hover:scale-[1.02] transition-all">
+                    <i data-lucide="wallet" class="w-10 h-10 mx-auto text-indigo-600 mb-4"></i>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Upfront Pricing</h3>
+                    <p class="text-slate-600">Know the exact price immediately. No seasonal contracts or recurring commitments. Pay securely for completed work.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. HOW IT WORKS (CLIENT JOURNEY) -->
+    <section class="py-16 sm:py-24 bg-slate-100" id="how-it-works">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-extrabold text-slate-900 text-center mb-16">
+                Your 3-Step Service Request
+            </h2>
+            <div class="relative flex flex-col md:flex-row justify-between items-start gap-12">
+                <!-- Timeline Connector Line (Desktop Only) -->
+                <div class="hidden md:block absolute top-10 left-0 right-0 h-1 bg-slate-300 z-0"></div>
+
+                <!-- Step 1 -->
+                <div class="flex-1 text-center relative z-10 p-4">
+                    <div class="w-16 h-16 rounded-full bg-blue-600 text-white flex items-center justify-center mx-auto mb-4 text-3xl font-extrabold border-4 border-slate-100 shadow-xl">
+                        1
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-900 mb-2">Pin & Select Service</h3>
+                    <p class="text-slate-600">Pin your location, select your single, fixed-price service: driveway plow, sidewalk salt, or lawn mow.</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="flex-1 text-center relative z-10 p-4">
+                    <div class="w-16 h-16 rounded-full bg-green-600 text-white flex items-center justify-center mx-auto mb-4 text-3xl font-extrabold border-4 border-slate-100 shadow-xl">
+                        2
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-900 mb-2">Pro Accepts & Works</h3>
+                    <p class="text-slate-600">A local Pro accepts your request instantly. They arrive, perform the work, and mark the job complete.</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="flex-1 text-center relative z-10 p-4">
+                    <div class="w-16 h-16 rounded-full bg-indigo-600 text-white flex items-center justify-center mx-auto mb-4 text-3xl font-extrabold border-4 border-slate-100 shadow-xl">
+                        3
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-900 mb-2">Review & Pay</h3>
+                    <p class="text-slate-600">Review the final photos on your phone. Confirm satisfaction and your secure, prepaid funds are released.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. PROVIDER OPPORTUNITY SECTION -->
+    <section class="py-24 sm:py-32 bg-white" id="provider-pitch">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="order-2 lg:order-1">
+                    <h2 class="text-4xl font-extrabold text-slate-900 mb-6">
+                        <span class="text-green-600">Drive Your Business.</span> Get Paid Instantly.
+                    </h2>
+                    <p class="text-xl text-slate-600 mb-8">
+                        Stop wasting time quoting and chasing invoices. Snow & Mow delivers single-job leads directly to your dashboard. You focus purely on the service.
                     </p>
-                    <a href="#contact" class="btn btn-primary">Start Your Journey</a>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="dollar-sign" class="w-6 h-6 text-green-600 mt-1 flex-shrink-0"></i>
+                            <span class="text-slate-700 font-medium">Instant Payment:</span> Funds are processed securely upon job completion—no long payment cycles.
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="calendar-check" class="w-6 h-6 text-blue-600 mt-1 flex-shrink-0"></i>
+                            <span class="text-slate-700 font-medium">Total Flexibility:</span> Accept only the one-off jobs that fit your route. No commitments or long contracts required.
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="map-pin" class="w-6 h-6 text-indigo-600 mt-1 flex-shrink-0"></i>
+                            <span class="text-slate-700 font-medium">Local Leads:</span> Access a real-time feed of local service requests in your immediate area.
+                        </li>
+                    </ul>
+                    <a href="/provider-signup" class="mt-10 inline-block px-8 py-3 text-lg font-bold text-white bg-blue-600 rounded-xl shadow-xl hover:bg-blue-700 transition-all transform hover:scale-[1.02]">
+                        Join Our Network & Start Earning
+                    </a>
+                </div>
+                <div class="order-1 lg:order-2">
+                    <img src="https://placehold.co/600x400/1e293b/ffffff?text=Provider+Job+Acceptance+Screen" alt="Provider dashboard interface" class="rounded-2xl shadow-2xl border-4 border-white transform rotate-3 hover:rotate-0 transition-transform duration-500" />
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Training Programs Section -->
-        <section class="section-pad bg-offset" id="programs">
-            <div class="container">
-                <div class="section-title anim-on-scroll">
-                    <h2>Our Training Programs</h2>
-                    <div class="underline"></div>
+    <!-- 5. FOOTER -->
+    <footer class="bg-slate-800 py-12" id="contact">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-white">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Logo & Mission -->
+                <div>
+                    <a href="#" class="flex items-center space-x-2 mb-4">
+                        <i data-lucide="snowflake" class="w-6 h-6 text-blue-400"></i>
+                        <i data-lucide="sun" class="w-6 h-6 text-green-400"></i>
+                        <span class="text-xl font-extrabold">Snow & Mow</span>
+                    </a>
+                    <p class="text-sm text-slate-400">Making yard maintenance effortless for homeowners and profitable for Pros.</p>
                 </div>
-                <div class="grid-3">
-                    <!-- Card 1 -->
-                    <div class="card anim-on-scroll" style="transition-delay: 0.1s;">
-                        <div class="card-icon">💻</div>
-                        <h3>Technical Training</h3>
-                        <p>Master the latest technologies including Java, .NET, Python, and Data Science. Our curriculum is designed by industry experts to meet current market demands.</p>
-                        <a href="#contact" class="btn btn-outline">Learn More</a>
-                    </div>
-                    <!-- Card 2 -->
-                    <div class="card anim-on-scroll" style="transition-delay: 0.2s;">
-                        <div class="card-icon">🏥</div>
-                        <h3>Healthcare Training</h3>
-                        <p>Specialized training for healthcare roles including Medical Billing, Coding, and Administration. Get certified and enter the fast-growing healthcare sector.</p>
-                        <a href="#contact" class="btn btn-outline">Learn More</a>
-                    </div>
-                    <!-- Card 3 -->
-                    <div class="card anim-on-scroll" style="transition-delay: 0.3s;">
-                        <div class="card-icon">🚀</div>
-                        <h3>Placement Support</h3>
-                        <p>We don't just train; we place. Benefit from resume building, mock interviews, and direct connections to our network of top-tier hiring partners.</p>
-                        <a href="#contact" class="btn btn-outline">Get Support</a>
-                    </div>
-                </div>
-            </div>
-        </section>
 
-        <!-- Why Choose Us Section -->
-        <section class="section-pad" id="why-us">
-            <div class="container">
-                <div class="section-title anim-on-scroll">
-                    <h2>Why Choose CygniSoft?</h2>
-                    <div class="underline"></div>
+                <!-- Company Links -->
+                <div>
+                    <h4 class="font-bold mb-3">Company</h4>
+                    <ul class="space-y-2 text-sm text-slate-400">
+                        <li><a href="#" class="hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Careers</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Support</a></li>
+                    </ul>
                 </div>
-                <div class="benefits-grid">
-                    <div class="benefit-item anim-on-scroll" style="transition-delay: 0.1s;">
-                        <span class="check-mark">✓</span>
-                        <div class="benefit-text">
-                            <strong style="color:var(--white);">Expert Trainers:</strong> Learn from professionals with years of real-world industry experience.
-                        </div>
-                    </div>
-                    <div class="benefit-item anim-on-scroll" style="transition-delay: 0.2s;">
-                        <span class="check-mark">✓</span>
-                        <div class="benefit-text">
-                            <strong style="color:var(--white);">Flexible Scheduling:</strong> Weekend and evening batches available to suit working professionals.
-                        </div>
-                    </div>
-                    <div class="benefit-item anim-on-scroll" style="transition-delay: 0.3s;">
-                        <span class="check-mark">✓</span>
-                        <div class="benefit-text">
-                            <strong style="color:var(--white);">Certification Support:</strong> Comprehensive preparation for industry-recognized certifications.
-                        </div>
-                    </div>
-                    <div class="benefit-item anim-on-scroll" style="transition-delay: 0.4s;">
-                        <span class="check-mark">✓</span>
-                        <div class="benefit-text">
-                            <strong style="color:var(--white);">100% Placement Assist:</strong> Dedicated HR team working to get your profile in front of employers.
-                        </div>
+
+                <!-- Legal Links -->
+                <div>
+                    <h4 class="font-bold mb-3">Legal</h4>
+                    <ul class="space-y-2 text-sm text-slate-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Terms of Service</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Service Guarantee</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact & Social -->
+                <div>
+                    <h4 class="font-bold mb-3">Connect</h4>
+                    <p class="text-sm text-slate-400 mb-4">Email: hello@snowmow.ca</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-slate-400 hover:text-blue-400 transition-colors"><i data-lucide="facebook" class="w-6 h-6"></i></a>
+                        <a href="#" class="text-slate-400 hover:text-blue-400 transition-colors"><i data-lucide="instagram" class="w-6 h-6"></i></a>
+                        <a href="#" class="text-slate-400 hover:text-blue-400 transition-colors"><i data-lucide="twitter" class="w-6 h-6"></i></a>
                     </div>
                 </div>
             </div>
-        </section>
-
-        <!-- How It Works Section -->
-        <section class="section-pad bg-offset" id="how-it-works">
-            <div class="container">
-                <div class="section-title anim-on-scroll">
-                    <h2>How It Works</h2>
-                    <div class="underline"></div>
-                </div>
-                <div class="steps-container">
-                    <div class="step anim-on-scroll" style="transition-delay: 0.1s;">
-                        <div class="step-number">1</div>
-                        <h3>Register</h3>
-                        <p>Fill out the form below to express interest in your preferred track.</p>
-                    </div>
-                    <div class="step anim-on-scroll" style="transition-delay: 0.2s;">
-                        <div class="step-number">2</div>
-                        <h3>Attend Training</h3>
-                        <p>Join our interactive sessions and complete hands-on projects.</p>
-                    </div>
-                    <div class="step anim-on-scroll" style="transition-delay: 0.3s;">
-                        <div class="step-number">3</div>
-                        <h3>Get Certified</h3>
-                        <p>Pass your assessments and earn industry-recognized credentials.</p>
-                    </div>
-                    <div class="step anim-on-scroll" style="transition-delay: 0.4s;">
-                        <div class="step-number">4</div>
-                        <h3>Placement</h3>
-                        <p>Work with our recruitment team to secure your new role.</p>
-                    </div>
-                </div>
+            <div class="mt-12 border-t border-slate-700 pt-6 text-center text-sm text-slate-500">
+                &copy; 2025 Snow & Mow. All rights reserved.
             </div>
-        </section>
+        </div>
+    </footer>
 
-        <!-- Contact Form Section -->
-        <section class="section-pad" id="contact">
-            <div class="container">
-                <div class="form-wrapper anim-on-scroll">
-                    <div class="section-title">
-                        <h2>Register Now</h2>
-                        <p style="color: var(--text-gray);">Take the next step in your career.</p>
-                    </div>
-                    <form id="trainingForm">
-                        <div class="form-group">
-                            <label for="name">Full Name</label>
-                            <input type="text" id="name" placeholder="Enter your full name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email Address</label>
-                            <input type="email" id="email" placeholder="Enter your email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">Phone Number</label>
-                            <input type="tel" id="phone" placeholder="(123) 456-7890">
-                        </div>
-                        <div class="form-group">
-                            <label for="interest">Training Interest</label>
-                            <select id="interest" required>
-                                <option value="" disabled selected>Select an option</option>
-                                <option value="Technical">Technical Training (IT/Software)</option>
-                                <option value="Healthcare">Healthcare Training</option>
-                                <option value="Placement">Placement Support Only</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-block">Submit Application</button>
-                    </form>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
+    <!-- JavaScript for Mobile Menu Toggle -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Form Logic ---
-            const trainingForm = document.getElementById('trainingForm');
-            if (trainingForm) {
-                trainingForm.addEventListener('submit', function(event) {
-                    event.preventDefault();
-                    const nameInput = document.getElementById('name');
-                    const emailInput = document.getElementById('email');
-                    const interestSelect = document.getElementById('interest');
-                    const nameValue = nameInput.value.trim();
-                    const emailValue = emailInput.value.trim();
-                    const interestValue = interestSelect.value;
-                    
-                    if (nameValue === "") { alert("Please enter your full name."); nameInput.focus(); return; }
-                    if (emailValue === "" || !emailValue.includes('@')) { alert("Please enter a valid email address."); emailInput.focus(); return; }
-                    if (interestValue === "") { alert("Please select a training interest."); interestSelect.focus(); return; }
-
-                    alert(`Thank you, ${nameValue}! We have received your request for ${interestValue} assistance. We will contact you at ${emailValue} soon.`);
-                    trainingForm.reset();
-                });
-            }
-
-            // --- Scroll Animations (The "Wow" Factor) ---
-            const observerOptions = {
-                threshold: 0.15 // Trigger when 15% of element is visible
+            const button = document.getElementById('mobile-menu-button');
+            const menu = document.getElementById('mobile-menu');
+            
+            // Function to toggle the menu
+            const toggleMenu = () => {
+                const isHidden = menu.classList.toggle('hidden');
+                // Optional: Change icon to 'x' when open, 'menu' when closed
+                const icon = document.querySelector('#mobile-menu-button i');
+                if (!isHidden) {
+                    icon.setAttribute('data-lucide', 'x');
+                    lucide.createIcons();
+                } else {
+                    icon.setAttribute('data-lucide', 'menu');
+                    lucide.createIcons();
+                }
             };
 
-            const observer = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                        observer.unobserve(entry.target); // Only animate once
+            // Toggle menu on button click
+            button.addEventListener('click', toggleMenu);
+
+            // Hide menu when a link is clicked (for smooth scrolling)
+            menu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (!menu.classList.contains('hidden')) {
+                        toggleMenu(); 
                     }
                 });
-            }, observerOptions);
+            });
 
-            const animatedElements = document.querySelectorAll('.anim-on-scroll, .card, .benefit-item, .step');
-            animatedElements.forEach(el => observer.observe(el));
+            // Initialize Lucide icons
+            lucide.createIcons();
         });
     </script>
 </body>
